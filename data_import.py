@@ -16,3 +16,10 @@ covid_frame = pd.read_csv(csv_file)
 all_data_list = list(covid_frame['postcode'])
 cleaned_list = [int(x) for x in all_data_list if str(x).startswith('2')]
 
+import csv
+import urllib.request
+with urllib.request.urlopen(csv_file) as response:
+    r = csv.reader(response.read())
+
+for row in r:
+    print(row)
