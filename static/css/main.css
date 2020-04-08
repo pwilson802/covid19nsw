@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,600;0,900;1,400;1,500&display=swap');
+
+.headers {
+    color: #344072;
+}
+
+.rank-number {
+    color: #344072;
+    font-weight: 900;
+    
+}
+
+.postcode {
+    color: #344072;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+}
+
+.suburbs {
+    color: #8086a0;
+}
+
+.today-count {
+    color: #8086a0;
+}
+
+.new-cases {
+    color: #8086a0;
+}
+
+.rank-entry {
+    border: 1px solid #dfe1ea;
+}
+
+.hot-entry {
+    border: 1px solid #dfe1ea;
+    background-color: rgba(246, 153, 95, 0.25);
+}

@@ -39,7 +39,7 @@ for postcode in postcodes_dict.keys():
     temp_dict = {}
     temp_dict['postcode'] = postcode
     temp_dict['count'] = postcodes_count[int(postcode)]
-    temp_dict['suburbs'] = postcodes_dict[postcode]
+    temp_dict['suburbs'] = ', '.join(postcodes_dict[postcode])
     daily_data.append(temp_dict)
 
 daily_data.sort(key = lambda k: k['count'], reverse=True)
@@ -49,7 +49,14 @@ for i, e in enumerate(daily_data):
     current_postcode = e['postcode']
     daily_data[i]['rank'] = rank
     daily_data[i]['previous_rank'] = yesterday_rank[e['postcode']]
-    daily_data[i]['movement_rank'] = yesterday_rank[e['postcode']] - rank
+    movement = yesterday_rank[e['postcode']] - rank
+    if movement > 0:
+        movement_rank = f'+{movement}'
+    elif movement < 0:
+        movement_rank = f'{movement}'
+    else:
+        movement_rank = '-'
+    daily_data[i]['movement_rank'] = movement_rank
     daily_data[i]['previous_count'] = yesterday_count[e['postcode']]
     daily_data[i]['count_change'] = postcodes_count[int(e['postcode'])] - yesterday_count[e['postcode']]
 

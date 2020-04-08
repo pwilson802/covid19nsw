@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Covid-19 NSW</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
     <h1 class="mb-5">Covid-19 NSW Rankings</h1>
@@ -24,43 +24,38 @@
             New Today
             </div>
         </div>
-    {% for each in data %}
-    {% if '+' in each.movement_rank %}
-    <div class="row hot-entry">
-    {% else %}
-    <div class="row rank-entry">
-    {% endif %}
+        <div class="row rank-entry">
             <div class="col-2">
                 <div class="rank-number">
-                    <div class="h2">{{ each.rank }}</div>    
+                    <div class="h2">1</div>    
                 </div>
                 <div class="rank-direction">
-                    {{ each.movement_rank }}
+                    -
                 </div>
             </div>
 
             <div class="col-6">
                 <div class="postcode">
-                    <div class="h2">{{ each.postcode }}</div>
+                    <div class="h2">2026</div>
                 </div>
                 <div class="suburbs">
-                    {{ each.suburbs }}
+                    Bondi, Waverly, Some Heights
                 </div>
             </div>
 
             <div class="col-2">
                 <div class="today-count mt-3">
-                    <h3>{{each.count}}</h3>
+                    106
                 </div>
             </div>
 
             <div class="col-2">
                 <div class="new-cases mt-3">
-                    {{ each.count_change }}
+                    3
                 </div>
             </div>
         </div>
-    {% endfor %}
     </div>
-</body>
+
+
 </html>
