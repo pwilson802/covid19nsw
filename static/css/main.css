@@ -1,5 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,600;0,900;1,400;1,500&display=swap');
 
+.disclaimer {
+    font-size: x-small;
+    text-align: center;
+}
+
+.page-heading {
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+}
+
 .headers {
     color: #344072;
 }
