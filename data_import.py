@@ -8,10 +8,15 @@ from collections import Counter
 from collections import defaultdict
 from datetime import datetime, timedelta
 
+data_folder = os.environ.get('COVID_DATA')
+
 today = datetime.now()
 yesterday = datetime.now() - timedelta(days=1)
-file_today = f'{today.day}-{today.month}-{today.year}.json'
-file_yesterday = f'{yesterday.day}-{yesterday.month}-{yesterday.year}.json'
+file_today_name = f'{today.day}-{today.month}-{today.year}.json'
+file_yesterday_name = f'{yesterday.day}-{yesterday.month}-{yesterday.year}.json'
+file_today = os.path.join(data_folder,file_today_name)
+file_yesterday = os.path.join(data_folder,file_yesterday_name)
+
 
 with open(file_yesterday) as json_file:
     yesterday = json.loads(json_file.read())

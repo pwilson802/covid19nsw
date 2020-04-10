@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Covid-19 NSW</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-163350903-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-163350903-1');
+  </script>
+</head>
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light justify-content-between">
+  <a class="navbar-brand" href="/">
+    <div class="nav-title postcode">Covid-19 NSW Cases</div>
+  </a>
+  <form action="postcode" method = "POST" class="form-inline">
+    <input class="form-control mr-sm-2" type="text" placeholder="Postcode" aria-label="Search" name="postcode">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+  </form>
+</nav>
+<body>
+    <p class="disclaimer">The data on this site is gathered from <a href="https://data.nsw.gov.au/nsw-covid-19-data">NSW Data</a> This is displayed for research purposes only and is not provided for health advice</p>
+    {% block content %}{% endblock %}
+</body>
+</html>

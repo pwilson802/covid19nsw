@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,600;0,900;1,400;1,500&display=swap');
 
+.nav-title {
+    color: #344072;
+    font-weight: 900;
+    font-family: 'Poppins', sans-serif;
+}
+
 .disclaimer {
     font-size: x-small;
     text-align: center;
@@ -45,4 +51,9 @@
 .hot-entry {
     border: 1px solid #dfe1ea;
     background-color: rgba(246, 153, 95, 0.25);
+}
+
+
+.postcode_error {
+    font-family: 'Poppins', sans-serif;
 }
