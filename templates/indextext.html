@@ -38,8 +38,13 @@
         height: 350,
         legend: 'none',
         hAxis: {
-          format: 'M/d',
-          title: 'Date'
+          format: 'd MMM',
+          title: 'Date',
+          gridlines : {
+              count : 14,
+              minSpacing: 80,
+            }
+>>>>>>> dev
         },
         vAxis: {
           title: 'Total Cases'
