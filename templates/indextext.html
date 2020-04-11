@@ -6,6 +6,59 @@
     <title>Covid-19 NSW</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="css/main.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+    google.charts.load('current', {packages: ['corechart', 'line']});
+    google.charts.setOnLoadCallback(drawBasic);
+
+    function drawBasic() {
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('date', 'Date');
+      data.addColumn('number', 'Cases');
+
+      data.addRows([
+        [new Date(2020,3,1), 20],
+        [new Date(2020,3,2), 24],
+        [new Date(2020,3,3), 24],  
+        [new Date(2020,3,4), 25],  
+        [new Date(2020,3,5), 26],  
+        [new Date(2020,3,6), 28],
+        [new Date(2020,3,7), 28],  
+        [new Date(2020,3,7), 28],  
+        [new Date(2020,3,8), 33],  
+        [new Date(2020,3,10), 34],  
+        [new Date(2020,3,11), 34], 
+        [new Date(2020,3,12), 35],
+        [new Date(2020,3,13), 35], 
+        [new Date(2020,3,14), 36]
+      ]);
+
+      var options = {
+        height: 350,
+        legend: 'none',
+        hAxis: {
+          format: 'd MMM',
+          title: 'Date',
+          gridlines : {
+              count : 14,
+              minSpacing: 80,
+            }
+        },
+        vAxis: {
+          title: 'Total Cases'
+        }
+      };
+
+      function resize() {
+          var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+          chart.draw(data, options);
+      }
+      window.onload = resize();
+      window.onresize = resize;
+    }
+
+    </script>
 </head>
 <body>
     <h1 class="mb-5">Covid-19 NSW Rankings</h1>
@@ -56,6 +109,7 @@
             </div>
         </div>
     </div>
+  <div id="chart_div"></div>
 
 
 </html>
