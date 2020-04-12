@@ -22,14 +22,23 @@ postcode_file_yesterday = os.path.join(data_folder,f'postcode-{file_yesterday_na
 seven_file_today = os.path.join(data_folder,f'seven-{file_today_name}')
 seven_file_yesterday = os.path.join(data_folder,f'seven-{file_yesterday_name}')
 fourteen_file_today = os.path.join(data_folder,f'fourteen-{file_today_name}')
-fourteen_file_yesterday = os.path.join(data_folder,f'fourteen-{file_yesterday}')
+fourteen_file_yesterday = os.path.join(data_folder,f'fourteen-{file_yesterday_name}')
 suburb_to_postcode_file = os.path.join(data_folder,'suburb_to_postcode.json')
 all_postcode_suburb_file = os.path.join(data_folder,'all_postcode_suburb.json')
 
 with open(file_yesterday) as json_file:
     yesterday = json.loads(json_file.read())
+with open(seven_file_yesterday) as json_file:
+    seven_yesterday = json.loads(json_file.read())
+with open(fourteen_file_yesterday) as json_file:
+    fourteen_yesterday = json.loads(json_file.read())
+
 yesterday_rank = {x['postcode']: x['rank'] for x in yesterday}
 yesterday_count = {x['postcode']: x['count'] for x in yesterday}
+seven_yesterday_rank = {x['postcode']: x['rank'] for x in seven_yesterday}
+seven_yesterday_count = {x['postcode']: x['count'] for x in seven_yesterday}
+fourteen_yesterday_rank = {x['postcode']: x['rank'] for x in fourteen_yesterday}
+fourteen_yesterday_count = {x['postcode']: x['count'] for x in fourteen_yesterday}
 
 csv_file = 'https://data.nsw.gov.au/data/dataset/aefcde60-3b0c-4bc0-9af1-6fe652944ec2/resource/21304414-1ff1-4243-a5d2-f52778048b29/download/covid-19-cases-by-notification-date-and-postcode-local-health-district-and-local-government-area.csv'
 
@@ -64,13 +73,21 @@ def get_postcode_rank(cleaned_list, days=all):
         daily_data.append(temp_dict)
 
     daily_data.sort(key = lambda k: k['count'], reverse=True)
-
+    if days == 'seven':
+        previous_rank = seven_yesterday_rank
+        previous_count = seven_yesterday_count
+    elif days == 'fourteen':
+        previous_rank = fourteen_yesterday_rank
+        previous_count = fourteen_yesterday_count
+    else:
+        previous_rank = yesterday_rank
+        previous_count = yesterday_count
     for i, e in enumerate(daily_data):
         rank = i + 1
         current_postcode = e['postcode']
         daily_data[i]['rank'] = rank
-        daily_data[i]['previous_rank'] = yesterday_rank[e['postcode']]
-        movement = yesterday_rank[e['postcode']] - rank
+        daily_data[i]['previous_rank'] = previous_rank[e['postcode']]
+        movement = previous_rank[e['postcode']] - rank
         if movement > 0:
             movement_rank = f'+{movement}'
         elif movement < 0:
@@ -78,16 +95,16 @@ def get_postcode_rank(cleaned_list, days=all):
         else:
             movement_rank = '-'
         daily_data[i]['movement_rank'] = movement_rank
-        daily_data[i]['previous_count'] = yesterday_count[e['postcode']]
-        count_change = postcodes_count[int(e['postcode'])] - yesterday_count[e['postcode']]
+        daily_data[i]['previous_count'] = previous_count[e['postcode']]
+        count_change = postcodes_count[int(e['postcode'])] - previous_count[e['postcode']]
         if count_change > 0:
             count_change = f'+{count_change}'
         daily_data[i]['count_change'] = count_change
     return daily_data
 
-all_data = get_postcode_rank(cleaned_list_all)
-seven_day_data = get_postcode_rank(cleaned_list_seven)
-fourteen_day_data = get_postcode_rank(cleaned_list_fourteen)
+all_data = get_postcode_rank(cleaned_list_all, days='all')
+seven_day_data = get_postcode_rank(cleaned_list_seven, days='seven')
+fourteen_day_data = get_postcode_rank(cleaned_list_fourteen, days='fourteen')
 
 
 # Get the details for making the charts for each postcode

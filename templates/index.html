@@ -1,6 +1,37 @@
 {% extends 'base.html' %}
 {% block content %}
     <div class="container">
+    <div class="row select-buttons mb-2">
+        <div class="col-4 button-all">
+            <form action="/" method = "POST" class="form-inline">
+                {% if days_set == 'all' %}
+                    <button class="btn btn-outline-success my-2 my-sm-0 active" type="submit" name="days" value="all">All Data</button>
+                {% else %}
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="days" value="all">All Data</button>
+                {% endif %}
+            </form>
+        </div>
+        <div class="col-4 button-fourteen">
+            <form action="/" method = "POST" class="form-inline">
+                {% if days_set == 'fourteen' %}
+                    <button class="btn btn-outline-success my-2 my-sm-0 active" type="submit" name="days" value="fourteen">14 Days</button>
+                {% else %}
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="days" value="fourteen">14 Days</button>
+                {% endif %}
+            </form>
+        </div>
+        <div class="col-4 button-seven">
+            <form action="/" method = "POST" class="form-inline" name="seven-days">
+                {% if days_set == 'seven' %}
+                    <button class="btn btn-outline-success my-2 my-sm-0 active" type="submit" name="days" value="seven">7 Days</button>
+                {% else %}
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="days" value="seven">7 Days</button>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+    </div>
+    <div class="container">
         <div class="row headers mb-2">
             <div class="col-2">
             Rank
@@ -12,7 +43,7 @@
             Cases
             </div>
             <div class="col-2">
-            Change
+            Last day
             </div>
         </div>
     {% for each in data %}
