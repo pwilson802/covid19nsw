@@ -29,7 +29,7 @@
       ]);
 
       var options = {
-        height: 350,
+        height: 300,
         legend: 'none',
         hAxis: {
           format: 'd MMM',
@@ -58,6 +58,37 @@
 
 {% block content %}
     <div class="container">
+    <div class="row select-buttons mb-2">
+        <div class="col-4 button-all">
+            <form action="postcode" method = "POST" class="form-inline">
+                {% if days_set == 'all' %}
+                    <button class="btn btn-outline-success my-2 my-sm-0 active" type="submit" name="days" value="recall-{{ postcode }}-all">All Data</button>
+                {% else %}
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="days" value="recall-{{ postcode }}-all">All Data</button>
+                {% endif %}
+            </form>
+        </div>
+        <div class="col-4 button-fourteen">
+            <form action="postcode" method = "POST" class="form-inline">
+                {% if days_set == 'fourteen' %}
+                    <button class="btn btn-outline-success my-2 my-sm-0 active" type="submit" name="days" value="recall-{{ postcode }}-fourteen">14 Days</button>
+                {% else %}
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="days" value="recall-{{ postcode }}-fourteen">14 Days</button>
+                {% endif %}
+            </form>
+        </div>
+        <div class="col-4 button-seven">
+            <form action="postcode" method = "POST" class="form-inline" name="seven-days">
+                {% if days_set == 'seven' %}
+                    <button class="btn btn-outline-success my-2 my-sm-0 active" type="submit" name="days" value="recall-{{ postcode }}-seven">7 Days</button>
+                {% else %}
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="days" value="recall-{{ postcode }}-seven">7 Days</button>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+    </div>
+    <div class="container">
         <div class="row headers mb-2">
             <div class="col-2">
             Rank
@@ -69,7 +100,7 @@
             Cases
             </div>
             <div class="col-2">
-            Change
+            Last day
             </div>
         </div>
     {% for each in data %}
@@ -108,7 +139,60 @@
                 </div>
             </div>
         </div>
+    </div>
     {% endfor %}
     </div>
     <div id="chart_div"></div>
+
+    <div class="close-postcodes">
+    <div class="today-count"><h3>Close Suburbs</h3></div>
+    <div class="container">
+        <div class="row headers mb-2">
+            <div class="col-2">
+            Rank
+            </div>
+            <div class="col-6">
+            Postcode
+            </div>
+            <div class="col-2">
+            Cases
+            </div>
+            <div class="col-2">
+            Last day
+            </div>
+        </div>
+    {% for each in close %}
+    <div class="row rank-entry">
+            <div class="col-2">
+                <div class="rank-number">
+                    <div class="h2">{{ each.rank }}</div>    
+                </div>
+                <div class="rank-direction">
+                    {{ each.movement_rank }}
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="postcode">
+                    <div class="h2">{{ each.postcode }}</div>
+                </div>
+                <div class="suburbs">
+                    {{ each.suburbs }}
+                </div>
+            </div>
+
+            <div class="col-2">
+                <div class="today-count mt-3">
+                    <h3>{{each.count}}</h3>
+                </div>
+            </div>
+
+            <div class="col-2">
+                <div class="new-cases mt-3">
+                    {{ each.count_change }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
 {% endblock %} 
