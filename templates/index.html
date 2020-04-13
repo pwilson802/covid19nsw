@@ -43,11 +43,11 @@
             Cases
             </div>
             <div class="col-2">
-            Last day
+            Recent
             </div>
         </div>
     {% for each in data %}
-    {% if '+' in each.movement_rank %}
+    {% if each.count_change != 0 %}
     <div class="row hot-entry">
     {% else %}
     <div class="row rank-entry">
@@ -55,9 +55,6 @@
             <div class="col-2">
                 <div class="rank-number">
                     <div class="h2">{{ each.rank }}</div>    
-                </div>
-                <div class="rank-direction">
-                    {{ each.movement_rank }}
                 </div>
             </div>
 

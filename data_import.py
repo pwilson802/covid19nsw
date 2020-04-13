@@ -47,9 +47,11 @@ covid_frame['notification_date'] =  pd.to_datetime(covid_frame['notification_dat
 all_data_list = list(covid_frame['postcode'])
 seven_day_list = list(covid_frame[covid_frame['notification_date'] > datetime.now() - timedelta(days=7)]['postcode'])
 fourteen_day_list = list(covid_frame[covid_frame['notification_date'] > datetime.now() - timedelta(days=14)]['postcode'])
+recent_list = list(covid_frame[covid_frame['notification_date'] > datetime.now() - timedelta(days=4)]['postcode'])
 cleaned_list_all = [int(x) for x in all_data_list if str(x).startswith('2')]
 cleaned_list_seven = [int(x) for x in seven_day_list if str(x).startswith('2')]
 cleaned_list_fourteen = [int(x) for x in fourteen_day_list if str(x).startswith('2')]
+recent_list_cleaned = [str(int(x)) for x in recent_list if str(x).startswith('2')]
 
 postcodes_dict = defaultdict(list)
 file = open('nsw_postcodes.csv')
@@ -96,9 +98,10 @@ def get_postcode_rank(cleaned_list, days=all):
             movement_rank = '-'
         daily_data[i]['movement_rank'] = movement_rank
         daily_data[i]['previous_count'] = previous_count[e['postcode']]
-        count_change = postcodes_count[int(e['postcode'])] - previous_count[e['postcode']]
-        if count_change > 0:
-            count_change = f'+{count_change}'
+        count_change = recent_list_cleaned.count(current_postcode)
+        # count_change = postcodes_count[int(e['postcode'])] - previous_count[e['postcode']]
+        # if count_change > 0:
+            # count_change = f'+{count_change}'
         daily_data[i]['count_change'] = count_change
     return daily_data
 
