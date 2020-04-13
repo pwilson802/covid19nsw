@@ -140,7 +140,7 @@ suburb_postcode_dict = {}
 for suburb in all_suburbs:
     for postcode in list(postcodes_dict.keys())[1:]:
         if suburb in postcodes_dict[postcode]:
-            suburb_postcode_dict[suburb] = postcode
+            suburb_postcode_dict[suburb.lower()] = postcode
 
 # Create a list of all suburbs and postcodes for error checkinf
 all_suburbs_postcodes = list(postcodes_dict.keys())[1:] + all_suburbs
