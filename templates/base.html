@@ -22,12 +22,18 @@
     <div class="nav-title postcode">Covid-19 NSW Cases</div>
   </a>
   <form action="postcode" method = "POST" class="form-inline">
-    <input class="form-control mr-sm-2" type="text" placeholder="Postcode" aria-label="Search" name="postcode">
+    <input list="postcode-options" class="form-control mr-sm-2" type="text" placeholder="Postcode or Suburb" aria-label="Search" name="postcode">
+    <datalist id="postcode-options">
+    {% for value in validation_set %}
+      <option value ="{{ value }}">
+    {% endfor %}
+    </datalist>
     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
   </form>
+
 </nav>
 <body>
-    <p class="disclaimer">The data on this site is gathered from <a href="https://data.nsw.gov.au/nsw-covid-19-data">NSW Data</a> This is displayed for research purposes only and is not provided for health advice.  The numbers displayed are confimred cases as provided in the data and may not be completely accurate of the current situation.</p>
+    <p class="disclaimer">The data on this site is gathered from <a href="https://data.nsw.gov.au/nsw-covid-19-data" target="_blank">NSW Data</a>. This is displayed for interest purposes only and should not replace current health advice. The numbers displayed are confirmed cases only and may not reflect the current situation.</p>
     {% block content %}{% endblock %}
 </body>
 </html>

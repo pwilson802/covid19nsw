@@ -56,4 +56,10 @@
 
 .postcode_error {
     font-family: 'Poppins', sans-serif;
+    font-family: 400;
+}
+
+.postcode a {
+    text-decoration: none; 
+    color: inherit
 }

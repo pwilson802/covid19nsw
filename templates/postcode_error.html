@@ -1,8 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="mt-3">
+<div class="mt-3 container">
+    {% if other_options == 'no' %}
     <p class="postcode_error">
-    The postcode {{ postcode}} was not found, if you believe this should be included please contact us at <a href="mailto:covid19nsw.stat@gmail.com">covid19nsw.stat@gmail.com</a>
+    Sorry, we coulding find {{ postcode }} or anything similar in our database, please try again.
     </p>
+    {% else %}
+    <p class="postcode_error">Search results for {{ postcode }}:</p>
+    {% for entry in all_options  %}
+    <div class="col-6">
+    <p style="margin-bottom: 1px"><a href = {{ url_for('postcode', location=entry) }}> {{ entry }} </a></p>
+    </div>
+    {% endfor %}
+    {% endif %}
 </div>
 {% endblock %} 
