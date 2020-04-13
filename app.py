@@ -17,7 +17,7 @@ postcode_file_yesterday = os.path.join(data_folder,f'postcode-{file_yesterday_na
 seven_file_today = os.path.join(data_folder,f'seven-{file_today_name}')
 seven_file_yesterday = os.path.join(data_folder,f'seven-{file_yesterday_name}')
 fourteen_file_today = os.path.join(data_folder,f'fourteen-{file_today_name}')
-fourteen_file_yesterday = os.path.join(data_folder,f'fourteen-{file_yesterday}')
+fourteen_file_yesterday = os.path.join(data_folder,f'fourteen-{file_yesterday_name}')
 suburb_to_postcode_file = os.path.join(data_folder,'suburb_to_postcode.json')
 all_postcode_suburb_file = os.path.join(data_folder,'all_postcode_suburb.json')
 
