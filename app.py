@@ -128,11 +128,7 @@ def postcode():
         postcode_data = [x for x in data if x['postcode'] == postcode]
         close_postcode_data = [x for x in data if x['postcode'] in close_postcodes]
         return render_template("postcode.html",postcode = postcode, data = postcode_data, history=postcode_history[postcode],days_set = 'all', close = close_postcode_data, validation_set = all_postcode_suburb_list)
-        # except:
-        #     return render_template('index.html', data=data, validation_set = all_postcode_suburb_list)
 
-# @app.route('/new_postcode',methods = ['POST', 'GET'])
-# def new_postcode():
-#     postcode = request.args['new_postcode']
-#     print(postcode)
-#     return render_template('index.html', data=data, validation_set = all_postcode_suburb_list)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port='8080')
+
