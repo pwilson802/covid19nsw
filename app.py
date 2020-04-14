@@ -130,5 +130,5 @@ def postcode():
         return render_template("postcode.html",postcode = postcode, data = postcode_data, history=postcode_history[postcode],days_set = 'all', close = close_postcode_data, validation_set = all_postcode_suburb_list)
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port='8080')
+    app.run(host='0.0.0.0')
 
