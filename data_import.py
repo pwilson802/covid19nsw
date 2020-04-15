@@ -40,7 +40,7 @@ seven_yesterday_count = {x['postcode']: x['count'] for x in seven_yesterday}
 fourteen_yesterday_rank = {x['postcode']: x['rank'] for x in fourteen_yesterday}
 fourteen_yesterday_count = {x['postcode']: x['count'] for x in fourteen_yesterday}
 
-csv_file = 'https://data.nsw.gov.au/data/dataset/aefcde60-3b0c-4bc0-9af1-6fe652944ec2/resource/21304414-1ff1-4243-a5d2-f52778048b29/download/covid-19-cases-by-notification-date-and-postcode-local-health-district-and-local-government-area.csv'
+csv_file = 'https://data.nsw.gov.au/data/dataset/97ea2424-abaf-4f3e-a9f2-b5c883f42b6a/resource/2776dbb8-f807-4fb2-b1ed-184a6fc2c8aa/download/covid-19-cases-by-notification-date-location-and-likely-source-of-infection.csv'
 
 covid_frame = pd.read_csv(csv_file)
 covid_frame['notification_date'] =  pd.to_datetime(covid_frame['notification_date'])
@@ -59,9 +59,8 @@ csv_file = csv.reader(file)
 for line in csv_file:
     postcodes_dict[line[1]].append(line[2].title())
 
-# Getting the rank information for each postcode
-# need to add multiople days
-def get_postcode_rank(cleaned_list, days=all):
+# Creating a dictionary of each postcode withe relevant information and adding them to a list
+def get_postcode_rank(cleaned_list, days_back=365):
     postcodes_count = Counter(cleaned_list)
     daily_data = []
 
@@ -75,10 +74,10 @@ def get_postcode_rank(cleaned_list, days=all):
         daily_data.append(temp_dict)
 
     daily_data.sort(key = lambda k: k['count'], reverse=True)
-    if days == 'seven':
+    if days_back == 7:
         previous_rank = seven_yesterday_rank
         previous_count = seven_yesterday_count
-    elif days == 'fourteen':
+    elif days_back == 14:
         previous_rank = fourteen_yesterday_rank
         previous_count = fourteen_yesterday_count
     else:
@@ -103,11 +102,14 @@ def get_postcode_rank(cleaned_list, days=all):
         # if count_change > 0:
             # count_change = f'+{count_change}'
         daily_data[i]['count_change'] = count_change
+        daily_data[i]['source'] = {}
+        for s in covid_frame['likely_source_of_infection'].unique():
+            daily_data[i]['source'][s.replace(' ','').replace('-','').replace('/','').lower()] = covid_frame.loc[(covid_frame['notification_date'] > datetime.now() - timedelta(days=days_back)) & (covid_frame['postcode'] == int(current_postcode)) & (covid_frame['likely_source_of_infection'] == s) ].shape[0]
     return daily_data
 
-all_data = get_postcode_rank(cleaned_list_all, days='all')
-seven_day_data = get_postcode_rank(cleaned_list_seven, days='seven')
-fourteen_day_data = get_postcode_rank(cleaned_list_fourteen, days='fourteen')
+all_data = get_postcode_rank(cleaned_list_all)
+seven_day_data = get_postcode_rank(cleaned_list_seven, days_back=7)
+fourteen_day_data = get_postcode_rank(cleaned_list_fourteen, days_back=14)
 
 
 # Get the details for making the charts for each postcode

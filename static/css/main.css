@@ -63,3 +63,28 @@
     text-decoration: none; 
     color: inherit
 }
+
+.infection-heading {
+    color: #344072;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+}
+
+.infection-type {
+    color: #8086a0;
+    font-weight: bold;
+    font-size: medium;
+}
+
+.infection {
+    color: #8086a0;
+    font-size: medium;
+}
+
+.infection-p {
+    margin-bottom: 0px;
+}
+
+.infection-box {
+    border: 1px solid #28a745;
+}
