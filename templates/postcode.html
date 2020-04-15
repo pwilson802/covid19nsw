@@ -133,62 +133,19 @@
                 </div>
             </div>
         </div>
-
-
-        <div class="row headers mt-5">
-            <div class="col">
-            Overseas
-            </div>
-            <div class="col">
-            Interstate
-            </div>
-            <div class="col">
-            Locally (Known)
-            </div>
-            <div class="col">
-            Locally (Unknown)
-            </div>
-            <div class="col">
-            Under Investigation
-            </div>
+    
+    <div class="row mt-2">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4 infection-box">
+        <h5 class="infection-heading">Infection Source</h5>
+        <p class="infection-p"><span class="infection-type">Overseas:</span> <span class="infection">{{ each.source.overseas }}</span></p>
+        <p class="infection-p"><span class="infection-type">Interstate:</span> <span class="infection">{{ each.source.interstate }}</span></p>
+        <p class="infection-p"><span class="infection-type">Locally (Known Source):</span> <span class="infection">{{ each.source.locallyacquiredcontactofaconfirmedcaseandorinaknowncluster }}</span></p>
+        <p class="infection-p"><span class="infection-type">Locally (Unknown Source):</span> <span class="infection">{{ each.source.locallyacquiredcontactnotidentified }}</span></p>
+        <p class="infection-p"><span class="infection-type">Under Investigation:</span> <span class="infection">{{ each.source.underinvestigation }}</span></p>
         </div>
-        <div class="row rank-entry">
-            <div class="col">
-                <div class="today-count">
-                    <div class="h2">{{ each.source.overseas }}</div>    
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="today-count">
-                    <div class="h2">{{ each.source.interstate }}</div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="today-count">
-                    <h2>{{each.source.locallyacquiredcontactofaconfirmedcaseandorinaknowncluster}}</h2>
-                </div>
-            </div>
-            <div class="col">
-                <div class="today-count">
-                    <h2>{{ each.source.locallyacquiredcontactnotidentified }}</h2>
-                </div>
-            </div>
-            <div class="col">
-                <div class="today-count">
-                    <h2>{{ each.source.underinvestigation }}</h2>
-                </div>
-            </div>
-        </div>
-
-
-
-
-
-
-
-
+        <div class="col-lg-4"></div>
+    </div>
     
     
     </div>

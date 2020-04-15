@@ -89,7 +89,6 @@ def postcode():
         except:
             days = 'all'
             postcode = input_data['postcode']
-        print(postcode)
         if postcode.lower() not in validation_list:
             close_options = get_close_matches(postcode.lower(), validation_list)
             in_options = [x for x in validation_list if postcode in x]
@@ -120,7 +119,6 @@ def postcode():
         print(request.args['location'])
         # try:
         postcode = request.args['location']
-        print(postcode)
         if not postcode.startswith('2'):
             postcode = suburb_to_postcode_dict[postcode.lower()]
         close_postcodes_try = [int(postcode) - 1, int(postcode) - 2, int(postcode) + 1, int(postcode) + 2]
