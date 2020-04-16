@@ -66,16 +66,20 @@ with open(all_postcode_suburb_file) as json_file:
 validation_list = [x.lower() for x in all_postcode_suburb_list]
 all_postcode_suburb_list = set(all_postcode_suburb_list)
 
+data_shown = [x for x in data if x['count'] != 0]
+seven_day_data_shown = [x for x in data_seven_days if x['count'] != 0]
+fourteen_day_data_shown = [x for x in data_seven_days if x['count'] != 0]
+
 @app.route('/', methods = ['POST', 'GET'])
 def index():
     if request.method == 'POST':
         input_data = request.form
         days = input_data['days']
         if days == 'seven':
-            return render_template('index.html', data=data_seven_days, days_set='seven', validation_set = all_postcode_suburb_list)
+            return render_template('index.html', data=seven_day_data_shown, days_set='seven', validation_set = all_postcode_suburb_list)
         if days == 'fourteen':
-            return render_template('index.html', data=data_fourteen_days, days_set='fourteen', validation_set = all_postcode_suburb_list)
-    return render_template('index.html', data=data, days_set = 'all', validation_set = all_postcode_suburb_list )
+            return render_template('index.html', data=fourteen_day_data_shown, days_set='fourteen', validation_set = all_postcode_suburb_list)
+    return render_template('index.html', data=data_shown, days_set = 'all', validation_set = all_postcode_suburb_list )
 
 @app.route('/postcode',methods = ['POST', 'GET'])
 def postcode():
