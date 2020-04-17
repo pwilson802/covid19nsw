@@ -205,6 +205,10 @@ def postcode():
             validation_set=all_postcode_suburb_list,
         )
 
+@app.route('/sitemap.xml')
+def site_map():
+    return render_template('sitemap.xml')
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
