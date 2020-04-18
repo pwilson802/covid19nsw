@@ -1,9 +1,8 @@
-# import requests
 import os
 import json
 import csv
-
-# import urllib.request
+import sys
+from datetime_string import make_current_time_string
 import pandas as pd
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta
@@ -27,6 +26,7 @@ fourteen_file_yesterday = os.path.join(data_folder, f"fourteen-{file_yesterday_n
 suburb_to_postcode_file = os.path.join(data_folder, "suburb_to_postcode.json")
 all_postcode_suburb_file = os.path.join(data_folder, "all_postcode_suburb.json")
 
+
 with open(file_yesterday) as json_file:
     yesterday = json.loads(json_file.read())
 with open(seven_file_yesterday) as json_file:
@@ -44,6 +44,8 @@ fourteen_yesterday_count = {x["postcode"]: x["count"] for x in fourteen_yesterda
 csv_file = "https://data.nsw.gov.au/data/dataset/97ea2424-abaf-4f3e-a9f2-b5c883f42b6a/resource/2776dbb8-f807-4fb2-b1ed-184a6fc2c8aa/download/covid-19-cases-by-notification-date-location-and-likely-source-of-infection.csv"
 
 covid_frame = pd.read_csv(csv_file)
+
+
 covid_frame["notification_date"] = pd.to_datetime(covid_frame["notification_date"])
 all_data_list = list(covid_frame["postcode"])
 seven_day_list = list(
@@ -212,7 +214,6 @@ with open(fourteen_file_today, "w") as json_file:
 
 with open(postcode_file_today, "w") as json_file:
     json.dump(postcode_chart, json_file)
-
 
 with open(suburb_to_postcode_file, "w") as json_file:
     json.dump(suburb_postcode_dict, json_file)

@@ -88,3 +88,8 @@
 .infection-box {
     border: 1px solid #28a745;
 }
+
+.contact-message {
+    font-size: small;
+    text-align: center;
+}

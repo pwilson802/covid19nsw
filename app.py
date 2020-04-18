@@ -22,6 +22,11 @@ fourteen_file_today = os.path.join(data_folder, f"fourteen-{file_today_name}")
 fourteen_file_yesterday = os.path.join(data_folder, f"fourteen-{file_yesterday_name}")
 suburb_to_postcode_file = os.path.join(data_folder, "suburb_to_postcode.json")
 all_postcode_suburb_file = os.path.join(data_folder, "all_postcode_suburb.json")
+last_update_file = os.path.join(data_folder, "last_update_time")
+
+# get the last update time for display on th website postcode page
+with open(last_update_file) as f:
+    last_update = f.readlines()[0]
 
 
 # If todays file hasn't been loaded yet, we will grab yesterdays file
@@ -151,6 +156,7 @@ def postcode():
                 days_set="seven",
                 close=close_postcode_data,
                 validation_set=all_postcode_suburb_list,
+                last_update = last_update,
             )
         elif days == "fourteen":
             postcode_data = [x for x in data_fourteen_days if x["postcode"] == postcode]
@@ -165,6 +171,7 @@ def postcode():
                 days_set="fourteen",
                 close=close_postcode_data,
                 validation_set=all_postcode_suburb_list,
+                last_update = last_update,
             )
         else:
             postcode_data = [x for x in data if x["postcode"] == postcode]
@@ -177,6 +184,7 @@ def postcode():
                 days_set="all",
                 close=close_postcode_data,
                 validation_set=all_postcode_suburb_list,
+                last_update = last_update,
             )
     else:
         print(request.args["location"])
@@ -203,6 +211,7 @@ def postcode():
             days_set="all",
             close=close_postcode_data,
             validation_set=all_postcode_suburb_list,
+            last_update = last_update,
         )
 
 @app.route('/sitemap.xml')
