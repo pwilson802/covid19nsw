@@ -6,7 +6,7 @@ from datetime_string import make_current_time_string
 import subprocess
 import logging
 data_folder = os.environ.get("COVID_DATA")
-logging.basicConfig(filename='app.log', 
+logging.basicConfig(filename='/var/log/covid_update', 
                     filemode='a',
                     format='%(asctime)s - %(message)s', 
                     datefmt='%d-%b-%y %H:%M:%S')
