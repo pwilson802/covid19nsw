@@ -11,7 +11,7 @@ day_endings = {
 }
 
 def make_current_time_string():
-    now = datetime.now() + timedelta(hours=8)
+    now = datetime.now() + timedelta(hours=10)
     time = now.strftime('%I:%M %p')
     day = now.strftime('%d')
     month = now.strftime('%B')
