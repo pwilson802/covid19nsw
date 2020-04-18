@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 day_endings = {
     '1': 'st',
@@ -11,7 +11,7 @@ day_endings = {
 }
 
 def make_current_time_string():
-    now = datetime.now()
+    now = datetime.now() + timedelta(hours=8)
     time = now.strftime('%I:%M %p')
     day = now.strftime('%d')
     month = now.strftime('%B')
