@@ -23,6 +23,7 @@ fourteen_file_yesterday = os.path.join(data_folder, f"fourteen-{file_yesterday_n
 suburb_to_postcode_file = os.path.join(data_folder, "suburb_to_postcode.json")
 all_postcode_suburb_file = os.path.join(data_folder, "all_postcode_suburb.json")
 last_update_file = os.path.join(data_folder, "last_update_time")
+case_count_file = os.path.join(data_folder, "case_count.json")
 
 # get the last update time for display on th website postcode page
 with open(last_update_file) as f:
@@ -69,6 +70,9 @@ with open(suburb_to_postcode_file) as json_file:
 with open(all_postcode_suburb_file) as json_file:
     all_postcode_suburb_list = json.loads(json_file.read())
 
+with open(case_count_file) as json_file:
+    case_count = json.loads(json_file.read())
+
 validation_list = [x.lower() for x in all_postcode_suburb_list]
 all_postcode_suburb_list = set(all_postcode_suburb_list)
 
@@ -88,6 +92,7 @@ def index():
                 data=seven_day_data_shown,
                 days_set="seven",
                 validation_set=all_postcode_suburb_list,
+                case_numbers = case_count['seven'],
             )
         if days == "fourteen":
             return render_template(
@@ -95,12 +100,14 @@ def index():
                 data=fourteen_day_data_shown,
                 days_set="fourteen",
                 validation_set=all_postcode_suburb_list,
+                case_numbers = case_count['fourteen'],
             )
     return render_template(
         "index.html",
         data=data_shown,
         days_set="all",
         validation_set=all_postcode_suburb_list,
+        case_numbers = case_count['all'],
     )
 
 
@@ -188,7 +195,6 @@ def postcode():
             )
     else:
         print(request.args["location"])
-        # try:
         postcode = request.args["location"]
         if not postcode.startswith("2"):
             postcode = suburb_to_postcode_dict[postcode.lower()]

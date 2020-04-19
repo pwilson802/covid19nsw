@@ -6,9 +6,9 @@
         <div class="col-4 button-all">
             <form action="/" method = "POST" class="form-inline">
                 {% if days_set == 'all' %}
-                    <button class="btn btn-outline-success my-2 my-sm-0 active" type="submit" name="days" value="all">All Data</button>
+                    <button class="btn btn-outline-success my-2 my-sm-0 active" type="submit" name="days" value="all">All Cases</button>
                 {% else %}
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="days" value="all">All Data</button>
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="days" value="all">All Cases</button>
                 {% endif %}
             </form>
         </div>
@@ -33,6 +33,17 @@
     </div>
     </div>
     <div class="container">
+        <div>
+            <h4 class="text-center all-count">
+            {% if days_set == 'seven' %}
+                Last 7 days: {{ case_numbers }}
+            {% elif days_set == 'fourteen' %}
+                Last 14 days: {{ case_numbers }}
+            {% else %}
+                All Cases: {{ case_numbers }}
+            {% endif %}
+            </h4>
+        </div>
         <div class="row headers mb-2">
             <div class="col-2">
             Rank

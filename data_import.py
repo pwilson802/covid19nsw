@@ -25,7 +25,7 @@ fourteen_file_today = os.path.join(data_folder, f"fourteen-{file_today_name}")
 fourteen_file_yesterday = os.path.join(data_folder, f"fourteen-{file_yesterday_name}")
 suburb_to_postcode_file = os.path.join(data_folder, "suburb_to_postcode.json")
 all_postcode_suburb_file = os.path.join(data_folder, "all_postcode_suburb.json")
-
+case_count_file = os.path.join(data_folder, "case_count.json")
 
 with open(file_yesterday) as json_file:
     yesterday = json.loads(json_file.read())
@@ -63,6 +63,13 @@ recent_list = list(
         "postcode"
     ]
 )
+
+case_count = {
+    'all': len(all_data_list),
+    'seven': len(seven_day_list),
+    'fourteen': len(fourteen_day_list)
+}
+
 cleaned_list_all = [int(x) for x in all_data_list if str(x).startswith("2")]
 cleaned_list_seven = [int(x) for x in seven_day_list if str(x).startswith("2")]
 cleaned_list_fourteen = [int(x) for x in fourteen_day_list if str(x).startswith("2")]
@@ -220,3 +227,6 @@ with open(suburb_to_postcode_file, "w") as json_file:
 
 with open(all_postcode_suburb_file, "w") as json_file:
     json.dump(all_suburbs_postcodes, json_file)
+
+with open(case_count_file, "w") as json_file:
+    json.dump(case_count, json_file)
