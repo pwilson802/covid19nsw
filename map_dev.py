@@ -39,8 +39,3 @@ for l in postcode_dict.keys():
         ).add_to(m)
 
 m.save('map_test.html')
-
-
-# home = postcode_dict['2219']['map_location']
-# picton = postcode_dict['2571']['map_location']
-# m = folium.Map(home, zoom_start=12)

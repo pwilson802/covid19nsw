@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 
 # Details for making the data files used in the website.
 # Using environment variables and os.join as development is on Windows and prod is Linux
-# This could probably o into a database at some point but josn files are fast
+# This could probably o into a database at some point but josn files are fast and work for the moment
 data_folder = os.environ.get("COVID_DATA")
 today = datetime.now()
 yesterday = datetime.now() - timedelta(days=1)
