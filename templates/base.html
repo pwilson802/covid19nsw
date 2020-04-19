@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Covid-19 NSW</title>
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="description" content="Search your postcode for confirmed cases and infection sources of COVID-19">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='img/site.webmanifest') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
   <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -33,7 +38,10 @@
 
 </nav>
 <body>
-    <p class="disclaimer">The data on this site is gathered from <a href="https://data.nsw.gov.au/nsw-covid-19-data" target="_blank">NSW Data</a>. This is displayed for interest purposes only and should not replace current health advice. The numbers displayed are confirmed cases only and may not reflect the current situation.</p>
+    <p class="disclaimer">The data on this site is gathered from <a href="https://data.nsw.gov.au/nsw-covid-19-data" target="_blank">NSW Data</a>. This is displayed for interest purposes only and should not replace current health advice. The numbers displayed are confirmed cases only and may not reflect the current infection rate in your area.</p>
     {% block content %}{% endblock %}
 </body>
+<footer>
+
+</footer>
 </html>
