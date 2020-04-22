@@ -10,7 +10,10 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon-16x16.png') }}">
     <link rel="manifest" href="{{ url_for('static', filename='img/site.webmanifest') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-163350903-1"></script>
   <script>
@@ -26,14 +29,38 @@
   <a class="navbar-brand" href="/">
     <div class="nav-title postcode">Covid-19 NSW Cases</div>
   </a>
-  <form action="postcode" method = "POST" class="form-inline">
-    <input list="postcode-options" class="form-control mr-sm-2" type="text" placeholder="Postcode or Suburb" aria-label="Search" name="postcode">
+    <div class="btn-group">
+
+      <form action="/" method = "POST" class="form-inline">
+      {% if view_mode == 'map' %}
+      <button class="btn btn-outline-primary btn-sm" type="submit" name="days" value={{ days_set }}>
+      {% else %}
+      <button class="btn btn-outline-primary btn-sm active" type="submit" name="days" value={{ days_set }}>
+      {% endif %}
+      List View</button>
+      </form>
+      <form action="map" method = "POST" class="form-inline">
+      {% if view_mode == 'map' %}
+      <button class="btn btn-outline-secondary btn-sm active" type="submit" name="days" value={{ days_set }}>
+      {% else %}
+      <button class="btn btn-outline-secondary btn-sm" type="submit" name="days" value={{ days_set }}>
+      {% endif %}      
+      Map View</button>
+      </form>
+    </div>
+    <form action="postcode" method = "POST" class="form-inline">
+    <input list="postcode-options" class="form-control mr-sm-2" type="text" placeholder="Postcode or Suburb" aria-label="Search" name="postcode" style="width: 186px;">
     <datalist id="postcode-options">
     {% for value in validation_set %}
       <option value ="{{ value }}">
     {% endfor %}
     </datalist>
+    {% if view_mode == 'map' %}
+    <input type="hidden" name="source" value="maps">
+    <input type="hidden" name="days" value={{ days_set }}>
+    {% endif %}
     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    
   </form>
 
 </nav>
@@ -41,7 +68,4 @@
     <p class="disclaimer">The data on this site is gathered from <a href="https://data.nsw.gov.au/nsw-covid-19-data" target="_blank">NSW Data</a>. This is displayed for interest purposes only and should not replace current health advice. The numbers displayed are confirmed cases only and may not reflect the current infection rate in your area.</p>
     {% block content %}{% endblock %}
 </body>
-<footer>
-
-</footer>
 </html>

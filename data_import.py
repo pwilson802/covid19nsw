@@ -26,6 +26,7 @@ fourteen_file_yesterday = os.path.join(data_folder, f"fourteen-{file_yesterday_n
 suburb_to_postcode_file = os.path.join(data_folder, "suburb_to_postcode.json")
 all_postcode_suburb_file = os.path.join(data_folder, "all_postcode_suburb.json")
 case_count_file = os.path.join(data_folder, "case_count.json")
+map_data_file = os.path.join(data_folder, "map_data.json")
 
 with open(file_yesterday) as json_file:
     yesterday = json.loads(json_file.read())
@@ -74,25 +75,41 @@ cleaned_list_all = [int(x) for x in all_data_list if str(x).startswith("2")]
 cleaned_list_seven = [int(x) for x in seven_day_list if str(x).startswith("2")]
 cleaned_list_fourteen = [int(x) for x in fourteen_day_list if str(x).startswith("2")]
 recent_list_cleaned = [str(int(x)) for x in recent_list if str(x).startswith("2")]
-
-postcodes_dict = defaultdict(list)
+########################################CHANGE###################################
+##################################################################################
+####################################################################################
+suburb_dict = defaultdict(list)
 file = open("nsw_postcodes.csv")
 csv_file = csv.reader(file)
 for line in csv_file:
-    postcodes_dict[line[1]].append(line[2].title())
+    suburb_dict[line[1]].append(line[2].title())
+
+postcode_dict = {}
+with open('nsw_postcodes.csv') as file:
+    csv_file = csv.reader(file)
+    next(csv_file)
+    for line in csv_file:
+        postcode = line[1]
+        postcode_dict[postcode] = {}
+        postcode_dict[postcode]['suburbs'] = suburb_dict[postcode]
+        postcode_dict[postcode]['map_location'] = [ float(line[5]), float(line[4]) ]
+        postcode_dict[postcode]['postcode'] = postcode
+
+
+
 
 # Creating a dictionary of each postcode withe relevant information and adding them to a list
 def get_postcode_rank(cleaned_list, days_back=365):
     postcodes_count = Counter(cleaned_list)
     daily_data = []
 
-    for postcode in postcodes_dict.keys():
+    for postcode in postcode_dict.keys():
         if len(postcode) != 4:
             continue
         temp_dict = {}
         temp_dict["postcode"] = postcode
         temp_dict["count"] = postcodes_count[int(postcode)]
-        temp_dict["suburbs"] = ", ".join(postcodes_dict[postcode])
+        temp_dict["suburbs"] = ", ".join(postcode_dict[postcode]['suburbs'])
         daily_data.append(temp_dict)
 
     daily_data.sort(key=lambda k: k["count"], reverse=True)
@@ -145,6 +162,18 @@ all_data = get_postcode_rank(cleaned_list_all)
 seven_day_data = get_postcode_rank(cleaned_list_seven, days_back=7)
 fourteen_day_data = get_postcode_rank(cleaned_list_fourteen, days_back=14)
 
+for line in all_data:
+    # postcode_dict[line['postcode']]['postcode'] = postcode
+    postcode_dict[line['postcode']]['all_count'] = line['count']
+    postcode_dict[line['postcode']]['all_rank'] = line['rank']
+    postcode_dict[line['postcode']]['suburbs'] = line['suburbs']
+for line in seven_day_data:
+    postcode_dict[line['postcode']]['seven_day_count'] = line['count']
+    postcode_dict[line['postcode']]['seven_day_rank'] = line['rank']
+for line in fourteen_day_data:
+    postcode_dict[line['postcode']]['fourteen_day_count'] = line['count']
+    postcode_dict[line['postcode']]['fourteen_day_rank'] = line['rank']
+
 
 # Get the details for making the charts for each postcode
 #
@@ -171,7 +200,7 @@ day_keys = [
     "fourteen",
 ]
 postcode_chart = {}
-for postcode in postcodes_dict.keys():
+for postcode in postcode_dict.keys():
     if len(postcode) != 4:
         continue
     postcode_chart[postcode] = {}
@@ -198,16 +227,19 @@ for postcode in postcodes_dict.keys():
         chart_day = chart_day - timedelta(days=1)
 
 # create a dictionary for mapping suburb to postcode
-suburbs = list(postcodes_dict.values())[1:]
-all_suburbs = [item for l in suburbs for item in l]
+# suburbs = list(postcodes_dict.values())[1:]
+# all_suburbs = [item for l in suburbs for item in l]
+suburbs = [x.split(',') for x in [postcode_dict[x]['suburbs'] for x in postcode_dict.keys()]]
+all_suburbs = [item.strip() for l in suburbs for item in l]
 suburb_postcode_dict = {}
 for suburb in all_suburbs:
-    for postcode in list(postcodes_dict.keys())[1:]:
-        if suburb in postcodes_dict[postcode]:
+    # for postcode in list(postcodes_dict.keys())[1:]:
+    for postcode in list(postcode_dict.keys()):
+        if suburb in postcode_dict[postcode]['suburbs']:
             suburb_postcode_dict[suburb.lower()] = postcode
 
 # Create a list of all suburbs and postcodes for error checkinf
-all_suburbs_postcodes = list(postcodes_dict.keys())[1:] + all_suburbs
+all_suburbs_postcodes = list(postcode_dict.keys()) + all_suburbs
 
 # Write all the json files
 with open(file_today, "w") as json_file:
@@ -230,3 +262,6 @@ with open(all_postcode_suburb_file, "w") as json_file:
 
 with open(case_count_file, "w") as json_file:
     json.dump(case_count, json_file)
+
+with open(map_data_file, "w") as json_file:
+    json.dump(postcode_dict, json_file)

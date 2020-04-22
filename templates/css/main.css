@@ -37,3 +37,11 @@
     text-decoration: none; 
     color: inherit
 }
+
+.navbar::before {
+    content: normal;
+}
+
+.navbar::after {
+    content: normal;
+}
