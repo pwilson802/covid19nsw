@@ -29,7 +29,7 @@ popup_html = """
 with open(map_data_file) as json_file:
     postcode_dict = json.loads(json_file.read())
 
-def all_map(data, postcode_zoom='2134', postcode_dict = postcode_dict, zoom=12):
+def all_map(data, postcode_zoom='2016', postcode_dict = postcode_dict, zoom=12):
     # Add data for all cases
     sydney = postcode_dict[postcode_zoom]['map_location']
     cases_map = folium.Map(sydney, zoom_start=zoom)
