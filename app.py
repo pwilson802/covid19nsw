@@ -180,7 +180,7 @@ def postcode():
                 map_data = all_map('seven_day_count', postcode_zoom=postcode,zoom=13)
                 map_data.save(temp_map_name)
                 remove_bootstrap3(temp_map_name)
-                just_the_file = temp_map_name.split('\\')[-1]
+                just_the_file = os.path.split(temp_map_name)[-1]
                 map_template = f"temp_maps/{just_the_file}"
                 return render_template('map_direct.html', days_set="seven", view_mode="map", temp_map_name=map_template, temp_map = 'true')
             postcode_data = [x for x in data_seven_days if x["postcode"] == postcode]
