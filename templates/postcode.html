@@ -2,59 +2,136 @@
 {% block title %}Covid-19 Postcode Search - {{ postcode }}{% endblock %}
 {% block head %}
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script>
-    google.charts.load('current', {packages: ['corechart', 'line']});
-    google.charts.setOnLoadCallback(drawBasic);
+    <script type="text/javascript">
 
-    function drawBasic() {
+    // Load the Visualization API and the controls package.
+    // Packages for all the other charts you need will be loaded
+    // automatically by the system.
+    google.charts.load('current', {'packages':['corechart', 'controls', 'line']});
 
-      var data = new google.visualization.DataTable();
+    // Set a callback to run when the Google Visualization API is loaded.
+    google.charts.setOnLoadCallback(drawDashboard);
+
+    function drawDashboard() {
+        // Everything is loaded. Assemble your dashboard...
+        var data = new google.visualization.DataTable();
       data.addColumn('date', 'Date');
       data.addColumn('number', 'Cases');
 
       data.addRows([
-        [new Date({{ history.fourteen.year }},{{history.fourteen.month}},{{history.fourteen.day}}), {{history.fourteen.total_count}}],
-        [new Date({{ history.thirteen.year }},{{history.thirteen.month}},{{history.thirteen.day}}), {{history.thirteen.total_count}}],
-        [new Date({{ history.twelve.year }},{{history.twelve.month}},{{history.twelve.day}}), {{history.twelve.total_count}}],  
-        [new Date({{ history.eleven.year }},{{history.eleven.month}},{{history.eleven.day}}), {{history.eleven.total_count}}],  
-        [new Date({{ history.ten.year }},{{history.ten.month}},{{history.ten.day}}), {{history.ten.total_count}}],
-        [new Date({{ history.nine.year }},{{history.nine.month}},{{history.nine.day}}), {{history.nine.total_count}}],
-        [new Date({{ history.eight.year }},{{history.eight.month}},{{history.eight.day}}), {{history.eight.total_count}}],
-        [new Date({{ history.seven.year }},{{history.seven.month}},{{history.seven.day}}), {{history.seven.total_count}}],
-        [new Date({{ history.six.year }},{{history.six.month}},{{history.six.day}}), {{history.six.total_count}}],
-        [new Date({{ history.five.year }},{{history.five.month}},{{history.five.day}}), {{history.five.total_count}}],
-        [new Date({{ history.four.year }},{{history.four.month}},{{history.four.day}}), {{history.four.total_count}}],
-        [new Date({{ history.three.year }},{{history.three.month}},{{history.three.day}}), {{history.three.total_count}}],
-        [new Date({{ history.two.year }},{{history.two.month}},{{history.two.day}}), {{history.two.total_count}}],
-        [new Date({{ history.one.year }},{{history.one.month}},{{history.one.day}}), {{history.one.total_count}}]
+        {% for each in history %}
+        {{ each }}
+        {% endfor %}
       ]);
 
-      var options = {
-        height: 300,
-        legend: 'none',
-        hAxis: {
-          format: 'd MMM',
-          title: 'Date',
-          gridlines : {
-              count : 14,
-              minSpacing: 80,
-            }
-        },
-        vAxis: {
-          title: 'Total Cases',
-          format: '0',
-        }
-      };
+        var dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'));
 
-      function resize() {
-          var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-          chart.draw(data, options);
-      }
-      window.onload = resize();
-      window.onresize = resize;
-    }
+        // Create a range slider, passing some options
+        var casesRangeSlider = new google.visualization.ControlWrapper({
+            'controlType': 'DateRangeFilter',
+            'containerId': 'filter_div',
+            'options': {
+            'filterColumnLabel': 'Date'
+            }
+        });
+
+        var casesChart = new google.visualization.ChartWrapper({
+            'chartType': 'LineChart',
+            'containerId': 'chart_div',
+            'options': {
+                height: 300,
+                legend: 'none',
+                hAxis: {
+                format: 'd MMM',
+                gridlines : {
+                    count : 14,
+                    minSpacing: 80,
+                    }
+                },
+                vAxis: {
+                title: 'Total Cases',
+                format: '0',
+                }
+            }
+        });
+
+        dashboard.bind(casesRangeSlider, casesChart);
+
+        function resize() {
+            var chart = new google.visualization.Dashboard(document.getElementById('dashboard_div'));
+            chart.draw(data);
+        }
+        window.onload = resize();
+        window.onresize = resize;
+
+
+        dashboard.draw(data);
+    };
 
     </script>
+
+    <script type="text/javascript">
+
+    google.charts.load('current', {'packages':['corechart', 'controls', 'line']});
+
+    google.charts.setOnLoadCallback(drawTestDashboard);
+
+    function drawTestDashboard() {
+        var data = new google.visualization.DataTable();
+      data.addColumn('date', 'Date');
+      data.addColumn('number', 'Tests');
+      data.addColumn('number', 'Positive');
+
+      data.addRows([
+        {% for each in testing %}
+        {{ each }}
+        {% endfor %}  
+        
+      ]);
+
+        var test_dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_test_div'));
+
+        // Create a range slider, passing some options
+        var casesRangeSlider = new google.visualization.ControlWrapper({
+            'controlType': 'DateRangeFilter',
+            'containerId': 'filter_test_div',
+            'options': {
+            'filterColumnLabel': 'Date'
+            }
+        });
+
+        var casesChart = new google.visualization.ChartWrapper({
+            'chartType': 'ColumnChart',
+            'containerId': 'chart_test_div',
+            'options': {
+                height: 300,
+                hAxis: {
+                format: 'd MMM',
+                gridlines : {
+                    count : 14,
+                    minSpacing: 80,
+                    }
+                },
+                vAxis: {
+                format: '0',
+                }
+            }
+        });
+
+        test_dashboard.bind(casesRangeSlider, casesChart);
+
+        function resize() {
+            var chart = new google.visualization.Dashboard(document.getElementById('dashboard_test_div'));
+            chart.draw(data);
+        }
+        window.onload = resize();
+        window.onresize = resize;
+
+        test_dashboard.draw(data);
+    };
+
+    </script>
+
 
 {% endblock %}
 
@@ -134,6 +211,14 @@
                 </div>
             </div>
         </div>
+
+    <div class="row" id="dashboard_div">
+        <div class="col">
+      <!--Divs that will hold each control and chart-->
+            <div id="chart_div"></div>
+            <div class="text-center" id="filter_div"></div>
+        </div>
+    </div>
     
     <div class="row mt-2">
         <div class="col-lg-4"></div>
@@ -153,7 +238,6 @@
     {% endfor %}
     </div>
     <div id="chart_div"></div>
-
 
     <div class="container">
         <div class="today-count"><h3>Close Suburbs</h3></div>
@@ -205,6 +289,13 @@
             </div>
         </div>
     {% endfor %}
+    <div class="row" id="dashboard_tests_div">
+        <div class="col">
+      <!--Divs that will hold each control and chart-->
+            <div id="chart_test_div"></div>
+            <div class="text-center" id="filter_test_div"></div>
+        </div>
+    </div>
     <div class="contact-message mt-5">
     <p>The information on this website is updated as soon as new data is published by NSW Health which is usually once a day.  The last update was at {{ last_update }}. For feedback on the website or to suggest a feature please contact <a href="mailto:covid19nsw.stat@gmail.com">covid19nsw.stat@gmail.com</a></p>
     </div>

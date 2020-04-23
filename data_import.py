@@ -27,6 +27,7 @@ suburb_to_postcode_file = os.path.join(data_folder, "suburb_to_postcode.json")
 all_postcode_suburb_file = os.path.join(data_folder, "all_postcode_suburb.json")
 case_count_file = os.path.join(data_folder, "case_count.json")
 map_data_file = os.path.join(data_folder, "map_data.json")
+testing_chart_file = os.path.join(data_folder, "testing_chart.json")
 
 with open(file_yesterday) as json_file:
     yesterday = json.loads(json_file.read())
@@ -176,55 +177,81 @@ for line in fourteen_day_data:
 
 
 # Get the details for making the charts for each postcode
-#
 postcode_dates = covid_frame[["notification_date", "postcode"]]
 postcode_dates["notification_date"] = pd.to_datetime(
     postcode_dates["notification_date"]
 )
 newest_date = postcode_dates["notification_date"].iloc[-1]
 
-day_keys = [
-    "one",
-    "two",
-    "three",
-    "four",
-    "five",
-    "six",
-    "seven",
-    "eight",
-    "nine",
-    "ten",
-    "eleven",
-    "twelve",
-    "thirteen",
-    "fourteen",
-]
 postcode_chart = {}
 for postcode in postcode_dict.keys():
     if len(postcode) != 4:
         continue
-    postcode_chart[postcode] = {}
+    # postcode_chart[postcode] = {}
+    chart_rows = []
     chart_day = newest_date
     # postcode = float(postcode)
     postcode_df = postcode_dates[postcode_dates["postcode"] == float(postcode)]
-    for num in day_keys:
+    for num in range(30):
         date_str = chart_day.strftime("%Y-%m-%d")
-        postcode_chart[postcode][str(num)] = {}
-        postcode_chart[postcode][str(num)]["year"] = chart_day.year
-        # Minus 1 from the month as this will be used in a javascipt graph.  Javascript month indes start from 0 (January).
-        postcode_chart[postcode][str(num)]["month"] = chart_day.month - 1
-        postcode_chart[postcode][str(num)]["day"] = chart_day.day
-        postcode_chart[postcode][str(num)]["daily_count"] = int(
+        year = chart_day.year
+        month = chart_day.month - 1
+        day = chart_day.day
+        daily_count = int(
             postcode_df[postcode_df["notification_date"] == chart_day].count()[
                 "postcode"
             ]
         )
-        postcode_chart[postcode][str(num)]["total_count"] = int(
+        total_count = int(
             postcode_df[postcode_df["notification_date"] <= chart_day].count()[
                 "postcode"
             ]
         )
+        row_entry = f"[new Date({year},{month},{day}), {total_count}],"
+        chart_rows.append(row_entry)
         chart_day = chart_day - timedelta(days=1)
+    postcode_chart[postcode] = chart_rows
+
+# Get the details for making a chart for the test cases to be displayed on each postcode page
+test_csv_file = "https://data.nsw.gov.au/data/dataset/5424aa3b-550d-4637-ae50-7f458ce327f4/resource/227f6b65-025c-482c-9f22-a25cf1b8594f/download/covid-19-tests-by-date-and-location-and-result.csv"
+
+covid_test_frame = pd.read_csv(test_csv_file)
+
+covid_test_frame["test_date"] = pd.to_datetime(
+    covid_test_frame["test_date"]
+)
+
+newest_date = covid_test_frame["test_date"].iloc[-1]
+
+testing_chart = {}
+for postcode in postcode_dict.keys():
+    if len(postcode) != 4:
+        continue
+    # postcode_chart[postcode] = {}
+    chart_rows = []
+    chart_day = newest_date
+    # postcode = float(postcode)
+    postcode_df = covid_test_frame[covid_test_frame["postcode"] == float(postcode)]
+    for num in range(45):
+        # date_str = chart_day.strftime("%Y-%m-%d")
+        year = chart_day.year
+        month = chart_day.month - 1
+        day = chart_day.day
+        daily_tests = int(
+            postcode_df[postcode_df["test_date"] == chart_day].count()[
+                "postcode"
+            ]
+        )
+        daily_positive = int(
+            postcode_df[postcode_df["test_date"] == chart_day][postcode_df["result"] == "Case - Confirmed"].count()[
+                "postcode"
+            ]
+        )
+        row_entry = f"[new Date({year},{month},{day}), {daily_tests}, {daily_positive}],"
+        chart_rows.append(row_entry)
+        chart_day = chart_day - timedelta(days=1)
+    testing_chart[postcode] = chart_rows
+
 
 # create a dictionary for mapping suburb to postcode
 # suburbs = list(postcodes_dict.values())[1:]
@@ -265,3 +292,6 @@ with open(case_count_file, "w") as json_file:
 
 with open(map_data_file, "w") as json_file:
     json.dump(postcode_dict, json_file)
+
+with open(testing_chart_file, "w") as json_file:
+    json.dump(testing_chart, json_file)
