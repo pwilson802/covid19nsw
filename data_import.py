@@ -323,7 +323,6 @@ for num in range(90):
     row_entry = f"[new Date({year},{month},{day}), {daily_tests}, {daily_positive}],"
     all_nsw_chart_tests.append(row_entry)
     chart_day = chart_day - timedelta(days=1)
-    print(chart_day)
 
 testing_chart['all_nsw'] = all_nsw_chart_tests
 

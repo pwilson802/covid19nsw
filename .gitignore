@@ -131,6 +131,7 @@ dmypy.json
 
 # Maop template files
 templates/map_all.html
+templates/map_all.html
 templates/map_fourteen.html
 templates/map_seven.html
 templates/temp_maps/*
