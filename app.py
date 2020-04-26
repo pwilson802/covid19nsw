@@ -272,7 +272,10 @@ def postcode():
     else:
         print(request.args["location"])
         postcode = request.args["location"]
-        days_set = request.args["days"]
+        try:
+            days_set = request.args["days"]
+        except:
+            days_set = "all"
         if not postcode.startswith("2"):
             postcode = suburb_to_postcode_dict[postcode.lower()]
         close_postcodes_try = [
