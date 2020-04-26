@@ -332,12 +332,14 @@ def allnsw():
                             history=postcode_history['all_nsw'],
                             testing=testing_chart['all_nsw'],
                             data = seven_day_nsw,
+                            last_update = last_update,
                             days_set ='seven')
         elif days == "fourteen":
             return render_template('all_nsw.html',
                             history=postcode_history['all_nsw'],
                             testing=testing_chart['all_nsw'],
                             data = fourteen_day_nsw,
+                            last_update = last_update,
                             days_set = 'fourteen')
         
         else:
@@ -345,6 +347,7 @@ def allnsw():
                             history=postcode_history['all_nsw'],
                             testing=testing_chart['all_nsw'],
                             data = all_nsw,
+                            last_update = last_update,
                             days_set = 'all')
     else:
         try:
@@ -356,12 +359,14 @@ def allnsw():
                             history=postcode_history['all_nsw'],
                             testing=testing_chart['all_nsw'],
                             data = seven_day_nsw,
+                            last_update = last_update,
                             days_set ='seven')
         elif days == "fourteen":
             return render_template('all_nsw.html',
                             history=postcode_history['all_nsw'],
                             testing=testing_chart['all_nsw'],
                             data = fourteen_day_nsw,
+                            last_update = last_update,
                             days_set = 'fourteen')
         
         else:
@@ -369,6 +374,7 @@ def allnsw():
                             history=postcode_history['all_nsw'],
                             testing=testing_chart['all_nsw'],
                             data = all_nsw,
+                            last_update = last_update,
                             days_set = 'all')
 
 if __name__ == "__main__":

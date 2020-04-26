@@ -32,7 +32,11 @@
             'controlType': 'DateRangeFilter',
             'containerId': 'filter_div',
             'options': {
-            'filterColumnLabel': 'Date'
+            'filterColumnLabel': 'Date',
+            'ui': {
+                'label': "",
+                'format': {pattern: "d/M/yy"},
+            }
             }
         });
 
@@ -97,7 +101,11 @@
             'controlType': 'DateRangeFilter',
             'containerId': 'filter_test_div',
             'options': {
-            'filterColumnLabel': 'Date'
+            'filterColumnLabel': 'Date', 
+            'ui': {
+                'label': "",
+                'format': {pattern: "d/M/yy"},
+            }
             }
         });
 
@@ -170,22 +178,32 @@
         </div>
     <div class="container">
         <div class="row headers mb-2">
-            <div class="col-2">
+            <div class="col-4">
+            
+            </div>
+            <div class="col-4">
             Cases
             </div>
-            <div class="col-2">
+            <div class="col-4">
             Recent
             </div>
         </div>
         <div class="row rank-entry">
-            <div class="col-2">
-                <div class="today-count mt-3">
+
+            <div class="col-4">
+                <div class="postcode">
+                    <div class="h2">All NSW</div>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="today-count">
                     <h3>{{data.count}}</h3>
                 </div>
             </div>
 
-            <div class="col-2">
-                <div class="new-cases mt-3">
+            <div class="col-4">
+                <div class="new-cases">
                     {{ data.recent}}
                 </div>
             </div>
