@@ -73,7 +73,7 @@
             <div class="col-6">
                 <div class="postcode">
                     <div class="h2">
-                    <a href = {{ url_for('postcode', location=each.postcode) }}>
+                    <a href = {{ url_for('postcode', location=each.postcode, days=days_set) }}>
                     {{ each.postcode }}
                     </a>
                     </div>

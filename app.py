@@ -272,6 +272,7 @@ def postcode():
     else:
         print(request.args["location"])
         postcode = request.args["location"]
+        days_set = request.args["days"]
         if not postcode.startswith("2"):
             postcode = suburb_to_postcode_dict[postcode.lower()]
         close_postcodes_try = [
@@ -283,19 +284,48 @@ def postcode():
         close_postcodes = [
             str(x) for x in close_postcodes_try if str(x) in all_postcodes
         ]
-        postcode_data = [x for x in data if x["postcode"] == postcode]
-        close_postcode_data = [x for x in data if x["postcode"] in close_postcodes]
-        return render_template(
-            "postcode.html",
-            postcode=postcode,
-            data=postcode_data,
-            history=postcode_history[postcode],
-            days_set="all",
-            close=close_postcode_data,
-            validation_set=all_postcode_suburb_list,
-            last_update = last_update,
-            testing=testing_chart[postcode],
-        )
+        if days_set == 'seven':
+            postcode_data = [x for x in data_seven_days if x["postcode"] == postcode]
+            close_postcode_data = [x for x in data_seven_days if x["postcode"] in close_postcodes]
+            return render_template(
+                "postcode.html",
+                postcode=postcode,
+                data=postcode_data,
+                history=postcode_history[postcode],
+                days_set="seven",
+                close=close_postcode_data,
+                validation_set=all_postcode_suburb_list,
+                last_update = last_update,
+                testing=testing_chart[postcode],
+            )
+        elif days_set == 'fourteen':
+            postcode_data = [x for x in data_fourteen_days if x["postcode"] == postcode]
+            close_postcode_data = [x for x in data_fourteen_days if x["postcode"] in close_postcodes]
+            return render_template(
+                "postcode.html",
+                postcode=postcode,
+                data=postcode_data,
+                history=postcode_history[postcode],
+                days_set="fourteen",
+                close=close_postcode_data,
+                validation_set=all_postcode_suburb_list,
+                last_update = last_update,
+                testing=testing_chart[postcode],
+            )
+        else:
+            postcode_data = [x for x in data if x["postcode"] == postcode]
+            close_postcode_data = [x for x in data if x["postcode"] in close_postcodes]
+            return render_template(
+                "postcode.html",
+                postcode=postcode,
+                data=postcode_data,
+                history=postcode_history[postcode],
+                days_set="all",
+                close=close_postcode_data,
+                validation_set=all_postcode_suburb_list,
+                last_update = last_update,
+                testing=testing_chart[postcode],
+            )
 
 @app.route('/sitemap.xml')
 def site_map():
