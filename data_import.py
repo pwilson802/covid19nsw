@@ -138,9 +138,6 @@ def get_postcode_rank(cleaned_list, days_back=365):
         daily_data[i]["movement_rank"] = movement_rank
         daily_data[i]["previous_count"] = previous_count[e["postcode"]]
         count_change = recent_list_cleaned.count(current_postcode)
-        # count_change = postcodes_count[int(e['postcode'])] - previous_count[e['postcode']]
-        # if count_change > 0:
-        # count_change = f'+{count_change}'
         daily_data[i]["count_change"] = count_change
         daily_data[i]["source"] = {}
         for s in covid_frame["likely_source_of_infection"].unique():
@@ -267,6 +264,95 @@ for suburb in all_suburbs:
 
 # Create a list of all suburbs and postcodes for error checkinf
 all_suburbs_postcodes = list(postcode_dict.keys()) + all_suburbs
+
+
+# Add Data for All of NSW to the export files
+# Data for numbers display of NSW All Page
+postcode_dict['all_nsw'] = {}
+postcode_dict['all_nsw']['all_count'] = case_count['all']
+postcode_dict['all_nsw']['seven_day_count'] = case_count['seven']
+postcode_dict['all_nsw']['fourteen_day_count'] = case_count['fourteen']
+postcode_dict['all_nsw']['recent'] = len(recent_list)
+
+# Data for the Al NSW cases count chart
+all_nsw_chart_cases = []
+chart_day = newest_date
+for num in range(90):
+    # date_str = chart_day.strftime("%Y-%m-%d")
+    year = chart_day.year
+    month = chart_day.month - 1
+    day = chart_day.day
+    daily_count = int(
+            postcode_dates[postcode_dates["notification_date"] == chart_day].count()[
+                "postcode"
+            ]
+        )
+    total_count = int(
+            postcode_dates[postcode_dates["notification_date"] <= chart_day].count()[
+                "postcode"
+            ]
+        )
+    row_entry = f"[new Date({year},{month},{day}), {total_count}],"
+    all_nsw_chart_cases.append(row_entry)
+    chart_day = chart_day - timedelta(days=1)
+postcode_chart['all_nsw'] = all_nsw_chart_cases
+
+
+# Make the testing chart for all NSW
+chart_day = newest_date
+all_nsw_chart_tests = []
+for num in range(90):
+    # date_str = chart_day.strftime("%Y-%m-%d")
+    year = chart_day.year
+    month = chart_day.month - 1
+    day = chart_day.day
+    # date_str = chart_day.strftime("%Y-%m-%d")
+    year = chart_day.year
+    month = chart_day.month - 1
+    day = chart_day.day
+    daily_tests = int(
+        covid_test_frame[covid_test_frame["test_date"] == chart_day].count()[
+            "postcode"
+        ]
+    )
+    daily_positive = int(
+        covid_test_frame[covid_test_frame["test_date"] == chart_day][covid_test_frame["result"] == "Case - Confirmed"].count()[
+            "postcode"
+        ]
+    )
+    row_entry = f"[new Date({year},{month},{day}), {daily_tests}, {daily_positive}],"
+    all_nsw_chart_tests.append(row_entry)
+    chart_day = chart_day - timedelta(days=1)
+    print(chart_day)
+
+testing_chart['all_nsw'] = all_nsw_chart_tests
+
+# Get the infection source for all NSW
+nsw_source = {'all': {}, 'fourteen': {}, 'seven': {} }
+for days in ['all', 'fourteen', 'seven']:
+    if days == 'seven':
+        days_back = 7
+    if days == 'fourteen':
+        days_back = 14
+    if days == 'all':
+        days_back = 365
+    for s in covid_frame["likely_source_of_infection"].unique():
+        nsw_source[days][
+            s.replace(" ", "").replace("-", "").replace("/", "").lower()
+        ] = covid_frame.loc[
+            (
+                covid_frame["notification_date"]
+                > datetime.now() - timedelta(days=days_back)
+            )
+            & (covid_frame["likely_source_of_infection"] == s)
+        ].shape[
+            0
+        ]
+
+postcode_dict['all_nsw']['source'] = nsw_source
+    
+    
+
 
 # Write all the json files
 with open(file_today, "w") as json_file:

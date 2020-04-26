@@ -135,3 +135,6 @@ templates/map_fourteen.html
 templates/map_seven.html
 templates/temp_maps/*
 templates/map*
+map_all.html
+map_fourteen.html
+map_seven.html

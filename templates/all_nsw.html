@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
-{% block title %}Covid-19 Postcode Search - {{ postcode }}{% endblock %}
+{% block title %}Covid-19 - All NSW{% endblock %}
 {% block head %}
+
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
 
@@ -132,49 +133,43 @@
 
     </script>
 
-
 {% endblock %}
 
 {% block content %}
     <div class="container">
     <div class="row select-buttons mb-2">
         <div class="col-4 button-all">
-            <form action="postcode" method = "POST" class="form-inline">
+            <form action="allnsw" method = "POST" class="form-inline">
                 {% if days_set == 'all' %}
-                    <button class="btn btn-outline-success my-2 my-sm-0 active" type="submit" name="days" value="recall-{{ postcode }}-all">All Cases</button>
+                    <button class="btn btn-outline-success my-2 my-sm-0 active" type="submit" name="days" value="recall-all">All Cases</button>
                 {% else %}
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="days" value="recall-{{ postcode }}-all">All Cases</button>
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="days" value="recall-all">All Cases</button>
                 {% endif %}
             </form>
         </div>
         <div class="col-4 button-fourteen">
-            <form action="postcode" method = "POST" class="form-inline">
+            <form action="allnsw" method = "POST" class="form-inline">
                 {% if days_set == 'fourteen' %}
-                    <button class="btn btn-outline-success my-2 my-sm-0 active" type="submit" name="days" value="recall-{{ postcode }}-fourteen">14 Days</button>
+                    <button class="btn btn-outline-success my-2 my-sm-0 active" type="submit" name="days" value="recall-fourteen">14 Days</button>
                 {% else %}
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="days" value="recall-{{ postcode }}-fourteen">14 Days</button>
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="days" value="recall-fourteen">14 Days</button>
                 {% endif %}
             </form>
         </div>
         <div class="col-4 button-seven">
-            <form action="postcode" method = "POST" class="form-inline" name="seven-days">
+            <form action="allnsw" method = "POST" class="form-inline" name="seven-days">
                 {% if days_set == 'seven' %}
-                    <button class="btn btn-outline-success my-2 my-sm-0 active" type="submit" name="days" value="recall-{{ postcode }}-seven">7 Days</button>
+                    <button class="btn btn-outline-success my-2 my-sm-0 active" type="submit" name="days" value="recall-seven">7 Days</button>
                 {% else %}
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="days" value="recall-{{ postcode }}-seven">7 Days</button>
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="days" value="recall-seven">7 Days</button>
                 {% endif %}
             </form>
         </div>
     </div>
     </div>
+        </div>
     <div class="container">
         <div class="row headers mb-2">
-            <div class="col-2">
-            Rank
-            </div>
-            <div class="col-6">
-            Postcode
-            </div>
             <div class="col-2">
             Cases
             </div>
@@ -182,32 +177,16 @@
             Recent
             </div>
         </div>
-    {% for each in data %}
         <div class="row rank-entry">
             <div class="col-2">
-                <div class="rank-number">
-                    <div class="h2">{{ each.rank }}</div>    
-                </div>
-            </div>
-
-            <div class="col-6">
-                <div class="postcode">
-                    <div class="h2">{{ each.postcode }}</div>
-                </div>
-                <div class="suburbs">
-                    {{ each.suburbs }}
-                </div>
-            </div>
-
-            <div class="col-2">
                 <div class="today-count mt-3">
-                    <h3>{{each.count}}</h3>
+                    <h3>{{data.count}}</h3>
                 </div>
             </div>
 
             <div class="col-2">
                 <div class="new-cases mt-3">
-                    {{ each.count_change }}
+                    {{ data.recent}}
                 </div>
             </div>
         </div>
@@ -216,11 +195,11 @@
         <div class="col-lg-4"></div>
         <div class="col-lg-4 infection-box">
         <h5 class="infection-heading">Infection Source</h5>
-        <p class="infection-p"><span class="infection-type">Overseas:</span> <span class="infection">{{ each.source.overseas }}</span></p>
-        <p class="infection-p"><span class="infection-type">Interstate:</span> <span class="infection">{{ each.source.interstate }}</span></p>
-        <p class="infection-p"><span class="infection-type">Locally (Known Source):</span> <span class="infection">{{ each.source.locallyacquiredcontactofaconfirmedcaseandorinaknowncluster }}</span></p>
-        <p class="infection-p"><span class="infection-type">Locally (Unknown Source):</span> <span class="infection">{{ each.source.locallyacquiredcontactnotidentified }}</span></p>
-        <p class="infection-p"><span class="infection-type">Under Investigation:</span> <span class="infection">{{ each.source.underinvestigation }}</span></p>
+        <p class="infection-p"><span class="infection-type">Overseas:</span> <span class="infection">{{ data.source.overseas }}</span></p>
+        <p class="infection-p"><span class="infection-type">Interstate:</span> <span class="infection">{{ data.source.interstate }}</span></p>
+        <p class="infection-p"><span class="infection-type">Locally (Known Source):</span> <span class="infection">{{ data.source.locallyacquiredcontactofaconfirmedcaseandorinaknowncluster }}</span></p>
+        <p class="infection-p"><span class="infection-type">Locally (Unknown Source):</span> <span class="infection">{{ data.source.locallyacquiredcontactnotidentified }}</span></p>
+        <p class="infection-p"><span class="infection-type">Under Investigation:</span> <span class="infection">{{ data.source.underinvestigation }}</span></p>
         </div>
         <div class="col-lg-4"></div>
     </div>
@@ -232,62 +211,8 @@
             <div class="text-center" id="filter_div"></div>
         </div>
     </div>
-    
-    
-    </div>
-    {% endfor %}
 
-    <div class="container">
-        <div class="today-count"><h3>Close Suburbs</h3></div>
-        <div class="row headers mb-2">
-            <div class="col-2">
-            Rank
-            </div>
-            <div class="col-6">
-            Postcode
-            </div>
-            <div class="col-2">
-            Cases
-            </div>
-            <div class="col-2">
-            Recent
-            </div>
-        </div>
-    {% for each in close %}
-    <div class="row rank-entry">
-            <div class="col-2">
-                <div class="rank-number">
-                    <div class="h2">{{ each.rank }}</div>    
-                </div>
-            </div>
-
-            <div class="col-6">
-                <div class="postcode">
-                    <div class="h2">
-                    <a href = {{ url_for('postcode', location=each.postcode) }}>
-                    {{ each.postcode }}
-                    </a>
-                    </div>
-                </div>
-                <div class="suburbs">
-                    {{ each.suburbs }}
-                </div>
-            </div>
-
-            <div class="col-2">
-                <div class="today-count mt-3">
-                    <h3>{{each.count}}</h3>
-                </div>
-            </div>
-
-            <div class="col-2">
-                <div class="new-cases mt-3">
-                    {{ each.count_change }}
-                </div>
-            </div>
-        </div>
-    {% endfor %}
-    <div class="row mt-5" id="dashboard_tests_div">
+        <div class="row mt-5" id="dashboard_tests_div">
         <div class="col">
         <div class="today-count"><h3>Testing Results</h3></div>
       <!--Divs that will hold each control and chart-->
@@ -298,6 +223,10 @@
     <div class="contact-message mt-5">
     <p>The information on this website is updated as soon as new data is published by NSW Health which is usually once a day.  The last update was at {{ last_update }}. For feedback on the website or to suggest a feature please contact <a href="mailto:covid19nsw.stat@gmail.com">covid19nsw.stat@gmail.com</a></p>
     </div>
+    
+
+
     </div>
 
 {% endblock %} 
+

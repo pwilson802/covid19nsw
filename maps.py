@@ -43,6 +43,8 @@ def all_map(data, postcode_zoom='2016', postcode_dict = postcode_dict, zoom=12):
         large, big, medium = 10, 3, 2
         multiply = 56
     for l in postcode_dict.keys():
+        if l == 'all_nsw':
+            continue
         cases = int(postcode_dict[l][data])
         if cases > large:
             outer_color = 'darkred'

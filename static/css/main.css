@@ -64,6 +64,11 @@
     color: inherit
 }
 
+.all-count a {
+    text-decoration: underline;
+    color: inherit
+}
+
 .infection-heading {
     color: #344072;
     font-weight: 600;

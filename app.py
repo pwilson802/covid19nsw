@@ -87,8 +87,28 @@ fourteen_day_data_shown = [x for x in data_fourteen_days if x["count"] != 0]
 with open(testing_chart_file) as json_file:
     testing_chart = json.loads(json_file.read())
 
-# Generate Maps
-# all_data_maps = all_map()
+
+with open(map_data_file) as json_file:
+    postcode_dict = json.loads(json_file.read())
+
+all_nsw = {
+    'count': postcode_dict['all_nsw']['all_count'],
+    'recent': postcode_dict['all_nsw']['recent'],
+    'source': postcode_dict['all_nsw']['source']['all']
+}
+
+seven_day_nsw = {
+    'count': postcode_dict['all_nsw']['seven_day_count'],
+    'recent': postcode_dict['all_nsw']['recent'],
+    'source': postcode_dict['all_nsw']['source']['seven']
+}
+
+fourteen_day_nsw = {
+    'count': postcode_dict['all_nsw']['fourteen_day_count'],
+    'recent': postcode_dict['all_nsw']['recent'],
+    'source': postcode_dict['all_nsw']['source']['fourteen']
+}
+
 
 
 @app.route("/", methods=["POST", "GET"])
@@ -297,18 +317,59 @@ def map():
 
 
 
-# @app.route('/map')
-# def map():
-#     return render_template('main_map.html')
-
-# @app.route('/all_map_page')
-# def all_map_page():
-#     return render_template('all_map.html')
-
-# @app.route('/direct_map')
-# def direct_map():
-#     return render_template('map_direct.html')
-
+@app.route('/allnsw', methods=["POST", "GET"])
+def allnsw():
+    if request.method == "POST":
+        input_data = request.form
+        try:
+            days = input_data["days"]
+            if "recall" in days:
+                _, days = days.split("-")
+        except:
+            days = "all"
+        if days == "seven":
+            return render_template('all_nsw.html',
+                            history=postcode_history['all_nsw'],
+                            testing=testing_chart['all_nsw'],
+                            data = seven_day_nsw,
+                            days_set ='seven')
+        elif days == "fourteen":
+            return render_template('all_nsw.html',
+                            history=postcode_history['all_nsw'],
+                            testing=testing_chart['all_nsw'],
+                            data = fourteen_day_nsw,
+                            days_set = 'fourteen')
+        
+        else:
+            return render_template('all_nsw.html',
+                            history=postcode_history['all_nsw'],
+                            testing=testing_chart['all_nsw'],
+                            data = all_nsw,
+                            days_set = 'all')
+    else:
+        try:
+            days = request.args["days"]
+        except:
+            days = 'all'
+        if days == "seven":
+            return render_template('all_nsw.html',
+                            history=postcode_history['all_nsw'],
+                            testing=testing_chart['all_nsw'],
+                            data = seven_day_nsw,
+                            days_set ='seven')
+        elif days == "fourteen":
+            return render_template('all_nsw.html',
+                            history=postcode_history['all_nsw'],
+                            testing=testing_chart['all_nsw'],
+                            data = fourteen_day_nsw,
+                            days_set = 'fourteen')
+        
+        else:
+            return render_template('all_nsw.html',
+                            history=postcode_history['all_nsw'],
+                            testing=testing_chart['all_nsw'],
+                            data = all_nsw,
+                            days_set = 'all')
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")

@@ -36,11 +36,11 @@
         <div>
             <h4 class="text-center all-count">
             {% if days_set == 'seven' %}
-                Last 7 days: {{ case_numbers }}
+                <a href={{ url_for('allnsw', days='all') }}>Last 7 days: {{ case_numbers }}</a>
             {% elif days_set == 'fourteen' %}
-                Last 14 days: {{ case_numbers }}
+                <a href={{ url_for('allnsw', days='fourteen') }}>Last 14 days: {{ case_numbers }}</a>
             {% else %}
-                All Cases: {{ case_numbers }}
+                <a href={{ url_for('allnsw', days='all') }}>All Cases: {{ case_numbers }}</a>
             {% endif %}
             </h4>
         </div>
