@@ -282,16 +282,8 @@ for num in range(90):
     year = chart_day.year
     month = chart_day.month - 1
     day = chart_day.day
-    daily_count = int(
-            postcode_dates[postcode_dates["notification_date"] == chart_day].count()[
-                "postcode"
-            ]
-        )
-    total_count = int(
-            postcode_dates[postcode_dates["notification_date"] <= chart_day].count()[
-                "postcode"
-            ]
-        )
+    daily_count = postcode_dates[postcode_dates["notification_date"] == chart_day].shape[0]
+    total_count = postcode_dates[postcode_dates["notification_date"] <= chart_day].shape[0]
     row_entry = f"[new Date({year},{month},{day}), {total_count}],"
     all_nsw_chart_cases.append(row_entry)
     chart_day = chart_day - timedelta(days=1)
