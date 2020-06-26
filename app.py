@@ -27,7 +27,7 @@ all_postcode_suburb_file = os.path.join(data_folder, "all_postcode_suburb.json")
 last_update_file = os.path.join(data_folder, "last_update_time")
 case_count_file = os.path.join(data_folder, "case_count.json")
 map_data_file = os.path.join(data_folder, "map_data.json")
-testing_chart_file = os.path.join(data_folder, "testing_chart.json")
+# testing_chart_file = os.path.join(data_folder, "testing_chart.json")
 
 # get the last update time for display on th website postcode page
 with open(last_update_file) as f:
@@ -84,8 +84,8 @@ seven_day_data_shown = [x for x in data_seven_days if x["count"] != 0]
 fourteen_day_data_shown = [x for x in data_fourteen_days if x["count"] != 0]
 
 # Get date for charts
-with open(testing_chart_file) as json_file:
-    testing_chart = json.loads(json_file.read())
+# with open(testing_chart_file) as json_file:
+#     testing_chart = json.loads(json_file.read())
 
 
 with open(map_data_file) as json_file:
@@ -221,7 +221,7 @@ def postcode():
                 close=close_postcode_data,
                 validation_set=all_postcode_suburb_list,
                 last_update = last_update,
-                testing=testing_chart[postcode],
+                # testing=testing_chart[postcode],
             )
         elif days == "fourteen":
             if source == 'maps':
@@ -245,7 +245,7 @@ def postcode():
                 close=close_postcode_data,
                 validation_set=all_postcode_suburb_list,
                 last_update = last_update,
-                testing=testing_chart[postcode],
+                # testing=testing_chart[postcode],
             )
         else:
             if source == 'maps':
@@ -267,7 +267,7 @@ def postcode():
                 close=close_postcode_data,
                 validation_set=all_postcode_suburb_list,
                 last_update = last_update,
-                testing=testing_chart[postcode],
+                # testing=testing_chart[postcode],
             )
     else:
         print(request.args["location"])
@@ -299,7 +299,7 @@ def postcode():
                 close=close_postcode_data,
                 validation_set=all_postcode_suburb_list,
                 last_update = last_update,
-                testing=testing_chart[postcode],
+                # testing=testing_chart[postcode],
             )
         elif days_set == 'fourteen':
             postcode_data = [x for x in data_fourteen_days if x["postcode"] == postcode]
@@ -313,7 +313,7 @@ def postcode():
                 close=close_postcode_data,
                 validation_set=all_postcode_suburb_list,
                 last_update = last_update,
-                testing=testing_chart[postcode],
+                # testing=testing_chart[postcode],
             )
         else:
             postcode_data = [x for x in data if x["postcode"] == postcode]
@@ -327,7 +327,7 @@ def postcode():
                 close=close_postcode_data,
                 validation_set=all_postcode_suburb_list,
                 last_update = last_update,
-                testing=testing_chart[postcode],
+                # testing=testing_chart[postcode],
             )
 
 @app.route('/sitemap.xml')
@@ -363,14 +363,14 @@ def allnsw():
         if days == "seven":
             return render_template('all_nsw.html',
                             history=postcode_history['all_nsw'],
-                            testing=testing_chart['all_nsw'],
+                            # testing=testing_chart['all_nsw'],
                             data = seven_day_nsw,
                             last_update = last_update,
                             days_set ='seven')
         elif days == "fourteen":
             return render_template('all_nsw.html',
                             history=postcode_history['all_nsw'],
-                            testing=testing_chart['all_nsw'],
+                            # testing=testing_chart['all_nsw'],
                             data = fourteen_day_nsw,
                             last_update = last_update,
                             days_set = 'fourteen')
@@ -378,7 +378,7 @@ def allnsw():
         else:
             return render_template('all_nsw.html',
                             history=postcode_history['all_nsw'],
-                            testing=testing_chart['all_nsw'],
+                            # testing=testing_chart['all_nsw'],
                             data = all_nsw,
                             last_update = last_update,
                             days_set = 'all')
@@ -390,14 +390,14 @@ def allnsw():
         if days == "seven":
             return render_template('all_nsw.html',
                             history=postcode_history['all_nsw'],
-                            testing=testing_chart['all_nsw'],
+                            # testing=testing_chart['all_nsw'],
                             data = seven_day_nsw,
                             last_update = last_update,
                             days_set ='seven')
         elif days == "fourteen":
             return render_template('all_nsw.html',
                             history=postcode_history['all_nsw'],
-                            testing=testing_chart['all_nsw'],
+                            # testing=testing_chart['all_nsw'],
                             data = fourteen_day_nsw,
                             last_update = last_update,
                             days_set = 'fourteen')
@@ -405,7 +405,7 @@ def allnsw():
         else:
             return render_template('all_nsw.html',
                             history=postcode_history['all_nsw'],
-                            testing=testing_chart['all_nsw'],
+                            # testing=testing_chart['all_nsw'],
                             data = all_nsw,
                             last_update = last_update,
                             days_set = 'all')

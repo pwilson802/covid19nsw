@@ -75,73 +75,6 @@
 
     </script>
 
-    <script type="text/javascript">
-
-    google.charts.load('current', {'packages':['corechart', 'controls', 'line']});
-
-    google.charts.setOnLoadCallback(drawTestDashboard);
-
-    function drawTestDashboard() {
-        var data = new google.visualization.DataTable();
-      data.addColumn('date', 'Date');
-      data.addColumn('number', 'Tests');
-      data.addColumn('number', 'Positive');
-
-      data.addRows([
-        {% for each in testing %}
-        {{ each }}
-        {% endfor %}  
-        
-      ]);
-
-        var test_dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_test_div'));
-
-        // Create a range slider, passing some options
-        var casesRangeSlider = new google.visualization.ControlWrapper({
-            'controlType': 'DateRangeFilter',
-            'containerId': 'filter_test_div',
-            'options': {
-            'filterColumnLabel': 'Date', 
-            'ui': {
-                'label': "",
-                'format': {pattern: "d/M/yy"},
-            }
-            }
-        });
-
-        var casesChart = new google.visualization.ChartWrapper({
-            'chartType': 'ColumnChart',
-            'containerId': 'chart_test_div',
-            'options': {
-                height: 300,
-                hAxis: {
-                format: 'd MMM',
-                gridlines : {
-                    count : 14,
-                    minSpacing: 80,
-                    }
-                },
-                vAxis: {
-                format: '0',
-                scaleType: 'log',
-                }
-            }
-        });
-
-        test_dashboard.bind(casesRangeSlider, casesChart);
-
-        function resize() {
-            var chart = new google.visualization.Dashboard(document.getElementById('dashboard_test_div'));
-            chart.draw(data);
-        }
-        window.onload = resize();
-        window.onresize = resize;
-
-        test_dashboard.draw(data);
-    };
-
-    </script>
-
 {% endblock %}
 
 {% block content %}
@@ -231,14 +164,6 @@
         </div>
     </div>
 
-        <div class="row mt-5" id="dashboard_tests_div">
-        <div class="col">
-        <div class="today-count"><h3>Testing Results</h3></div>
-      <!--Divs that will hold each control and chart-->
-            <div id="chart_test_div"></div>
-            <div class="text-center" id="filter_test_div"></div>
-        </div>
-    </div>
     <div class="contact-message mt-5">
     <p>The information on this website is updated as soon as new data is published by NSW Health which is usually once a day.  The last update was at {{ last_update }}. For feedback on the website or to suggest a feature please contact <a href="mailto:covid19nsw.stat@gmail.com">covid19nsw.stat@gmail.com</a></p>
     </div>
