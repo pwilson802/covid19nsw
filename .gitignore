@@ -131,3 +131,5 @@ dmypy.json
 
 # Maop template files
 templates/temp_maps/*
+
+.vscode/
