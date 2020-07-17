@@ -10,7 +10,7 @@ import pandas as pd
 
 data_folder = os.environ.get("COVID_DATA")
 
-file_export = os.path.join(data_folder, 'cases_file_latest.json')
+main_cases_file = os.path.join(data_folder, 'cases_file_latest.json')
 
 # csv_cases contains all data except recoverd cases
 csv_cases = "https://data.nsw.gov.au/data/dataset/97ea2424-abaf-4f3e-a9f2-b5c883f42b6a/resource/2776dbb8-f807-4fb2-b1ed-184a6fc2c8aa/download/covid-19-cases-by-notification-date-location-and-likely-source-of-infection.csv"
@@ -34,9 +34,9 @@ cases_frame["Date"] = pd.to_datetime(cases_frame["Date"])
 
 # The dict cases_data will be used for building a json file to be used by the website
 # OPening the previous file so only the recent information needs to be updated
-if os.path.isfile(file_export):
+if os.path.isfile(main_cases_file):
     update = True
-    with open(file_export) as f:
+    with open(main_cases_file) as f:
         cases_data = json.loads(f.read())
 else:
     update = False
@@ -201,6 +201,21 @@ for postcode in cases_data.keys():
 ### END
 #############
 
-with open(file_export, "w") as json_file:
+#Adding a location to all so dictionary comprehension is easy
+cases_data['all']['map_location'] = cases_data['2016']['map_location']
+# Make a smaller file to be used by maps and initial tables for faster load times
+high_level_data = {x: {'active_cases': cases_data[x]['cases_active'],
+                       'recovered_cases': cases_data[x]['cases_recovered'],
+                       'map_location': cases_data[x]['map_location'],
+                       'all_days': cases_data[x]['all_days']['cases'],
+                       'seven_days': cases_data[x]['seven_days']['cases'],
+                       'fourteen_days': cases_data[x]['fourteen_days']['cases'],
+                       } for x in cases_data}
+
+with open(main_cases_file, "w") as json_file:
     json.dump(cases_data, json_file)
+
+high_level_data_file = os.path.join(data_folder, 'high_level_data.json')
+with open(high_level_data_file, "w") as json_file:
+    json.dump(high_level_data, json_file)
     

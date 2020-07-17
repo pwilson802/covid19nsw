@@ -27,7 +27,9 @@ all_postcode_suburb_file = os.path.join(data_folder, "all_postcode_suburb.json")
 last_update_file = os.path.join(data_folder, "last_update_time")
 case_count_file = os.path.join(data_folder, "case_count.json")
 map_data_file = os.path.join(data_folder, "map_data.json")
-# testing_chart_file = os.path.join(data_folder, "testing_chart.json")
+
+# New Import file
+main_cases_file = os.path.join(data_folder, 'cases_file_latest.json')
 
 # get the last update time for display on th website postcode page
 with open(last_update_file) as f:
@@ -202,7 +204,7 @@ def postcode():
         if days == "seven":
             if source == 'maps':
                 temp_map_name = random_map_name()
-                map_data = all_map('seven_day_count', postcode_zoom=postcode,zoom=13)
+                map_data = all_map('seven_days', postcode_zoom=postcode,zoom=13)
                 map_data.save(temp_map_name)
                 remove_bootstrap3(temp_map_name)
                 just_the_file = os.path.split(temp_map_name)[-1]
@@ -226,7 +228,7 @@ def postcode():
         elif days == "fourteen":
             if source == 'maps':
                 temp_map_name = random_map_name()
-                map_data = all_map('fourteen_day_count', postcode_zoom=postcode,zoom=13)
+                map_data = all_map('fourteen_days', postcode_zoom=postcode,zoom=13)
                 map_data.save(temp_map_name)
                 remove_bootstrap3(temp_map_name)
                 just_the_file = os.path.split(temp_map_name)[-1]
@@ -250,7 +252,7 @@ def postcode():
         else:
             if source == 'maps':
                 temp_map_name = random_map_name()
-                map_data = all_map('all_count', postcode_zoom=postcode,zoom=13)
+                map_data = all_map('all_days', postcode_zoom=postcode,zoom=13)
                 map_data.save(temp_map_name)
                 remove_bootstrap3(temp_map_name)
                 just_the_file = os.path.split(temp_map_name)[-1]

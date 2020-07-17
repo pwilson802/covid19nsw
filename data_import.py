@@ -373,8 +373,9 @@ with open(all_postcode_suburb_file, "w") as json_file:
 with open(case_count_file, "w") as json_file:
     json.dump(case_count, json_file)
 
-with open(map_data_file, "w") as json_file:
-    json.dump(postcode_dict, json_file)
+# with open(map_data_file, "w") as json_file:
+
+#     json.dump(postcode_dict, json_file)
 
 # with open(testing_chart_file, "w") as json_file:
 #     json.dump(testing_chart, json_file)

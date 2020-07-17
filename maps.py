@@ -11,7 +11,9 @@ data_folder = os.environ.get("COVID_DATA")
 template_folder = os.environ.get("COVID_TEMPLATES")
 temp_map_dir = os.environ.get("COVID_TEMP_MAP_FOLDER")
 
-map_data_file = os.path.join(data_folder, "map_data.json")
+high_level_data_file = os.path.join(data_folder, 'high_level_data.json')
+# main_cases_file = os.path.join(data_folder, 'cases_file_latest.json')
+# map_data_file = os.path.join(data_folder, "map_data.json")
 # Add some random stuff to the below file when we go live
 map_all_file = os.path.join(template_folder, "map_all.html")
 map_fourteen_file = os.path.join(template_folder, "map_fourteen.html")
@@ -25,27 +27,32 @@ popup_html = """
     </p>
     """
 
+# with open(main_cases_file) as f:
+#     cases_data = json.loads(f.read())
 
-with open(map_data_file) as json_file:
-    postcode_dict = json.loads(json_file.read())
+with open(high_level_data_file) as f:
+    high_level_data = json.loads(f.read())
 
-def all_map(data, postcode_zoom='2016', postcode_dict = postcode_dict, zoom=12):
+# with open(map_data_file) as json_file:
+#     postcode_dict = json.loads(json_file.read())
+
+def all_map(data, postcode_zoom='2016', high_level_data = high_level_data, zoom=12):
     # Add data for all cases
-    sydney = postcode_dict[postcode_zoom]['map_location']
+    sydney = high_level_data[postcode_zoom]['map_location']
     cases_map = folium.Map(sydney, zoom_start=zoom)
-    if data == "all_count":
+    if data == "all_days":
         large, big, medium = 100, 40, 20
         multiply = 14
-    if data == "fourteen_day_count":
+    if data == "fourteen_days":
         large, big, medium = 20, 10, 5
         multiply = 28
-    if data == "seven_day_count":
+    if data == "seven_days":
         large, big, medium = 10, 3, 2
         multiply = 56
-    for l in postcode_dict.keys():
-        if l == 'all_nsw':
+    for l in high_level_data.keys():
+        if l == 'all':
             continue
-        cases = int(postcode_dict[l][data])
+        cases = int(high_level_data[l][data])
         if cases > large:
             outer_color = 'darkred'
             iner_color = 'red'
@@ -64,7 +71,7 @@ def all_map(data, postcode_zoom='2016', postcode_dict = postcode_dict, zoom=12):
         if 0 < circle_size < 200:
             circle_size = 200
         folium.Circle(
-                location= postcode_dict[l]['map_location'],
+                location= high_level_data[l]['map_location'],
                 popup= folium.Popup(popup_html.replace('POSTCODE', str(l)).replace('NUM_CASES', str(cases)), min_width=140, max_width=140),
                 tooltip= f'{cases}',
                 radius= circle_size ,
@@ -74,9 +81,12 @@ def all_map(data, postcode_zoom='2016', postcode_dict = postcode_dict, zoom=12):
             ).add_to(cases_map)
     return cases_map
     
-all_day_map = all_map('all_count')
-fourteen_day_map = all_map('fourteen_day_count')
-seven_day_map = all_map('seven_day_count')
+# all_day_map = all_map('all_count')
+# fourteen_day_map = all_map('fourteen_day_count')
+# seven_day_map = all_map('seven_day_count')
+all_day_map = all_map('all_days')
+fourteen_day_map = all_map('fourteen_days')
+seven_day_map = all_map('seven_days')
 
 
 all_day_map.save(map_all_file)

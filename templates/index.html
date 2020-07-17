@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Covid-19 NSW - find cases in your suburb{% endblock %}
 {% block content %}
+    <div id="root">not rendered</div>
     <div class="container">
     <div class="row select-buttons mb-2">
         <div class="col-4 button-all">
@@ -97,4 +98,8 @@
         </div>
     {% endfor %}
     </div>
+    <script>
+        
+    </script>
+    <script type="module" src="{{ url_for('static', filename='js/index.js') }}"></script>
 {% endblock %}

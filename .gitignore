@@ -133,3 +133,6 @@ dmypy.json
 templates/temp_maps/*
 
 .vscode/
+.prettierrc
+static/node_modules/
+static/package-lock.json
