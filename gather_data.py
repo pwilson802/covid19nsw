@@ -209,7 +209,7 @@ high_level_data = {x: {'active_cases': cases_data[x]['cases_active'],
                        'map_location': cases_data[x]['map_location'],
                        'all_days': cases_data[x]['all_days']['cases'],
                        'seven_days': cases_data[x]['seven_days']['cases'],
-                       'fourteen_days': cases_data[x]['fourteen_days']['cases'],
+                       'fourteen_days': cases_data[x]['fourteen_days']['cases']
                        } for x in cases_data}
 
 with open(main_cases_file, "w") as json_file:

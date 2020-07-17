@@ -99,7 +99,7 @@
     {% endfor %}
     </div>
     <script>
-        
+        const allData = {{ all_data|tojson }}
     </script>
     <script type="module" src="{{ url_for('static', filename='js/index.js') }}"></script>
 {% endblock %}

@@ -30,6 +30,22 @@ map_data_file = os.path.join(data_folder, "map_data.json")
 
 # New Import file
 main_cases_file = os.path.join(data_folder, 'cases_file_latest.json')
+with open(main_cases_file) as f:
+    cases_data = json.loads(f.read())
+
+#Adding a location and suburbs to all so dictionary comprehension is easy
+cases_data['all']['map_location'] = cases_data['2016']['map_location']
+cases_data['all']['suburbs'] = "none"
+# Make a smaller file to be used by maps and initial tables for faster load times
+high_level_data = {x: {'active_cases': cases_data[x]['cases_active'],
+                       'recovered_cases': cases_data[x]['cases_recovered'],
+                       'map_location': cases_data[x]['map_location'],
+                       'all_days': cases_data[x]['all_days']['cases'],
+                       'seven_days': cases_data[x]['seven_days']['cases'],
+                       'fourteen_days': cases_data[x]['fourteen_days']['cases'],
+                       'suburbs': cases_data[x]['suburbs']
+                       } for x in cases_data}
+
 
 # get the last update time for display on th website postcode page
 with open(last_update_file) as f:
@@ -139,6 +155,7 @@ def index():
     return render_template(
         "index.html",
         data=data_shown,
+        all_data=high_level_data,
         days_set="all",
         validation_set=all_postcode_suburb_list,
         case_numbers = case_count['all'],
