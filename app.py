@@ -43,7 +43,8 @@ high_level_data = {x: {'active_cases': cases_data[x]['cases_active'],
                        'all_days': cases_data[x]['all_days']['cases'],
                        'seven_days': cases_data[x]['seven_days']['cases'],
                        'fourteen_days': cases_data[x]['fourteen_days']['cases'],
-                       'suburbs': cases_data[x]['suburbs']
+                       'suburbs': cases_data[x]['suburbs'],
+                       'cases_recent': cases_data[x]['cases_recent'],
                        } for x in cases_data}
 
 

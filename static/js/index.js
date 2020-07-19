@@ -1,33 +1,67 @@
 "use strict";
 
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var locations = Object.keys(allData);
+var postcodes = locations.filter(function (item) {
+  return item.startsWith("2");
+});
+
+function getViewData(data) {
+  return postcodes.filter(function (item) {
+    return allData[item][data] > 0;
+  }).map(function mapPostcodeData(item) {
+    return {
+      postcode: item,
+      suburbs: allData[item]["suburbs"].join(", "),
+      cases: allData[item][data],
+      recent: allData[item]["cases_recent"]
+    };
+  }).sort(function (a, b) {
+    return b.cases > a.cases ? 1 : -1;
+  }).map(function addRanking(item, index) {
+    item["rank"] = index + 1;
+    return item;
+  });
+}
+
+function countCases(rows) {
+  var count = 0;
+  rows.forEach(function (obj) {
+    return count = count + obj.cases;
+  });
+  return count;
+}
+
 function SwitchButton(_ref) {
-  var text = _ref.text;
+  var text = _ref.text,
+      onAction = _ref.onAction;
 
   return React.createElement(
     "div",
     { className: "col-2" },
     React.createElement(
       "button",
-      { className: "btn btn-outline-success my-2 my-sm-0" },
+      {
+        className: "btn btn-outline-success my-2 my-sm-0",
+        onClick: onAction
+      },
       text
     )
   );
 }
 
 function CaseCount(_ref2) {
-  var days = _ref2.days,
-      count = _ref2.count;
+  var caseCount = _ref2.caseCount;
 
   return React.createElement(
     "div",
     null,
     React.createElement(
       "h4",
-      { className: "text-center all-count mt-1" },
-      "Last ",
-      days,
-      " days:",
-      count
+      { className: "postcode mt-3 text-center" },
+      "Cases: ",
+      caseCount
     )
   );
 }
@@ -63,12 +97,18 @@ function RowEntry(_ref3) {
   var rank = _ref3.rank,
       postcode = _ref3.postcode,
       suburbs = _ref3.suburbs,
-      count = _ref3.count,
+      cases = _ref3.cases,
       recent = _ref3.recent;
 
+  var rowClass = recent > 0 ? "row hot-entry" : "row rank-entry";
+  // if (recent > 0) {
+  //   let rowClass = "row hot-entry";
+  // } else {
+  //   let rowClass = "row rank-entry";
+  // }
   return React.createElement(
     "div",
-    { className: "row rank-entry" },
+    { className: rowClass },
     React.createElement(
       "div",
       { className: "col-2" },
@@ -113,7 +153,7 @@ function RowEntry(_ref3) {
         React.createElement(
           "h3",
           null,
-          count
+          cases
         )
       )
     ),
@@ -129,11 +169,51 @@ function RowEntry(_ref3) {
   );
 }
 
-function PageLayout(_ref4) {
-  var dayView = _ref4.dayView;
+function RowEntries(_ref4) {
+  var rowData = _ref4.rowData;
 
+  var items = [];
+  rowData.forEach(function insertRowData(item) {
+    items.push(React.createElement(RowEntry, {
+      rank: item.rank,
+      postcode: item.postcode,
+      suburbs: item.suburbs,
+      cases: item.cases,
+      recent: item.recent
+    }));
+  });
+  return React.createElement(
+    "div",
+    null,
+    items
+  );
+}
+
+function PageLayout() {
   // make a function the changes the dayView and pass that function to the buttons
-  //  also pass a prop to each buttom depneding on the button with the numbers to show
+  var _React$useState = React.useState({ dayView: "active_cases" }),
+      _React$useState2 = _slicedToArray(_React$useState, 2),
+      state = _React$useState2[0],
+      setState = _React$useState2[1];
+
+  var setAll = function setAll() {
+    var newValue = "all_days";
+    setState({ dayView: newValue });
+  };
+  var setSeven = function setSeven() {
+    var newValue = "seven_days";
+    setState({ dayView: newValue });
+  };
+  var setFourteen = function setFourteen() {
+    var newValue = "fourteen_days";
+    setState({ dayView: newValue });
+  };
+  var setActive = function setActive() {
+    var newValue = "active_cases";
+    setState({ dayView: newValue });
+  };
+  var rowData = getViewData(state.dayView);
+  var caseCount = countCases(rowData);
   return React.createElement(
     "div",
     null,
@@ -143,26 +223,22 @@ function PageLayout(_ref4) {
       React.createElement(
         "div",
         { className: "row" },
-        React.createElement(SwitchButton, { text: "Active" }),
-        React.createElement(SwitchButton, { text: "All" }),
-        React.createElement(SwitchButton, { text: "14 Days" }),
-        React.createElement(SwitchButton, { text: "7 Days" })
+        React.createElement(SwitchButton, { text: "Active", onAction: setActive }),
+        React.createElement(SwitchButton, { text: "All", onAction: setAll }),
+        React.createElement(SwitchButton, { text: "14 Days", onAction: setFourteen }),
+        React.createElement(SwitchButton, { text: "7 Days", onAction: setSeven })
       )
     ),
     React.createElement(
       "div",
       { className: "container" },
-      React.createElement(CaseCount, { days: "7", count: "53" }),
+      React.createElement(CaseCount, { caseCount: caseCount }),
       React.createElement(TableHeading, null),
-      React.createElement(RowEntry, {
-        rank: "1",
-        postcode: "2026",
-        suburbs: "Ben Buckler, Bondi, Bondi Beach, North Bondi, Tamarama",
-        count: "112",
-        recent: "0"
-      })
+      React.createElement(RowEntries, { rowData: rowData })
     )
   );
 }
+
+function makeCasesArray(days) {}
 
 ReactDOM.render(React.createElement(PageLayout, null), document.querySelector("#root"));

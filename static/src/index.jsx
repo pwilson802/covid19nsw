@@ -1,17 +1,47 @@
-function SwitchButton({ text }) {
+const locations = Object.keys(allData);
+const postcodes = locations.filter((item) => item.startsWith("2"));
+
+function getViewData(data) {
+  return postcodes
+    .filter((item) => allData[item][data] > 0)
+    .map(function mapPostcodeData(item) {
+      return {
+        postcode: item,
+        suburbs: allData[item]["suburbs"].join(", "),
+        cases: allData[item][data],
+        recent: allData[item]["cases_recent"],
+      };
+    })
+    .sort((a, b) => (b.cases > a.cases ? 1 : -1))
+    .map(function addRanking(item, index) {
+      item["rank"] = index + 1;
+      return item;
+    });
+}
+
+function countCases(rows) {
+  let count = 0;
+  rows.forEach((obj) => (count = count + obj.cases));
+  return count;
+}
+
+function SwitchButton({ text, onAction }) {
   return (
     <div className="col-2">
-      <button className="btn btn-outline-success my-2 my-sm-0">{text}</button>
+      <button
+        className="btn btn-outline-success my-2 my-sm-0"
+        onClick={onAction}
+      >
+        {text}
+      </button>
     </div>
   );
 }
 
-function CaseCount({ days, count }) {
+function CaseCount({ caseCount }) {
   return (
     <div>
-      <h4 className="text-center all-count mt-1">
-        Last {days} days:{count}
-      </h4>
+      <h4 className="postcode mt-3 text-center">Cases: {caseCount}</h4>
     </div>
   );
 }
@@ -27,9 +57,15 @@ function TableHeading() {
   );
 }
 
-function RowEntry({ rank, postcode, suburbs, count, recent }) {
+function RowEntry({ rank, postcode, suburbs, cases, recent }) {
+  let rowClass = recent > 0 ? "row hot-entry" : "row rank-entry";
+  // if (recent > 0) {
+  //   let rowClass = "row hot-entry";
+  // } else {
+  //   let rowClass = "row rank-entry";
+  // }
   return (
-    <div className="row rank-entry">
+    <div className={rowClass}>
       <div className="col-2">
         <div className="rank-number">
           <div className="h2">{rank}</div>
@@ -47,7 +83,7 @@ function RowEntry({ rank, postcode, suburbs, count, recent }) {
 
       <div className="col-2">
         <div className="today-count mt-3">
-          <h3>{count}</h3>
+          <h3>{cases}</h3>
         </div>
       </div>
 
@@ -58,32 +94,63 @@ function RowEntry({ rank, postcode, suburbs, count, recent }) {
   );
 }
 
-function PageLayout({ dayView }) {
+function RowEntries({ rowData }) {
+  const items = [];
+  rowData.forEach(function insertRowData(item) {
+    items.push(
+      <RowEntry
+        rank={item.rank}
+        postcode={item.postcode}
+        suburbs={item.suburbs}
+        cases={item.cases}
+        recent={item.recent}
+      />
+    );
+  });
+  return <div>{items}</div>;
+}
+
+function PageLayout() {
   // make a function the changes the dayView and pass that function to the buttons
   //  also pass a prop to each buttom depneding on the button with the numbers to show
+  const [state, setState] = React.useState({ dayView: "active_cases" });
+  const setAll = () => {
+    const newValue = "all_days";
+    setState({ dayView: newValue });
+  };
+  const setSeven = () => {
+    const newValue = "seven_days";
+    setState({ dayView: newValue });
+  };
+  const setFourteen = () => {
+    const newValue = "fourteen_days";
+    setState({ dayView: newValue });
+  };
+  const setActive = () => {
+    const newValue = "active_cases";
+    setState({ dayView: newValue });
+  };
+  let rowData = getViewData(state.dayView);
+  let caseCount = countCases(rowData);
   return (
     <div>
       <div className="container">
         <div className="row">
-          <SwitchButton text="Active" />
-          <SwitchButton text="All" />
-          <SwitchButton text="14 Days" />
-          <SwitchButton text="7 Days" />
+          <SwitchButton text="Active" onAction={setActive} />
+          <SwitchButton text="All" onAction={setAll} />
+          <SwitchButton text="14 Days" onAction={setFourteen} />
+          <SwitchButton text="7 Days" onAction={setSeven} />
         </div>
       </div>
       <div className="container">
-        <CaseCount days="7" count="53" />
+        <CaseCount caseCount={caseCount} />
         <TableHeading />
-        <RowEntry
-          rank="1"
-          postcode="2026"
-          suburbs="Ben Buckler, Bondi, Bondi Beach, North Bondi, Tamarama"
-          count="112"
-          recent="0"
-        />
+        <RowEntries rowData={rowData} />
       </div>
     </div>
   );
 }
+
+function makeCasesArray(days) {}
 
 ReactDOM.render(<PageLayout />, document.querySelector("#root"));
