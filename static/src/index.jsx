@@ -1,3 +1,5 @@
+import { PageButtons } from "./Buttons";
+
 const locations = Object.keys(allData);
 const postcodes = locations.filter((item) => item.startsWith("2"));
 
@@ -36,20 +38,6 @@ function activeButton(button) {
   return result;
 }
 
-function SwitchButton({ text, onAction, buttonActive }) {
-  let activeClass = buttonActive ? "active" : "";
-  return (
-    <div className="col-2">
-      <button
-        className={`btn btn-outline-success my-2 my-sm-0 ${activeClass}`}
-        onClick={onAction}
-      >
-        {text}
-      </button>
-    </div>
-  );
-}
-
 function CaseCount({ caseCount }) {
   return (
     <div>
@@ -71,11 +59,6 @@ function TableHeading() {
 
 function RowEntry({ rank, postcode, suburbs, cases, recent }) {
   let rowClass = recent > 0 ? "row hot-entry" : "row rank-entry";
-  // if (recent > 0) {
-  //   let rowClass = "row hot-entry";
-  // } else {
-  //   let rowClass = "row rank-entry";
-  // }
   return (
     <div className={rowClass}>
       <div className="col-2">
@@ -87,7 +70,9 @@ function RowEntry({ rank, postcode, suburbs, cases, recent }) {
       <div className="col-6">
         <div className="postcode">
           <div className="h2">
-            <a href="#">{postcode}</a>
+            <a href={`/postcode?location=${postcode}&days=${daysSet}`}>
+              {postcode}
+            </a>
           </div>
         </div>
         <div className="suburbs">{suburbs}</div>
@@ -129,54 +114,23 @@ function PageLayout() {
     dayView: "active_cases",
     buttonsActive: activeButton(daysSet),
   });
-  const setAll = () => {
-    const newValue = "all_days";
-    const newButtons = activeButton("all");
+  const setView = (view) => {
+    const daysMap = {
+      active_cases: "active",
+      all_days: "all",
+      seven_days: "seven",
+      fourteen_days: "fourteen",
+    };
+    const newValue = view;
+    const newButtons = activeButton(daysMap[view]);
     setState({ dayView: newValue, buttonsActive: newButtons });
-  };
-  const setSeven = () => {
-    const newValue = "seven_days";
-    const newButtons = activeButton("seven");
-    setState({ dayView: newValue, buttonsActive: newButtons });
-  };
-  const setFourteen = () => {
-    const newValue = "fourteen_days";
-    const newButtons = activeButton("fourteen");
-    setState({ dayView: newValue, buttonsActive: newButtons });
-  };
-  const setActive = () => {
-    const newValue = "active_cases";
-    const newButtons = activeButton("active");
-    setState({ dayView: newValue, buttonsActive: newButtons });
+    daysSet = daysMap[view];
   };
   let rowData = getViewData(state.dayView);
   let caseCount = countCases(rowData);
   return (
     <div>
-      <div className="container">
-        <div className="row">
-          <SwitchButton
-            text="Active"
-            buttonActive={state.buttonsActive.active}
-            onAction={setActive}
-          />
-          <SwitchButton
-            text="All"
-            buttonActive={state.buttonsActive.all}
-            onAction={setAll}
-          />
-          <SwitchButton
-            buttonActive={state.buttonsActive.fourteen}
-            text="14 Days"
-            onAction={setFourteen}
-          />
-          <SwitchButton
-            text="7 Days"
-            buttonActive={state.buttonsActive.seven}
-            onAction={setSeven}
-          />
-        </div>
-      </div>
+      <PageButtons buttonState={state.buttonsActive} onAction={setView} />
       <div className="container">
         <CaseCount caseCount={caseCount} />
         <TableHeading />

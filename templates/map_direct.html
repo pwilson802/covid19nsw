@@ -3,6 +3,7 @@
 {% endblock %}
 {% block title %}Covid-19 NSW - find cases in your suburb{% endblock %}
 {% block content %}
+<div id="root">not rendered</div>
 <div class="container position-sticky">
     <div class="row select-buttons mb-2">
         <div class="col-4 button-all">
@@ -43,4 +44,5 @@
     {% else %}
     {% include 'map_all.html' %}
     {% endif %}
+    <script type="module" src="{{ url_for('static', filename='js/maps.js') }}"></script>
 {% endblock %}

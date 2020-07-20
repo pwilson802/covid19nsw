@@ -1,6 +1,90 @@
+(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+function SwitchButton(_ref) {
+  var text = _ref.text,
+      onAction = _ref.onAction,
+      buttonActive = _ref.buttonActive,
+      view = _ref.view;
+
+  var activeClass = buttonActive ? "active" : "";
+  return React.createElement(
+    "div",
+    { className: "col-2" },
+    React.createElement(
+      "button",
+      {
+        className: "btn btn-outline-success my-2 my-sm-0 " + activeClass,
+        onClick: function onClick() {
+          return onAction(view);
+        }
+      },
+      text
+    )
+  );
+}
+
+function PageButtons(_ref2) {
+  var buttonState = _ref2.buttonState,
+      onAction = _ref2.onAction;
+
+  return React.createElement(
+    "div",
+    { className: "container" },
+    React.createElement(
+      "div",
+      { className: "row" },
+      React.createElement(SwitchButton, {
+        text: "Active",
+        buttonActive: buttonState.active,
+        onAction: onAction,
+        view: "active_cases"
+      }),
+      React.createElement(SwitchButton, {
+        text: "All",
+        buttonActive: buttonState.all,
+        onAction: onAction,
+        view: "all_days"
+      }),
+      React.createElement(SwitchButton, {
+        buttonActive: buttonState.fourteen,
+        text: "14 Days",
+        onAction: onAction,
+        view: "fourteen_days"
+      }),
+      React.createElement(SwitchButton, {
+        text: "7 Days",
+        buttonActive: buttonState.seven,
+        onAction: onAction,
+        view: "seven_days"
+      })
+    )
+  );
+}
+
+function activeButton(button) {
+  var result = {
+    active: false,
+    all: false,
+    seven: false,
+    fourteen: false
+  };
+  result[button] = true;
+  return result;
+}
+
+exports.SwitchButton = SwitchButton;
+exports.PageButtons = PageButtons;
+exports.activeButton = activeButton;
+},{}],2:[function(require,module,exports){
 "use strict";
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _Buttons = require("./Buttons");
 
 var locations = Object.keys(allData);
 var postcodes = locations.filter(function (item) {
@@ -44,28 +128,8 @@ function activeButton(button) {
   return result;
 }
 
-function SwitchButton(_ref) {
-  var text = _ref.text,
-      onAction = _ref.onAction,
-      buttonActive = _ref.buttonActive;
-
-  var activeClass = buttonActive ? "active" : "";
-  return React.createElement(
-    "div",
-    { className: "col-2" },
-    React.createElement(
-      "button",
-      {
-        className: "btn btn-outline-success my-2 my-sm-0 " + activeClass,
-        onClick: onAction
-      },
-      text
-    )
-  );
-}
-
-function CaseCount(_ref2) {
-  var caseCount = _ref2.caseCount;
+function CaseCount(_ref) {
+  var caseCount = _ref.caseCount;
 
   return React.createElement(
     "div",
@@ -106,19 +170,14 @@ function TableHeading() {
   );
 }
 
-function RowEntry(_ref3) {
-  var rank = _ref3.rank,
-      postcode = _ref3.postcode,
-      suburbs = _ref3.suburbs,
-      cases = _ref3.cases,
-      recent = _ref3.recent;
+function RowEntry(_ref2) {
+  var rank = _ref2.rank,
+      postcode = _ref2.postcode,
+      suburbs = _ref2.suburbs,
+      cases = _ref2.cases,
+      recent = _ref2.recent;
 
   var rowClass = recent > 0 ? "row hot-entry" : "row rank-entry";
-  // if (recent > 0) {
-  //   let rowClass = "row hot-entry";
-  // } else {
-  //   let rowClass = "row rank-entry";
-  // }
   return React.createElement(
     "div",
     { className: rowClass },
@@ -146,7 +205,7 @@ function RowEntry(_ref3) {
           { className: "h2" },
           React.createElement(
             "a",
-            { href: "#" },
+            { href: "/postcode?location=" + postcode + "&days=" + daysSet },
             postcode
           )
         )
@@ -182,8 +241,8 @@ function RowEntry(_ref3) {
   );
 }
 
-function RowEntries(_ref4) {
-  var rowData = _ref4.rowData;
+function RowEntries(_ref3) {
+  var rowData = _ref3.rowData;
 
   var items = [];
   rowData.forEach(function insertRowData(item) {
@@ -212,59 +271,24 @@ function PageLayout() {
       state = _React$useState2[0],
       setState = _React$useState2[1];
 
-  var setAll = function setAll() {
-    var newValue = "all_days";
-    var newButtons = activeButton("all");
+  var setView = function setView(view) {
+    var daysMap = {
+      active_cases: "active",
+      all_days: "all",
+      seven_days: "seven",
+      fourteen_days: "fourteen"
+    };
+    var newValue = view;
+    var newButtons = activeButton(daysMap[view]);
     setState({ dayView: newValue, buttonsActive: newButtons });
-  };
-  var setSeven = function setSeven() {
-    var newValue = "seven_days";
-    var newButtons = activeButton("seven");
-    setState({ dayView: newValue, buttonsActive: newButtons });
-  };
-  var setFourteen = function setFourteen() {
-    var newValue = "fourteen_days";
-    var newButtons = activeButton("fourteen");
-    setState({ dayView: newValue, buttonsActive: newButtons });
-  };
-  var setActive = function setActive() {
-    var newValue = "active_cases";
-    var newButtons = activeButton("active");
-    setState({ dayView: newValue, buttonsActive: newButtons });
+    daysSet = daysMap[view];
   };
   var rowData = getViewData(state.dayView);
   var caseCount = countCases(rowData);
   return React.createElement(
     "div",
     null,
-    React.createElement(
-      "div",
-      { className: "container" },
-      React.createElement(
-        "div",
-        { className: "row" },
-        React.createElement(SwitchButton, {
-          text: "Active",
-          buttonActive: state.buttonsActive.active,
-          onAction: setActive
-        }),
-        React.createElement(SwitchButton, {
-          text: "All",
-          buttonActive: state.buttonsActive.all,
-          onAction: setAll
-        }),
-        React.createElement(SwitchButton, {
-          buttonActive: state.buttonsActive.fourteen,
-          text: "14 Days",
-          onAction: setFourteen
-        }),
-        React.createElement(SwitchButton, {
-          text: "7 Days",
-          buttonActive: state.buttonsActive.seven,
-          onAction: setSeven
-        })
-      )
-    ),
+    React.createElement(_Buttons.PageButtons, { buttonState: state.buttonsActive, onAction: setView }),
     React.createElement(
       "div",
       { className: "container" },
@@ -278,3 +302,4 @@ function PageLayout() {
 function makeCasesArray(days) {}
 
 ReactDOM.render(React.createElement(PageLayout, null), document.querySelector("#root"));
+},{"./Buttons":1}]},{},[2]);
