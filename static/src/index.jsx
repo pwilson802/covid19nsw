@@ -25,11 +25,23 @@ function countCases(rows) {
   return count;
 }
 
-function SwitchButton({ text, onAction }) {
+function activeButton(button) {
+  let result = {
+    active: false,
+    all: false,
+    seven: false,
+    fourteen: false,
+  };
+  result[button] = true;
+  return result;
+}
+
+function SwitchButton({ text, onAction, buttonActive }) {
+  let activeClass = buttonActive ? "active" : "";
   return (
     <div className="col-2">
       <button
-        className="btn btn-outline-success my-2 my-sm-0"
+        className={`btn btn-outline-success my-2 my-sm-0 ${activeClass}`}
         onClick={onAction}
       >
         {text}
@@ -113,22 +125,29 @@ function RowEntries({ rowData }) {
 function PageLayout() {
   // make a function the changes the dayView and pass that function to the buttons
   //  also pass a prop to each buttom depneding on the button with the numbers to show
-  const [state, setState] = React.useState({ dayView: "active_cases" });
+  const [state, setState] = React.useState({
+    dayView: "active_cases",
+    buttonsActive: activeButton(daysSet),
+  });
   const setAll = () => {
     const newValue = "all_days";
-    setState({ dayView: newValue });
+    const newButtons = activeButton("all");
+    setState({ dayView: newValue, buttonsActive: newButtons });
   };
   const setSeven = () => {
     const newValue = "seven_days";
-    setState({ dayView: newValue });
+    const newButtons = activeButton("seven");
+    setState({ dayView: newValue, buttonsActive: newButtons });
   };
   const setFourteen = () => {
     const newValue = "fourteen_days";
-    setState({ dayView: newValue });
+    const newButtons = activeButton("fourteen");
+    setState({ dayView: newValue, buttonsActive: newButtons });
   };
   const setActive = () => {
     const newValue = "active_cases";
-    setState({ dayView: newValue });
+    const newButtons = activeButton("active");
+    setState({ dayView: newValue, buttonsActive: newButtons });
   };
   let rowData = getViewData(state.dayView);
   let caseCount = countCases(rowData);
@@ -136,10 +155,26 @@ function PageLayout() {
     <div>
       <div className="container">
         <div className="row">
-          <SwitchButton text="Active" onAction={setActive} />
-          <SwitchButton text="All" onAction={setAll} />
-          <SwitchButton text="14 Days" onAction={setFourteen} />
-          <SwitchButton text="7 Days" onAction={setSeven} />
+          <SwitchButton
+            text="Active"
+            buttonActive={state.buttonsActive.active}
+            onAction={setActive}
+          />
+          <SwitchButton
+            text="All"
+            buttonActive={state.buttonsActive.all}
+            onAction={setAll}
+          />
+          <SwitchButton
+            buttonActive={state.buttonsActive.fourteen}
+            text="14 Days"
+            onAction={setFourteen}
+          />
+          <SwitchButton
+            text="7 Days"
+            buttonActive={state.buttonsActive.seven}
+            onAction={setSeven}
+          />
         </div>
       </div>
       <div className="container">

@@ -132,32 +132,16 @@ fourteen_day_nsw = {
 
 @app.route("/", methods=["POST", "GET"])
 def index():
+    days = "active"
     if request.method == "POST":
         input_data = request.form
         days = input_data["days"]
-        print('root page post request')
-        print(days)
-        if days == "seven":
-            return render_template(
-                "index.html",
-                data=seven_day_data_shown,
-                days_set="seven",
-                validation_set=all_postcode_suburb_list,
-                case_numbers = case_count['seven'],
-            )
-        if days == "fourteen":
-            return render_template(
-                "index.html",
-                data=fourteen_day_data_shown,
-                days_set="fourteen",
-                validation_set=all_postcode_suburb_list,
-                case_numbers = case_count['fourteen'],
-            )
+        print(input_data)
     return render_template(
         "index.html",
         data=data_shown,
         all_data=high_level_data,
-        days_set="all",
+        days_set=days,
         validation_set=all_postcode_suburb_list,
         case_numbers = case_count['all'],
     )

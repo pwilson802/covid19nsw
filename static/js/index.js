@@ -33,17 +33,30 @@ function countCases(rows) {
   return count;
 }
 
+function activeButton(button) {
+  var result = {
+    active: false,
+    all: false,
+    seven: false,
+    fourteen: false
+  };
+  result[button] = true;
+  return result;
+}
+
 function SwitchButton(_ref) {
   var text = _ref.text,
-      onAction = _ref.onAction;
+      onAction = _ref.onAction,
+      buttonActive = _ref.buttonActive;
 
+  var activeClass = buttonActive ? "active" : "";
   return React.createElement(
     "div",
     { className: "col-2" },
     React.createElement(
       "button",
       {
-        className: "btn btn-outline-success my-2 my-sm-0",
+        className: "btn btn-outline-success my-2 my-sm-0 " + activeClass,
         onClick: onAction
       },
       text
@@ -191,26 +204,33 @@ function RowEntries(_ref4) {
 
 function PageLayout() {
   // make a function the changes the dayView and pass that function to the buttons
-  var _React$useState = React.useState({ dayView: "active_cases" }),
+  var _React$useState = React.useState({
+    dayView: "active_cases",
+    buttonsActive: activeButton(daysSet)
+  }),
       _React$useState2 = _slicedToArray(_React$useState, 2),
       state = _React$useState2[0],
       setState = _React$useState2[1];
 
   var setAll = function setAll() {
     var newValue = "all_days";
-    setState({ dayView: newValue });
+    var newButtons = activeButton("all");
+    setState({ dayView: newValue, buttonsActive: newButtons });
   };
   var setSeven = function setSeven() {
     var newValue = "seven_days";
-    setState({ dayView: newValue });
+    var newButtons = activeButton("seven");
+    setState({ dayView: newValue, buttonsActive: newButtons });
   };
   var setFourteen = function setFourteen() {
     var newValue = "fourteen_days";
-    setState({ dayView: newValue });
+    var newButtons = activeButton("fourteen");
+    setState({ dayView: newValue, buttonsActive: newButtons });
   };
   var setActive = function setActive() {
     var newValue = "active_cases";
-    setState({ dayView: newValue });
+    var newButtons = activeButton("active");
+    setState({ dayView: newValue, buttonsActive: newButtons });
   };
   var rowData = getViewData(state.dayView);
   var caseCount = countCases(rowData);
@@ -223,10 +243,26 @@ function PageLayout() {
       React.createElement(
         "div",
         { className: "row" },
-        React.createElement(SwitchButton, { text: "Active", onAction: setActive }),
-        React.createElement(SwitchButton, { text: "All", onAction: setAll }),
-        React.createElement(SwitchButton, { text: "14 Days", onAction: setFourteen }),
-        React.createElement(SwitchButton, { text: "7 Days", onAction: setSeven })
+        React.createElement(SwitchButton, {
+          text: "Active",
+          buttonActive: state.buttonsActive.active,
+          onAction: setActive
+        }),
+        React.createElement(SwitchButton, {
+          text: "All",
+          buttonActive: state.buttonsActive.all,
+          onAction: setAll
+        }),
+        React.createElement(SwitchButton, {
+          buttonActive: state.buttonsActive.fourteen,
+          text: "14 Days",
+          onAction: setFourteen
+        }),
+        React.createElement(SwitchButton, {
+          text: "7 Days",
+          buttonActive: state.buttonsActive.seven,
+          onAction: setSeven
+        })
       )
     ),
     React.createElement(
