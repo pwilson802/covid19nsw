@@ -1,4 +1,4 @@
-import { PageButtons } from "./Buttons";
+import { PageButtons, AllNSWButton, activeButton } from "./Buttons";
 
 const locations = Object.keys(allData);
 const postcodes = locations.filter((item) => item.startsWith("2"));
@@ -27,21 +27,23 @@ function countCases(rows) {
   return count;
 }
 
-function activeButton(button) {
-  let result = {
-    active: false,
-    all: false,
-    seven: false,
-    fourteen: false,
-  };
-  result[button] = true;
-  return result;
-}
+// function activeButton(button) {
+//   let result = {
+//     active: false,
+//     all: false,
+//     seven: false,
+//     fourteen: false,
+//   };
+//   result[button] = true;
+//   return result;
+// }
 
 function CaseCount({ caseCount }) {
   return (
     <div>
-      <h4 className="postcode mt-3 text-center">Cases: {caseCount}</h4>
+      <a href={`/allnsw?days=${daysSet}`}>
+        <h4 className="postcode mt-3 text-center">Cases: {caseCount}</h4>
+      </a>
     </div>
   );
 }
@@ -132,7 +134,12 @@ function PageLayout() {
     <div>
       <PageButtons buttonState={state.buttonsActive} onAction={setView} />
       <div className="container">
-        <CaseCount caseCount={caseCount} />
+        <div className="container">
+          <div className="row justify-content-center mt-3">
+            <CaseCount caseCount={caseCount} />
+            <AllNSWButton />
+          </div>
+        </div>
         <TableHeading />
         <RowEntries rowData={rowData} />
       </div>

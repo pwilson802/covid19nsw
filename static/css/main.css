@@ -1,105 +1,118 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,600;0,900;1,400;1,500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,600;0,900;1,400;1,500&display=swap");
 
 .nav-title {
-    color: #344072;
-    font-weight: 900;
-    font-family: 'Poppins', sans-serif;
+  color: #344072;
+  font-weight: 900;
+  font-family: "Poppins", sans-serif;
 }
 
 .disclaimer {
-    font-size: x-small;
-    text-align: center;
+  font-size: x-small;
+  text-align: center;
 }
 
 .page-heading {
-    text-align: center;
-    font-family: 'Poppins', sans-serif;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
 }
 
 .headers {
-    color: #344072;
+  color: #344072;
 }
 
 .rank-number {
-    color: #344072;
-    font-weight: 900;
-    
+  color: #344072;
+  font-weight: 900;
 }
 
 .postcode {
-    color: #344072;
-    font-weight: 600;
-    font-family: 'Poppins', sans-serif;
+  color: #344072;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
 }
 
 .suburbs {
-    color: #8086a0;
+  color: #8086a0;
 }
 
 .today-count {
-    color: #8086a0;
+  color: #8086a0;
 }
 
 .new-cases {
-    color: #8086a0;
+  color: #8086a0;
 }
 
 .rank-entry {
-    border: 1px solid #dfe1ea;
+  border: 1px solid #dfe1ea;
 }
 
 .hot-entry {
-    border: 1px solid #dfe1ea;
-    background-color: rgba(246, 153, 95, 0.25);
+  border: 1px solid #dfe1ea;
+  background-color: rgba(246, 153, 95, 0.25);
 }
 
-
 .postcode_error {
-    font-family: 'Poppins', sans-serif;
-    font-family: 400;
+  font-family: "Poppins", sans-serif;
+  font-family: 400;
 }
 
 .postcode a {
-    text-decoration: none; 
-    color: inherit
+  text-decoration: none;
+  color: inherit;
 }
 
 .all-count a {
-    text-decoration: underline;
-    color: inherit
+  text-decoration: underline;
+  color: inherit;
 }
 
 .infection-heading {
-    color: #344072;
-    font-weight: 600;
-    font-family: 'Poppins', sans-serif;
+  color: #f2f2f2;
+  font-weight: normal;
+  font-family: "Poppins", sans-serif;
+  background-color: #303c69;
+  border-radius: 10px 10px 0 0;
+  padding: 0.5rem 0;
 }
 
 .infection-type {
-    color: #8086a0;
-    font-weight: bold;
-    font-size: medium;
+  color: #8086a0;
+  font-weight: bold;
+  font-size: medium;
 }
 
 .infection {
-    color: #8086a0;
-    font-size: medium;
+  color: #8086a0;
+  font-size: medium;
 }
 
 .infection-p {
-    margin-bottom: 0px;
+  margin-bottom: 0px;
 }
 
 .infection-box {
-    border: 1px solid #28a745;
+  border: 1px solid black;
+  border-radius: 11px;
 }
 
 .contact-message {
-    font-size: small;
-    text-align: center;
+  font-size: small;
+  text-align: center;
 }
 
 .all-count {
-    color: #8086a0;
-    font-size: large;
+  color: #8086a0;
+  font-size: large;
+}
+
+.top-box {
+  border: 2px solid white;
+  background-color: #303c69;
+  padding: 0 3rem;
+  border-radius: 11px;
+}
+
+.top-count {
+  color: white;
 }

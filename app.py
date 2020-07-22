@@ -37,15 +37,20 @@ with open(main_cases_file) as f:
 cases_data['all']['map_location'] = cases_data['2016']['map_location']
 cases_data['all']['suburbs'] = "none"
 # Make a smaller file to be used by maps and initial tables for faster load times
-high_level_data = {x: {'active_cases': cases_data[x]['cases_active'],
-                       'recovered_cases': cases_data[x]['cases_recovered'],
-                       'map_location': cases_data[x]['map_location'],
-                       'all_days': cases_data[x]['all_days']['cases'],
-                       'seven_days': cases_data[x]['seven_days']['cases'],
-                       'fourteen_days': cases_data[x]['fourteen_days']['cases'],
-                       'suburbs': cases_data[x]['suburbs'],
-                       'cases_recent': cases_data[x]['cases_recent'],
-                       } for x in cases_data}
+
+def get_high_level(cases):
+    result = {x: {'active_cases': cases[x]['cases_active'],
+                       'recovered_cases': cases[x]['cases_recovered'],
+                       'map_location': cases[x]['map_location'],
+                       'all_days': cases[x]['all_days']['cases'],
+                       'seven_days': cases[x]['seven_days']['cases'],
+                       'fourteen_days': cases[x]['fourteen_days']['cases'],
+                       'suburbs': cases[x]['suburbs'],
+                       'cases_recent': cases[x]['cases_recent'],
+                       } for x in cases}
+    return result
+
+high_level_data = get_high_level(cases_data)
 
 
 # get the last update time for display on th website postcode page
@@ -60,7 +65,7 @@ else:
     with open(file_yesterday) as json_file:
         data = json.loads(json_file.read())
 
-all_postcodes = [x["postcode"] for x in data]
+all_postcodes = [x for x in cases_data.keys() if not x.startswith('a')]
 
 # If todays postcode file hasn't been loaded yet, we will grab yesterdays file
 if os.path.isfile(postcode_file_today):
@@ -291,6 +296,19 @@ def postcode():
         close_postcodes = [
             str(x) for x in close_postcodes_try if str(x) in all_postcodes
         ]
+        close_postcodes_all_data = {x: cases_data[x] for x in close_postcodes}
+        close_postcodes_high_level = get_high_level(close_postcodes_all_data)
+        return render_template(
+            "postcode.html",
+            postcode=postcode,
+            days_set=days_set,
+            validation_set=all_postcode_suburb_list,
+            last_update=last_update,
+            close_postcodes_data=close_postcodes_high_level,
+            postcode_data=cases_data[postcode],
+
+
+        )
         if days_set == 'seven':
             postcode_data = [x for x in data_seven_days if x["postcode"] == postcode]
             close_postcode_data = [x for x in data_seven_days if x["postcode"] in close_postcodes]

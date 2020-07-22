@@ -26,22 +26,32 @@ function SwitchButton(_ref) {
   );
 }
 
+function AllNSWButton() {
+  return React.createElement(
+    "a",
+    { className: "ml-3", href: "/allnsw?days=" + daysSet },
+    React.createElement("img", { src: "/static/img/all_nsw.png", alt: "all NSW link" })
+  );
+}
+
 function PageButtons(_ref2) {
   var buttonState = _ref2.buttonState,
-      onAction = _ref2.onAction;
+      onAction = _ref2.onAction,
+      _ref2$activeOn = _ref2.activeOn,
+      activeOn = _ref2$activeOn === undefined ? true : _ref2$activeOn;
 
+  var activeButton = React.createElement(SwitchButton, {
+    text: "Active",
+    buttonActive: buttonState.active,
+    onAction: onAction,
+    view: "active_cases"
+  });
   return React.createElement(
     "div",
     { className: "container" },
     React.createElement(
       "div",
       { className: "row" },
-      React.createElement(SwitchButton, {
-        text: "Active",
-        buttonActive: buttonState.active,
-        onAction: onAction,
-        view: "active_cases"
-      }),
       React.createElement(SwitchButton, {
         text: "All",
         buttonActive: buttonState.all,
@@ -59,7 +69,8 @@ function PageButtons(_ref2) {
         buttonActive: buttonState.seven,
         onAction: onAction,
         view: "seven_days"
-      })
+      }),
+      activeOn ? activeButton : ""
     )
   );
 }
@@ -78,3 +89,4 @@ function activeButton(button) {
 exports.SwitchButton = SwitchButton;
 exports.PageButtons = PageButtons;
 exports.activeButton = activeButton;
+exports.AllNSWButton = AllNSWButton;

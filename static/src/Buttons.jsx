@@ -12,16 +12,26 @@ function SwitchButton({ text, onAction, buttonActive, view }) {
   );
 }
 
-function PageButtons({ buttonState, onAction }) {
+function AllNSWButton() {
+  return (
+    <a className="ml-3" href={`/allnsw?days=${daysSet}`}>
+      <img src="/static/img/all_nsw.png" alt="all NSW link" />
+    </a>
+  );
+}
+
+function PageButtons({ buttonState, onAction, activeOn = true }) {
+  let activeButton = (
+    <SwitchButton
+      text="Active"
+      buttonActive={buttonState.active}
+      onAction={onAction}
+      view="active_cases"
+    />
+  );
   return (
     <div className="container">
       <div className="row">
-        <SwitchButton
-          text="Active"
-          buttonActive={buttonState.active}
-          onAction={onAction}
-          view="active_cases"
-        />
         <SwitchButton
           text="All"
           buttonActive={buttonState.all}
@@ -40,6 +50,7 @@ function PageButtons({ buttonState, onAction }) {
           onAction={onAction}
           view="seven_days"
         />
+        {activeOn ? activeButton : ""}
       </div>
     </div>
   );
@@ -56,4 +67,4 @@ function activeButton(button) {
   return result;
 }
 
-export { SwitchButton, PageButtons, activeButton };
+export { SwitchButton, PageButtons, activeButton, AllNSWButton };

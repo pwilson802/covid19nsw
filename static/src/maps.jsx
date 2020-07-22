@@ -1,7 +1,7 @@
 import { PageButtons, activeButton } from "./Buttons";
 
-function CasesMap(view) {
-  return <object type="text/html" data="map_all.html"></object>;
+function createMarkup() {
+  return { __html: "" };
 }
 
 function PageLayout() {
@@ -25,7 +25,7 @@ function PageLayout() {
   return (
     <div>
       <PageButtons buttonState={state.buttonsActive} onAction={setView} />
-      <CasesMap view={state.dayView} />
+      <div dangerouslySetInnerHTML={createMarkup()} />
     </div>
   );
 }

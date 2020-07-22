@@ -27,22 +27,32 @@ function SwitchButton(_ref) {
   );
 }
 
+function AllNSWButton() {
+  return React.createElement(
+    "a",
+    { className: "ml-3", href: "/allnsw?days=" + daysSet },
+    React.createElement("img", { src: "/static/img/all_nsw.png", alt: "all NSW link" })
+  );
+}
+
 function PageButtons(_ref2) {
   var buttonState = _ref2.buttonState,
-      onAction = _ref2.onAction;
+      onAction = _ref2.onAction,
+      _ref2$activeOn = _ref2.activeOn,
+      activeOn = _ref2$activeOn === undefined ? true : _ref2$activeOn;
 
+  var activeButton = React.createElement(SwitchButton, {
+    text: "Active",
+    buttonActive: buttonState.active,
+    onAction: onAction,
+    view: "active_cases"
+  });
   return React.createElement(
     "div",
     { className: "container" },
     React.createElement(
       "div",
       { className: "row" },
-      React.createElement(SwitchButton, {
-        text: "Active",
-        buttonActive: buttonState.active,
-        onAction: onAction,
-        view: "active_cases"
-      }),
       React.createElement(SwitchButton, {
         text: "All",
         buttonActive: buttonState.all,
@@ -60,7 +70,8 @@ function PageButtons(_ref2) {
         buttonActive: buttonState.seven,
         onAction: onAction,
         view: "seven_days"
-      })
+      }),
+      activeOn ? activeButton : ""
     )
   );
 }
@@ -79,6 +90,7 @@ function activeButton(button) {
 exports.SwitchButton = SwitchButton;
 exports.PageButtons = PageButtons;
 exports.activeButton = activeButton;
+exports.AllNSWButton = AllNSWButton;
 },{}],2:[function(require,module,exports){
 "use strict";
 
@@ -117,16 +129,16 @@ function countCases(rows) {
   return count;
 }
 
-function activeButton(button) {
-  var result = {
-    active: false,
-    all: false,
-    seven: false,
-    fourteen: false
-  };
-  result[button] = true;
-  return result;
-}
+// function activeButton(button) {
+//   let result = {
+//     active: false,
+//     all: false,
+//     seven: false,
+//     fourteen: false,
+//   };
+//   result[button] = true;
+//   return result;
+// }
 
 function CaseCount(_ref) {
   var caseCount = _ref.caseCount;
@@ -135,10 +147,14 @@ function CaseCount(_ref) {
     "div",
     null,
     React.createElement(
-      "h4",
-      { className: "postcode mt-3 text-center" },
-      "Cases: ",
-      caseCount
+      "a",
+      { href: "/allnsw?days=" + daysSet },
+      React.createElement(
+        "h4",
+        { className: "postcode mt-3 text-center" },
+        "Cases: ",
+        caseCount
+      )
     )
   );
 }
@@ -265,7 +281,7 @@ function PageLayout() {
   // make a function the changes the dayView and pass that function to the buttons
   var _React$useState = React.useState({
     dayView: "active_cases",
-    buttonsActive: activeButton(daysSet)
+    buttonsActive: (0, _Buttons.activeButton)(daysSet)
   }),
       _React$useState2 = _slicedToArray(_React$useState, 2),
       state = _React$useState2[0],
@@ -279,7 +295,7 @@ function PageLayout() {
       fourteen_days: "fourteen"
     };
     var newValue = view;
-    var newButtons = activeButton(daysMap[view]);
+    var newButtons = (0, _Buttons.activeButton)(daysMap[view]);
     setState({ dayView: newValue, buttonsActive: newButtons });
     daysSet = daysMap[view];
   };
@@ -292,7 +308,16 @@ function PageLayout() {
     React.createElement(
       "div",
       { className: "container" },
-      React.createElement(CaseCount, { caseCount: caseCount }),
+      React.createElement(
+        "div",
+        { className: "container" },
+        React.createElement(
+          "div",
+          { className: "row justify-content-center mt-3" },
+          React.createElement(CaseCount, { caseCount: caseCount }),
+          React.createElement(_Buttons.AllNSWButton, null)
+        )
+      ),
       React.createElement(TableHeading, null),
       React.createElement(RowEntries, { rowData: rowData })
     )
