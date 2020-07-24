@@ -3,6 +3,14 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.AllNSWButton = exports.activeButton = exports.PageButtons = exports.SwitchButton = undefined;
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function SwitchButton(_ref) {
   var text = _ref.text,
       onAction = _ref.onAction,
@@ -10,10 +18,10 @@ function SwitchButton(_ref) {
       view = _ref.view;
 
   var activeClass = buttonActive ? "active" : "";
-  return React.createElement(
+  return _react2.default.createElement(
     "div",
     { className: "col-2" },
-    React.createElement(
+    _react2.default.createElement(
       "button",
       {
         className: "btn btn-outline-success my-2 my-sm-0 " + activeClass,
@@ -27,10 +35,10 @@ function SwitchButton(_ref) {
 }
 
 function AllNSWButton() {
-  return React.createElement(
-    "a",
-    { className: "ml-3", href: "/allnsw?days=" + daysSet },
-    React.createElement("img", { src: "/static/img/all_nsw.png", alt: "all NSW link" })
+  return _react2.default.createElement(
+    "div",
+    { className: "ml-3" },
+    _react2.default.createElement("img", { src: "/static/img/all_nsw.png", alt: "all NSW link" })
   );
 }
 
@@ -40,31 +48,31 @@ function PageButtons(_ref2) {
       _ref2$activeOn = _ref2.activeOn,
       activeOn = _ref2$activeOn === undefined ? true : _ref2$activeOn;
 
-  var activeButton = React.createElement(SwitchButton, {
+  var activeButton = _react2.default.createElement(SwitchButton, {
     text: "Active",
     buttonActive: buttonState.active,
     onAction: onAction,
     view: "active_cases"
   });
-  return React.createElement(
+  return _react2.default.createElement(
     "div",
     { className: "container" },
-    React.createElement(
+    _react2.default.createElement(
       "div",
       { className: "row" },
-      React.createElement(SwitchButton, {
+      _react2.default.createElement(SwitchButton, {
         text: "All",
         buttonActive: buttonState.all,
         onAction: onAction,
         view: "all_days"
       }),
-      React.createElement(SwitchButton, {
+      _react2.default.createElement(SwitchButton, {
         buttonActive: buttonState.fourteen,
         text: "14 Days",
         onAction: onAction,
         view: "fourteen_days"
       }),
-      React.createElement(SwitchButton, {
+      _react2.default.createElement(SwitchButton, {
         text: "7 Days",
         buttonActive: buttonState.seven,
         onAction: onAction,

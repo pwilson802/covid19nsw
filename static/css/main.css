@@ -116,3 +116,39 @@
 .top-count {
   color: white;
 }
+
+.charts-wrapper {
+  border: 1px solid black;
+}
+
+.charts-button {
+  font-family: "Poppins", sans-serif;
+  border: 1px solid black;
+  color: black;
+  background-color: #fdb5b5;
+  border-radius: 0;
+}
+
+.charts-button:hover {
+  background-color: #8c0404;
+  color: white;
+}
+
+.charts-button:active {
+  background-color: #8c0404;
+  color: white;
+}
+
+.chart-active-button {
+  background-color: #8c0404;
+  color: white;
+}
+
+.active-explanation {
+  color: #8086a0;
+  font-size: small;
+}
+
+.all-nsw-link:hover {
+  text-decoration: none;
+}

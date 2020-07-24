@@ -1,3 +1,5 @@
+import React from "react";
+
 function SwitchButton({ text, onAction, buttonActive, view }) {
   let activeClass = buttonActive ? "active" : "";
   return (
@@ -14,9 +16,9 @@ function SwitchButton({ text, onAction, buttonActive, view }) {
 
 function AllNSWButton() {
   return (
-    <a className="ml-3" href={`/allnsw?days=${daysSet}`}>
+    <div className="ml-3">
       <img src="/static/img/all_nsw.png" alt="all NSW link" />
-    </a>
+    </div>
   );
 }
 

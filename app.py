@@ -12,16 +12,6 @@ data_folder = os.environ.get("COVID_DATA")
 
 today = datetime.now()
 yesterday = datetime.now() - timedelta(days=1)
-file_today_name = f"{today.day}-{today.month}-{today.year}.json"
-file_yesterday_name = f"{yesterday.day}-{yesterday.month}-{yesterday.year}.json"
-file_today = os.path.join(data_folder, file_today_name)
-file_yesterday = os.path.join(data_folder, file_yesterday_name)
-postcode_file_today = os.path.join(data_folder, f"postcode-{file_today_name}")
-postcode_file_yesterday = os.path.join(data_folder, f"postcode-{file_yesterday_name}")
-seven_file_today = os.path.join(data_folder, f"seven-{file_today_name}")
-seven_file_yesterday = os.path.join(data_folder, f"seven-{file_yesterday_name}")
-fourteen_file_today = os.path.join(data_folder, f"fourteen-{file_today_name}")
-fourteen_file_yesterday = os.path.join(data_folder, f"fourteen-{file_yesterday_name}")
 suburb_to_postcode_file = os.path.join(data_folder, "suburb_to_postcode.json")
 all_postcode_suburb_file = os.path.join(data_folder, "all_postcode_suburb.json")
 last_update_file = os.path.join(data_folder, "last_update_time")
@@ -57,39 +47,7 @@ high_level_data = get_high_level(cases_data)
 with open(last_update_file) as f:
     last_update = f.readlines()[0]
 
-# If todays file hasn't been loaded yet, we will grab yesterdays file
-if os.path.isfile(file_today):
-    with open(file_today) as json_file:
-        data = json.loads(json_file.read())
-else:
-    with open(file_yesterday) as json_file:
-        data = json.loads(json_file.read())
-
 all_postcodes = [x for x in cases_data.keys() if not x.startswith('a')]
-
-# If todays postcode file hasn't been loaded yet, we will grab yesterdays file
-if os.path.isfile(postcode_file_today):
-    with open(postcode_file_today) as json_file:
-        postcode_history = json.loads(json_file.read())
-else:
-    with open(postcode_file_yesterday) as json_file:
-        postcode_history = json.loads(json_file.read())
-
-# If todays seven day data file hasn't been loaded yet, we will grab yesterdays file
-if os.path.isfile(seven_file_today):
-    with open(seven_file_today) as json_file:
-        data_seven_days = json.loads(json_file.read())
-else:
-    with open(seven_file_yesterday) as json_file:
-        data_seven_days = json.loads(json_file.read())
-
-# If todays fourteen day data file hasn't been loaded yet, we will grab yesterdays file
-if os.path.isfile(fourteen_file_today):
-    with open(fourteen_file_today) as json_file:
-        data_fourteen_days = json.loads(json_file.read())
-else:
-    with open(fourteen_file_yesterday) as json_file:
-        data_fourteen_days = json.loads(json_file.read())
 
 # Load the extra suburb and postcode data
 with open(suburb_to_postcode_file) as json_file:
@@ -103,37 +61,6 @@ with open(case_count_file) as json_file:
 validation_list = [x.lower() for x in all_postcode_suburb_list]
 all_postcode_suburb_list = set(all_postcode_suburb_list)
 
-data_shown = [x for x in data if x["count"] != 0]
-seven_day_data_shown = [x for x in data_seven_days if x["count"] != 0]
-fourteen_day_data_shown = [x for x in data_fourteen_days if x["count"] != 0]
-
-# Get date for charts
-# with open(testing_chart_file) as json_file:
-#     testing_chart = json.loads(json_file.read())
-
-
-with open(map_data_file) as json_file:
-    postcode_dict = json.loads(json_file.read())
-
-all_nsw = {
-    'count': postcode_dict['all_nsw']['all_count'],
-    'recent': postcode_dict['all_nsw']['recent'],
-    'source': postcode_dict['all_nsw']['source']['all']
-}
-
-seven_day_nsw = {
-    'count': postcode_dict['all_nsw']['seven_day_count'],
-    'recent': postcode_dict['all_nsw']['recent'],
-    'source': postcode_dict['all_nsw']['source']['seven']
-}
-
-fourteen_day_nsw = {
-    'count': postcode_dict['all_nsw']['fourteen_day_count'],
-    'recent': postcode_dict['all_nsw']['recent'],
-    'source': postcode_dict['all_nsw']['source']['fourteen']
-}
-
-
 
 @app.route("/", methods=["POST", "GET"])
 def index():
@@ -141,15 +68,23 @@ def index():
     if request.method == "POST":
         input_data = request.form
         days = input_data["days"]
-        print(input_data)
-    return render_template(
-        "index.html",
-        data=data_shown,
-        all_data=high_level_data,
-        days_set=days,
-        validation_set=all_postcode_suburb_list,
-        case_numbers = case_count['all'],
-    )
+        return render_template(
+            "index.html",
+            all_data=high_level_data,
+            days_set=days,
+            validation_set=all_postcode_suburb_list,
+        )
+    else:
+        try:
+            days_set = request.args["days"]
+        except:
+            days_set = "all"
+        return render_template(
+            "index.html",
+            all_data=high_level_data,
+            days_set=days_set,
+            validation_set=all_postcode_suburb_list,
+        )
 
 
 @app.route("/postcode", methods=["POST", "GET"])
@@ -157,19 +92,15 @@ def postcode():
     print("-----------")
     if request.method == "POST":
         input_data = request.form
-        try:
-            days = input_data["days"]
-            if "recall" in days:
-                _, postcode, days = days.split("-")
-        except:
-            days = "all"
-            postcode = input_data["postcode"]
+        days = "all"
+        postcode = input_data["postcode"]
         try:
             source = input_data['source']
             days = input_data['days']
             postcode = input_data["postcode"]
         except:
             source = 'list_view'
+        days_set = days
         print(source)
         if postcode.lower() not in validation_list:
             close_options = get_close_matches(postcode.lower(), validation_list)
@@ -186,7 +117,8 @@ def postcode():
                     other_options=other_options,
                     all_options=all_options,
                     validation_set=all_postcode_suburb_list,
-                    view_mode="map"
+                    view_mode="map",
+                    days_set=days_set
                 )
             else:
                 return render_template(
@@ -195,19 +127,33 @@ def postcode():
                     other_options=other_options,
                     all_options=all_options,
                     validation_set=all_postcode_suburb_list,
+                    days_set=days_set
                 )
         # Need to find if the search is not a post code so we can convert it
         if not postcode.startswith("2"):
             postcode = suburb_to_postcode_dict[postcode.lower()]
-        close_postcodes_try = [
+        if source == "list_view":
+            close_postcodes_try = [
             int(postcode) - 1,
             int(postcode) - 2,
             int(postcode) + 1,
             int(postcode) + 2,
-        ]
-        close_postcodes = [
+            ]
+            close_postcodes = [
             str(x) for x in close_postcodes_try if str(x) in all_postcodes
-        ]
+            ]
+            close_postcodes_all_data = {x: cases_data[x] for x in close_postcodes}
+            close_postcodes_high_level = get_high_level(close_postcodes_all_data)
+            return render_template(
+                "postcode.html",
+                postcode=postcode,
+                days_set=days_set,
+                validation_set=all_postcode_suburb_list,
+                last_update=last_update,
+                close_postcodes_data=close_postcodes_high_level,
+                postcode_data=cases_data[postcode]
+            )
+        print(days_set)
         if days == "seven":
             if source == 'maps':
                 temp_map_name = random_map_name()
@@ -217,21 +163,6 @@ def postcode():
                 just_the_file = os.path.split(temp_map_name)[-1]
                 map_template = f"temp_maps/{just_the_file}"
                 return render_template('map_direct.html', days_set="seven", view_mode="map", temp_map_name=map_template, temp_map = 'true')
-            postcode_data = [x for x in data_seven_days if x["postcode"] == postcode]
-            close_postcode_data = [
-                x for x in data_seven_days if x["postcode"] in close_postcodes
-            ]
-            return render_template(
-                "postcode.html",
-                postcode=postcode,
-                data=postcode_data,
-                history=postcode_history[postcode],
-                days_set="seven",
-                close=close_postcode_data,
-                validation_set=all_postcode_suburb_list,
-                last_update = last_update,
-                # testing=testing_chart[postcode],
-            )
         elif days == "fourteen":
             if source == 'maps':
                 temp_map_name = random_map_name()
@@ -241,22 +172,7 @@ def postcode():
                 just_the_file = os.path.split(temp_map_name)[-1]
                 map_template = f"temp_maps/{just_the_file}"
                 return render_template('map_direct.html', days_set="fourteen", view_mode="map", temp_map_name=map_template, temp_map = 'true')
-            postcode_data = [x for x in data_fourteen_days if x["postcode"] == postcode]
-            close_postcode_data = [
-                x for x in data_fourteen_days if x["postcode"] in close_postcodes
-            ]
-            return render_template(
-                "postcode.html",
-                postcode=postcode,
-                data=postcode_data,
-                history=postcode_history[postcode],
-                days_set="fourteen",
-                close=close_postcode_data,
-                validation_set=all_postcode_suburb_list,
-                last_update = last_update,
-                # testing=testing_chart[postcode],
-            )
-        else:
+        elif days == "all":
             if source == 'maps':
                 temp_map_name = random_map_name()
                 map_data = all_map('all_days', postcode_zoom=postcode,zoom=13)
@@ -264,20 +180,15 @@ def postcode():
                 remove_bootstrap3(temp_map_name)
                 just_the_file = os.path.split(temp_map_name)[-1]
                 map_template = f"temp_maps/{just_the_file}"
-                return render_template('map_direct.html', days_set="all", view_mode="map", temp_map_name=map_template, temp_map = 'true')
-            postcode_data = [x for x in data if x["postcode"] == postcode]
-            close_postcode_data = [x for x in data if x["postcode"] in close_postcodes]
-            return render_template(
-                "postcode.html",
-                postcode=postcode,
-                data=postcode_data,
-                history=postcode_history[postcode],
-                days_set="all",
-                close=close_postcode_data,
-                validation_set=all_postcode_suburb_list,
-                last_update = last_update,
-                # testing=testing_chart[postcode],
-            )
+                return render_template('map_direct.html', days_set="all", view_mode="map", temp_map_name=map_template, temp_map='true')
+        else:
+            temp_map_name = random_map_name()
+            map_data = all_map('active_cases', postcode_zoom=postcode,zoom=13)
+            map_data.save(temp_map_name)
+            remove_bootstrap3(temp_map_name)
+            just_the_file = os.path.split(temp_map_name)[-1]
+            map_template = f"temp_maps/{just_the_file}"
+            return render_template('map_direct.html', days_set="active", view_mode="map", temp_map_name=map_template, temp_map='true')         
     else:
         print(request.args["location"])
         postcode = request.args["location"]
@@ -305,52 +216,9 @@ def postcode():
             validation_set=all_postcode_suburb_list,
             last_update=last_update,
             close_postcodes_data=close_postcodes_high_level,
-            postcode_data=cases_data[postcode],
-
-
+            postcode_data=cases_data[postcode]
         )
-        if days_set == 'seven':
-            postcode_data = [x for x in data_seven_days if x["postcode"] == postcode]
-            close_postcode_data = [x for x in data_seven_days if x["postcode"] in close_postcodes]
-            return render_template(
-                "postcode.html",
-                postcode=postcode,
-                data=postcode_data,
-                history=postcode_history[postcode],
-                days_set="seven",
-                close=close_postcode_data,
-                validation_set=all_postcode_suburb_list,
-                last_update = last_update,
-                # testing=testing_chart[postcode],
-            )
-        elif days_set == 'fourteen':
-            postcode_data = [x for x in data_fourteen_days if x["postcode"] == postcode]
-            close_postcode_data = [x for x in data_fourteen_days if x["postcode"] in close_postcodes]
-            return render_template(
-                "postcode.html",
-                postcode=postcode,
-                data=postcode_data,
-                history=postcode_history[postcode],
-                days_set="fourteen",
-                close=close_postcode_data,
-                validation_set=all_postcode_suburb_list,
-                last_update = last_update,
-                # testing=testing_chart[postcode],
-            )
-        else:
-            postcode_data = [x for x in data if x["postcode"] == postcode]
-            close_postcode_data = [x for x in data if x["postcode"] in close_postcodes]
-            return render_template(
-                "postcode.html",
-                postcode=postcode,
-                data=postcode_data,
-                history=postcode_history[postcode],
-                days_set="all",
-                close=close_postcode_data,
-                validation_set=all_postcode_suburb_list,
-                last_update = last_update,
-                # testing=testing_chart[postcode],
-            )
+
 
 @app.route('/sitemap.xml')
 def site_map():
@@ -360,77 +228,32 @@ def site_map():
 def map():
     if request.method == "POST":
         input_data = request.form
-        days = input_data["days"]
-        if days == "seven":
-            return render_template('map_direct.html', days_set="seven", view_mode="map",temp_map='false')
-        if days == "fourteen":
-            return render_template('map_direct.html', days_set="fourteen", view_mode="map",temp_map='false')
-        else:
-            return render_template('map_direct.html', days_set="all", view_mode="map",temp_map='false')
+        try:
+            days_set = input_data["days"]
+        except:
+            days_set = "all"
+        return render_template('map_direct.html', days_set=days_set, view_mode="map",temp_map='false', validation_set=all_postcode_suburb_list)
     else:
-        return render_template('map_direct.html', days_set="all", view_mode="map",temp_map='false')
+        days_set = request.args["days"] or "all"
+        return render_template('map_direct.html', days_set=days_set, view_mode="map",temp_map='false', validation_set=all_postcode_suburb_list)
 
 
 
 @app.route('/allnsw', methods=["POST", "GET"])
 def allnsw():
-    if request.method == "POST":
-        input_data = request.form
+        postcode = "all"
         try:
-            days = input_data["days"]
-            if "recall" in days:
-                _, days = days.split("-")
+            days_set = request.args["days"]
         except:
-            days = "all"
-        if days == "seven":
-            return render_template('all_nsw.html',
-                            history=postcode_history['all_nsw'],
-                            # testing=testing_chart['all_nsw'],
-                            data = seven_day_nsw,
-                            last_update = last_update,
-                            days_set ='seven')
-        elif days == "fourteen":
-            return render_template('all_nsw.html',
-                            history=postcode_history['all_nsw'],
-                            # testing=testing_chart['all_nsw'],
-                            data = fourteen_day_nsw,
-                            last_update = last_update,
-                            days_set = 'fourteen')
-        
-        else:
-            return render_template('all_nsw.html',
-                            history=postcode_history['all_nsw'],
-                            # testing=testing_chart['all_nsw'],
-                            data = all_nsw,
-                            last_update = last_update,
-                            days_set = 'all')
-    else:
-        try:
-            days = request.args["days"]
-        except:
-            days = 'all'
-        if days == "seven":
-            return render_template('all_nsw.html',
-                            history=postcode_history['all_nsw'],
-                            # testing=testing_chart['all_nsw'],
-                            data = seven_day_nsw,
-                            last_update = last_update,
-                            days_set ='seven')
-        elif days == "fourteen":
-            return render_template('all_nsw.html',
-                            history=postcode_history['all_nsw'],
-                            # testing=testing_chart['all_nsw'],
-                            data = fourteen_day_nsw,
-                            last_update = last_update,
-                            days_set = 'fourteen')
-        
-        else:
-            return render_template('all_nsw.html',
-                            history=postcode_history['all_nsw'],
-                            # testing=testing_chart['all_nsw'],
-                            data = all_nsw,
-                            last_update = last_update,
-                            days_set = 'all')
+            days_set = "all"
+        return render_template(
+            "all_nsw.html",
+            postcode=postcode,
+            days_set=days_set,
+            validation_set=all_postcode_suburb_list,
+            last_update=last_update,
+            postcode_data=cases_data[postcode]
+        )
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")

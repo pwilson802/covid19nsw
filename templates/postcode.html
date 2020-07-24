@@ -3,12 +3,10 @@
 {% block head %}
 {% endblock %}
 {% block content %}
-    <div id="root">not rendered</div>
-    <div class="contact-message mt-5">
-    <p>The information on this website is updated as soon as new data is published by NSW Health which is usually once a day.  The last update was at {{ last_update }}. For feedback on the website or to suggest a feature please contact <a href="mailto:covid19nsw.stat@gmail.com">covid19nsw.stat@gmail.com</a></p>
-    </div>
+    <div id="root"></div>
     <script>
         const postcodeData = {{ postcode_data|tojson }}
+        const lastUpdate = {{ last_update|tojson }}
         const closePostcodeData = {{ close_postcodes_data|tojson }}
     </script>
     <script type="module" src="{{ url_for('static', filename='js/postcode.js') }}"></script>

@@ -1,8 +1,8 @@
-import { PageButtons, activeButton } from "./Buttons";
+import "react-app-polyfill/ie11";
+import "react-app-polyfill/stable";
+import React from "react";
 
-function createMarkup() {
-  return { __html: "" };
-}
+import { PageButtons, activeButton } from "./Buttons";
 
 function PageLayout() {
   // use state for the map to display
@@ -25,7 +25,7 @@ function PageLayout() {
   return (
     <div>
       <PageButtons buttonState={state.buttonsActive} onAction={setView} />
-      <div dangerouslySetInnerHTML={createMarkup()} />
+      <div dangerouslySetInnerHTML={template} />
     </div>
   );
 }

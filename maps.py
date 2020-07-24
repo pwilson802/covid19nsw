@@ -9,15 +9,14 @@ from collections import Counter, defaultdict
 from datetime import datetime, timedelta
 data_folder = os.environ.get("COVID_DATA")
 template_folder = os.environ.get("COVID_TEMPLATES")
+maps_folder = os.path.join(template_folder, "maps")
 temp_map_dir = os.environ.get("COVID_TEMP_MAP_FOLDER")
 
 high_level_data_file = os.path.join(data_folder, 'high_level_data.json')
-# main_cases_file = os.path.join(data_folder, 'cases_file_latest.json')
-# map_data_file = os.path.join(data_folder, "map_data.json")
-# Add some random stuff to the below file when we go live
-map_all_file = os.path.join(template_folder, "map_all.html")
-map_fourteen_file = os.path.join(template_folder, "map_fourteen.html")
-map_seven_file = os.path.join(template_folder, "map_seven.html")
+map_all_file = os.path.join(maps_folder, "map_all.html")
+map_fourteen_file = os.path.join(maps_folder, "map_fourteen.html")
+map_seven_file = os.path.join(maps_folder, "map_seven.html")
+map_active_file = os.path.join(maps_folder, "map_active.html")
 
 popup_html = """
     <h1 class="postcode">POSTCODE</h1>
@@ -27,14 +26,8 @@ popup_html = """
     </p>
     """
 
-# with open(main_cases_file) as f:
-#     cases_data = json.loads(f.read())
-
 with open(high_level_data_file) as f:
     high_level_data = json.loads(f.read())
-
-# with open(map_data_file) as json_file:
-#     postcode_dict = json.loads(json_file.read())
 
 def all_map(data, postcode_zoom='2016', high_level_data = high_level_data, zoom=12):
     # Add data for all cases
@@ -44,6 +37,9 @@ def all_map(data, postcode_zoom='2016', high_level_data = high_level_data, zoom=
         large, big, medium = 100, 40, 20
         multiply = 14
     if data == "fourteen_days":
+        large, big, medium = 20, 10, 5
+        multiply = 28
+    if data == "active_cases":
         large, big, medium = 20, 10, 5
         multiply = 28
     if data == "seven_days":
@@ -81,17 +77,16 @@ def all_map(data, postcode_zoom='2016', high_level_data = high_level_data, zoom=
             ).add_to(cases_map)
     return cases_map
     
-# all_day_map = all_map('all_count')
-# fourteen_day_map = all_map('fourteen_day_count')
-# seven_day_map = all_map('seven_day_count')
 all_day_map = all_map('all_days')
 fourteen_day_map = all_map('fourteen_days')
 seven_day_map = all_map('seven_days')
+active_day_map = all_map('active_cases')
 
 
 all_day_map.save(map_all_file)
 fourteen_day_map.save(map_fourteen_file)
 seven_day_map.save(map_seven_file)
+active_day_map.save(map_active_file)
 
 # Need to save the file as a new file and update the template include the new file before retarting app.
 # Going to remove bootstrap 3 from the map file as it messes with the navbar and doens't appear to degrade anything.
@@ -107,7 +102,7 @@ def remove_bootstrap3(file):
                 f.write(line)
     return(f'completed file {file}')
 
-for file in [map_all_file, map_fourteen_file, map_seven_file]:
+for file in [map_all_file, map_fourteen_file, map_seven_file, map_active_file]:
     remove_bootstrap3(file)
 
 def random_map_name():
