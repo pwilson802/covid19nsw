@@ -7,8 +7,8 @@
 {% block content %}
     <div id="root"></div>
         <script>
-        const postcodeData = {{ postcode_data|tojson }}
-        const lastUpdate = {{ last_update|tojson }}
+        var postcodeData = {{ postcode_data|tojson }}
+        var lastUpdate = {{ last_update|tojson }}
     </script>
     <script type="module" src="{{ url_for('static', filename='js/postcode.js') }}"></script>
 {% endblock %} 
