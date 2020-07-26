@@ -1,19 +1,36 @@
 "use strict";
 
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Charts = exports.SourceChart = undefined;
+exports.SourceChart = SourceChart;
+exports.Charts = Charts;
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+require("react-app-polyfill/ie11");
 
-var _react = require("react");
+require("react-app-polyfill/stable");
 
-var _react2 = _interopRequireDefault(_react);
+var _react = _interopRequireWildcard(require("react"));
 
 var _reactChartjs = require("react-chartjs-2");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function makeSourceData(view) {
   var overseas = postcodeData[view]["source"]["overseas"];
@@ -33,18 +50,19 @@ function makeSourceData(view) {
 
 function SourceChart(_ref) {
   var view = _ref.view;
-
   var chartData = makeSourceData(view);
-  return _react2.default.createElement(
-    "div",
-    { className: "infection-box" },
-    _react2.default.createElement(
-      "h4",
-      { className: "text-center postcode infection-heading" },
-      "Infection Source"
-    ),
-    _react2.default.createElement(_reactChartjs.Pie, { data: chartData })
-  );
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "infection-box"
+  }, /*#__PURE__*/_react.default.createElement("h4", {
+    className: "text-center postcode infection-heading"
+  }, "Infection Source"), /*#__PURE__*/_react.default.createElement(_reactChartjs.Pie, {
+    data: chartData,
+    options: {
+      tooltips: {
+        titleFontSize: 32
+      }
+    }
+  }));
 }
 
 function makeCasesChartData(dataType) {
@@ -78,70 +96,58 @@ function makeCasesChartData(dataType) {
 
 function CasesLineChart() {
   var data = makeCasesChartData("cases_all");
-  return _react2.default.createElement(
-    "div",
-    null,
-    _react2.default.createElement(_reactChartjs.Line, {
-      data: data,
-      options: {
-        scales: {
-          xAxes: [{
-            type: "time",
-            time: {
-              unit: "day",
-              tooltipFormat: "MMM D"
-            }
-          }]
-        }
+  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_reactChartjs.Line, {
+    data: data,
+    options: {
+      scales: {
+        xAxes: [{
+          type: "time",
+          time: {
+            unit: "day",
+            tooltipFormat: "MMM D"
+          }
+        }]
       }
-    })
-  );
+    }
+  }));
 }
 
 function CasesBarChart() {
   var data = makeCasesChartData("cases_new");
   data["datasets"][0]["label"] = "Cases";
-  return _react2.default.createElement(
-    "div",
-    null,
-    _react2.default.createElement(_reactChartjs.Bar, {
-      data: data,
-      options: {
-        scales: {
-          xAxes: [{
-            type: "time",
-            time: {
-              unit: "day",
-              tooltipFormat: "MMM D"
-            }
-          }]
-        }
+  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_reactChartjs.Bar, {
+    data: data,
+    options: {
+      scales: {
+        xAxes: [{
+          type: "time",
+          time: {
+            unit: "day",
+            tooltipFormat: "MMM D"
+          }
+        }]
       }
-    })
-  );
+    }
+  }));
 }
 
 function TestsBarChart() {
   var data = makeCasesChartData("tests_new");
   data["datasets"][0]["label"] = "Tests Completed";
-  return _react2.default.createElement(
-    "div",
-    null,
-    _react2.default.createElement(_reactChartjs.Bar, {
-      data: data,
-      options: {
-        scales: {
-          xAxes: [{
-            type: "time",
-            time: {
-              unit: "day",
-              tooltipFormat: "MMM D"
-            }
-          }]
-        }
+  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_reactChartjs.Bar, {
+    data: data,
+    options: {
+      scales: {
+        xAxes: [{
+          type: "time",
+          time: {
+            unit: "day",
+            tooltipFormat: "MMM D"
+          }
+        }]
       }
-    })
-  );
+    }
+  }));
 }
 
 function ChartActiveButton(button) {
@@ -160,65 +166,49 @@ function ChartButton(_ref2) {
       text = _ref2.text,
       chartType = _ref2.chartType,
       buttonActive = _ref2.buttonActive;
-
   var activeClass = buttonActive ? "chart-active-button" : "";
-  return _react2.default.createElement(
-    "div",
-    null,
-    _react2.default.createElement(
-      "button",
-      {
-        className: "charts-button btn my-2 my-sm-0 " + activeClass,
-        onClick: function onClick() {
-          return onAction(chartType);
-        }
-      },
-      text
-    )
-  );
+  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("button", {
+    className: "charts-button btn my-2 my-sm-0 ".concat(activeClass),
+    onClick: function onClick() {
+      return onAction(chartType);
+    }
+  }, text));
 }
 
 function ChartButtons(_ref3) {
   var buttonState = _ref3.buttonState,
       onAction = _ref3.onAction;
-
-  return _react2.default.createElement(
-    "div",
-    { className: "container" },
-    _react2.default.createElement(
-      "div",
-      { className: "row justify-content-center" },
-      _react2.default.createElement(ChartButton, {
-        onAction: onAction,
-        text: "Cases Growth",
-        chartType: "cases_line",
-        buttonActive: buttonState.cases_line
-      }),
-      _react2.default.createElement(ChartButton, {
-        onAction: onAction,
-        text: "Cases by Day",
-        chartType: "cases_bar",
-        buttonActive: buttonState.cases_bar
-      }),
-      _react2.default.createElement(ChartButton, {
-        onAction: onAction,
-        text: "Testing",
-        chartType: "tests_bar",
-        buttonActive: buttonState.tests_bar
-      })
-    )
-  );
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "container"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "row justify-content-center"
+  }, /*#__PURE__*/_react.default.createElement(ChartButton, {
+    onAction: onAction,
+    text: "Cases Growth",
+    chartType: "cases_line",
+    buttonActive: buttonState.cases_line
+  }), /*#__PURE__*/_react.default.createElement(ChartButton, {
+    onAction: onAction,
+    text: "Cases by Day",
+    chartType: "cases_bar",
+    buttonActive: buttonState.cases_bar
+  }), /*#__PURE__*/_react.default.createElement(ChartButton, {
+    onAction: onAction,
+    text: "Testing",
+    chartType: "tests_bar",
+    buttonActive: buttonState.tests_bar
+  })));
 }
 
 function CasesChart(_ref4) {
   var chartType = _ref4.chartType;
 
   if (chartType == "cases_line") {
-    return _react2.default.createElement(CasesLineChart, null);
+    return /*#__PURE__*/_react.default.createElement(CasesLineChart, null);
   } else if (chartType == "cases_bar") {
-    return _react2.default.createElement(CasesBarChart, null);
+    return /*#__PURE__*/_react.default.createElement(CasesBarChart, null);
   } else if (chartType == "tests_bar") {
-    return _react2.default.createElement(TestsBarChart, null);
+    return /*#__PURE__*/_react.default.createElement(TestsBarChart, null);
   }
 }
 
@@ -234,26 +224,22 @@ function Charts() {
   var changeChart = function changeChart(chartType) {
     var newChartType = chartType;
     var newButtons = ChartActiveButton(chartType);
-    setChart({ type: newChartType, buttonsActive: newButtons });
+    setChart({
+      type: newChartType,
+      buttonsActive: newButtons
+    });
   };
-  return _react2.default.createElement(
-    "div",
-    { className: "mt-3 container" },
-    _react2.default.createElement(
-      "div",
-      { className: "row justify-content-center" },
-      _react2.default.createElement(
-        "div",
-        { className: "col-lg-8 charts-wrapper" },
-        _react2.default.createElement(ChartButtons, {
-          onAction: changeChart,
-          buttonState: chart.buttonsActive
-        }),
-        _react2.default.createElement(CasesChart, { chartType: chart.type })
-      )
-    )
-  );
-}
 
-exports.SourceChart = SourceChart;
-exports.Charts = Charts;
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "mt-3 container"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "row justify-content-center"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "col-lg-8 charts-wrapper"
+  }, /*#__PURE__*/_react.default.createElement(ChartButtons, {
+    onAction: changeChart,
+    buttonState: chart.buttonsActive
+  }), /*#__PURE__*/_react.default.createElement(CasesChart, {
+    chartType: chart.type
+  }))));
+}

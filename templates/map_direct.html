@@ -4,8 +4,8 @@
 {% block title %}Covid-19 NSW - find cases in your suburb{% endblock %}
 {% block content %}
 <div class="container position-sticky">
-    <div class="row select-buttons mb-2">
-        <div class="col-2 button-all">
+    <div class="mb-2 button-row">
+        <div class="switch-button button-all">
             <form action="map" method = "POST" class="form-inline">
                 {% if days_set == 'all' %}
                     <button class="btn btn-outline-success my-2 my-sm-0 active" type="submit" name="days" value="all">All Cases</button>
@@ -14,7 +14,7 @@
                 {% endif %}
             </form>
         </div>
-        <div class="col-2 button-fourteen">
+        <div class="switch-button button-fourteen">
             <form action="map" method = "POST" class="form-inline">
                 {% if days_set == 'fourteen' %}
                     <button class="btn btn-outline-success my-2 my-sm-0 active" type="submit" name="days" value="fourteen">14 Days</button>
@@ -23,7 +23,7 @@
                 {% endif %}
             </form>
         </div>
-        <div class="col-2 button-seven">
+        <div class="switch-button button-seven">
             <form action="map" method = "POST" class="form-inline" name="seven-days">
                 {% if days_set == 'seven' %}
                     <button class="btn btn-outline-success my-2 my-sm-0 active" type="submit" name="days" value="seven">7 Days</button>
@@ -32,7 +32,7 @@
                 {% endif %}
             </form>
         </div>
-        <div class="col-2 button-active">
+        <div class="switch-button button-active">
             <form action="map" method = "POST" class="form-inline" name="active-days">
                 {% if days_set == 'active' %}
                     <button class="btn btn-outline-success my-2 my-sm-0 active" type="submit" name="days" value="active">Active</button>

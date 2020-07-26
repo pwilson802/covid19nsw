@@ -1,3 +1,5 @@
+import "react-app-polyfill/ie11";
+import "react-app-polyfill/stable";
 import React, { useState } from "react";
 import { Pie, Line, Bar } from "react-chartjs-2";
 
@@ -56,7 +58,14 @@ function SourceChart({ view }) {
       <h4 className="text-center postcode infection-heading">
         Infection Source
       </h4>
-      <Pie data={chartData} />
+      <Pie
+        data={chartData}
+        options={{
+          tooltips: {
+            titleFontSize: 32,
+          },
+        }}
+      />
     </div>
   );
 }

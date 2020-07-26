@@ -1,3 +1,5 @@
+import "react-app-polyfill/ie11";
+import "react-app-polyfill/stable";
 import React from "react";
 
 function getViewData(view, dataSource, filterZero = true) {
@@ -23,7 +25,6 @@ function getViewData(view, dataSource, filterZero = true) {
 }
 
 function TableHeading({ showRank = true }) {
-  console.log(showRank);
   return (
     <div className="row headers mb-2">
       {showRank ? <div className="col-2">Rank</div> : ""}
@@ -74,7 +75,9 @@ function RowEntry({ rank, postcode, suburbs, cases, recent, showRank = true }) {
 
 function RowEntries({ rowData, showRank }) {
   const items = [];
+  let keyNum = 0;
   rowData.forEach(function insertRowData(item) {
+    keyNum++;
     items.push(
       <RowEntry
         rank={item.rank}
@@ -83,6 +86,7 @@ function RowEntries({ rowData, showRank }) {
         cases={item.cases}
         recent={item.recent}
         showRank={showRank}
+        key={keyNum}
       />
     );
   });

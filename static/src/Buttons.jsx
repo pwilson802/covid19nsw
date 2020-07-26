@@ -1,9 +1,11 @@
+import "react-app-polyfill/ie11";
+import "react-app-polyfill/stable";
 import React from "react";
 
 function SwitchButton({ text, onAction, buttonActive, view }) {
   let activeClass = buttonActive ? "active" : "";
   return (
-    <div className="col-2">
+    <div className="switch-button">
       <button
         className={`btn btn-outline-success my-2 my-sm-0 ${activeClass}`}
         onClick={() => onAction(view)}
@@ -32,28 +34,26 @@ function PageButtons({ buttonState, onAction, activeOn = true }) {
     />
   );
   return (
-    <div className="container">
-      <div className="row">
-        <SwitchButton
-          text="All"
-          buttonActive={buttonState.all}
-          onAction={onAction}
-          view="all_days"
-        />
-        <SwitchButton
-          buttonActive={buttonState.fourteen}
-          text="14 Days"
-          onAction={onAction}
-          view="fourteen_days"
-        />
-        <SwitchButton
-          text="7 Days"
-          buttonActive={buttonState.seven}
-          onAction={onAction}
-          view="seven_days"
-        />
-        {activeOn ? activeButton : ""}
-      </div>
+    <div className="button-row">
+      <SwitchButton
+        text="All"
+        buttonActive={buttonState.all}
+        onAction={onAction}
+        view="all_days"
+      />
+      <SwitchButton
+        buttonActive={buttonState.fourteen}
+        text="14 Days"
+        onAction={onAction}
+        view="fourteen_days"
+      />
+      <SwitchButton
+        text="7 Days"
+        buttonActive={buttonState.seven}
+        onAction={onAction}
+        view="seven_days"
+      />
+      {activeOn ? activeButton : ""}
     </div>
   );
 }

@@ -1,10 +1,12 @@
-let mapButton = document.querySelector(".map-button");
-let listButton = document.querySelector(".list-button");
+"use strict";
+
+var mapButton = document.querySelector(".map-button");
+var listButton = document.querySelector(".list-button");
 
 mapButton.onclick = function () {
-  location.href = `/map?days=${daysSet}`;
+  location.href = "/map?days=".concat(daysSet);
 };
 
 listButton.onclick = function () {
-  location.href = `/?days=${daysSet}`;
+  location.href = "/?days=".concat(daysSet);
 };
