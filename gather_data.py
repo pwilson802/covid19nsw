@@ -151,10 +151,8 @@ for postcode in cases_data.keys():
         date = latest - timedelta(6)
     else:
         date = oldest
-    print(postcode)
     recovered = get_recovered_number(postcode_df_all_recovered, oldest_recovered)
     while date <= latest:
-        # print(date)
         day_string = make_time_string(date)
         cases_data[postcode]['history'][day_string] = {}
         cases_data[postcode]['history'][day_string]['cases_new'] = get_case_number(postcode_df_all, date)
