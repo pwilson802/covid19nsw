@@ -3,6 +3,7 @@ import json
 import csv
 import sys
 import requests
+from time import sleep
 from collections import Counter, defaultdict
 from datetime_string import make_current_time_string
 from datetime import datetime, timedelta
@@ -147,7 +148,7 @@ for postcode in cases_data.keys():
         postcode_df_all_tests = tests_frame[tests_frame["postcode"] == float(postcode)]
         postcode_df_all_recovered = cases_frame[cases_frame["POA_NAME16"] == postcode]
     if update == True:
-        date = latest - timedelta(6)
+        date = latest - timedelta(3)
     else:
         date = oldest
     recovered = get_recovered_number(postcode_df_all_recovered, oldest_recovered)
@@ -181,6 +182,7 @@ for postcode in cases_data.keys():
     cases_data[postcode]['fourteen_days']['cases'] = get_cases_back(postcode, days=14)
     cases_data[postcode]['fourteen_days']['tests'] = get_tests_back(postcode, days=14)
     cases_data[postcode]['fourteen_days']['source'] = get_sources_back(postcode, days=14)
+    sleep(0.5)
 
 
 # create a dictionary for mapping suburb to postcode
