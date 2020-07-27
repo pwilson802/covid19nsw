@@ -258,12 +258,12 @@ function Slider({ min, max, changeDates }) {
   return (
     <div className="range-slider">
       <div className="range-slider-dates">
-        <div>{formatDate(Number(dateRange[0]))}</div>
-        <div>{formatDate(Number(dateRange[1]))}</div>
+        <div>{formatDate(Number(dateRange[0]) + 24 * 60 * 60 * 1000)}</div>
+        <div>{formatDate(Number(dateRange[1]) - 24 * 60 * 60 * 1000)}</div>
       </div>
       <Nouislider
         range={{ min: Number(min), max: Number(max + 24 * 60 * 60 * 1000) }}
-        start={[Number(min), Number(max)]}
+        start={[Number(min), Number(max + 24 * 60 * 60 * 1000)]}
         step={24 * 60 * 60 * 1000}
         onUpdate={changeDateRange}
         connect
