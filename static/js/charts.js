@@ -70,12 +70,8 @@ function SourceChart(_ref) {
 }
 
 function makeCasesChartData(dataType, dates) {
-  console.log("dates", dates);
-  console.log(dates.start);
   var firstDate = new Date(Number(dates.start));
   var lastDate = new Date(Number(dates.end));
-  console.log("firstDate", firstDate);
-  console.log("lastDate", lastDate);
   var data = [];
   Object.keys(postcodeData["history"]).forEach(function (item) {
     var _item$split = item.split("-"),
@@ -219,7 +215,6 @@ function ChartButtons(_ref6) {
 function CasesChart(_ref7) {
   var chartType = _ref7.chartType,
       dates = _ref7.dates;
-  console.log("dates in CasesChart", dates);
 
   if (chartType == "cases_line") {
     return /*#__PURE__*/_react.default.createElement(CasesLineChart, {
@@ -267,7 +262,6 @@ function Slider(_ref8) {
       setDateRange = _useState2[1];
 
   var changeDateRange = function changeDateRange(value, index) {
-    console.log("changing the date");
     var newValue = value.map(function (item) {
       return Number(item);
     });
@@ -329,7 +323,6 @@ function Charts() {
     setChartDate(newValue);
   };
 
-  console.log("chartDate", chartDate);
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "mt-3 container"
   }, /*#__PURE__*/_react.default.createElement("div", {

@@ -344,12 +344,8 @@ function SourceChart(_ref) {
 }
 
 function makeCasesChartData(dataType, dates) {
-  console.log("dates", dates);
-  console.log(dates.start);
   var firstDate = new Date(Number(dates.start));
   var lastDate = new Date(Number(dates.end));
-  console.log("firstDate", firstDate);
-  console.log("lastDate", lastDate);
   var data = [];
   Object.keys(postcodeData["history"]).forEach(function (item) {
     var _item$split = item.split("-"),
@@ -493,7 +489,6 @@ function ChartButtons(_ref6) {
 function CasesChart(_ref7) {
   var chartType = _ref7.chartType,
       dates = _ref7.dates;
-  console.log("dates in CasesChart", dates);
 
   if (chartType == "cases_line") {
     return /*#__PURE__*/_react.default.createElement(CasesLineChart, {
@@ -541,7 +536,6 @@ function Slider(_ref8) {
       setDateRange = _useState2[1];
 
   var changeDateRange = function changeDateRange(value, index) {
-    console.log("changing the date");
     var newValue = value.map(function (item) {
       return Number(item);
     });
@@ -603,7 +597,6 @@ function Charts() {
     setChartDate(newValue);
   };
 
-  console.log("chartDate", chartDate);
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "mt-3 container"
   }, /*#__PURE__*/_react.default.createElement("div", {
@@ -940,9 +933,20 @@ function StatsExplanation() {
   }, "- Recent is any case in the last 3-4 days."));
 }
 
+function getDayView() {
+  var daysViewMap = {
+    active: "all_days",
+    all: "all_days",
+    seven: "seven_days",
+    fourteen: "fourteen_days"
+  };
+  var result = daysViewMap[daysSet];
+  return result;
+}
+
 function PageLayout() {
   var _useState = (0, _react.useState)({
-    dayView: "all_days",
+    dayView: getDayView(),
     buttonsActive: (0, _Buttons.activeButton)(daysSet)
   }),
       _useState2 = _slicedToArray(_useState, 2),

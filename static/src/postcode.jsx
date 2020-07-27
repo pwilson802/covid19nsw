@@ -109,9 +109,20 @@ function StatsExplanation() {
   );
 }
 
+function getDayView() {
+  const daysViewMap = {
+    active: "all_days",
+    all: "all_days",
+    seven: "seven_days",
+    fourteen: "fourteen_days",
+  };
+  let result = daysViewMap[daysSet];
+  return result;
+}
+
 function PageLayout() {
   const [state, setState] = useState({
-    dayView: "all_days",
+    dayView: getDayView(),
     buttonsActive: activeButton(daysSet),
   });
   const setView = (view) => {

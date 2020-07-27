@@ -72,12 +72,8 @@ function SourceChart({ view }) {
 }
 
 function makeCasesChartData(dataType, dates) {
-  console.log("dates", dates);
-  console.log(dates.start);
   let firstDate = new Date(Number(dates.start));
   let lastDate = new Date(Number(dates.end));
-  console.log("firstDate", firstDate);
-  console.log("lastDate", lastDate);
   let data = [];
   Object.keys(postcodeData["history"]).forEach((item) => {
     let [year, month, day] = item.split("-");
@@ -230,7 +226,6 @@ function ChartButtons({ buttonState, onAction }) {
 }
 
 function CasesChart({ chartType, dates }) {
-  console.log("dates in CasesChart", dates);
   if (chartType == "cases_line") {
     return <CasesLineChart dates={dates} />;
   } else if (chartType == "cases_bar") {
@@ -256,7 +251,6 @@ function getInitialDates() {
 function Slider({ min, max, changeDates }) {
   const [dateRange, setDateRange] = useState([Number(min), Number(max)]);
   const changeDateRange = (value, index) => {
-    console.log("changing the date");
     const newValue = value.map((item) => Number(item));
     setDateRange(newValue);
     changeDates(value);
@@ -300,7 +294,6 @@ function Charts() {
     };
     setChartDate(newValue);
   };
-  console.log("chartDate", chartDate);
   return (
     <div className="mt-3 container">
       <div className="row justify-content-center">
