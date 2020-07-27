@@ -556,7 +556,7 @@ function Slider(_ref8) {
   }, /*#__PURE__*/_react.default.createElement("div", null, formatDate(Number(dateRange[0]))), /*#__PURE__*/_react.default.createElement("div", null, formatDate(Number(dateRange[1])))), /*#__PURE__*/_react.default.createElement(_nouisliderReact.default, {
     range: {
       min: Number(min),
-      max: Number(max)
+      max: Number(max + 24 * 60 * 60 * 1000)
     },
     start: [Number(min), Number(max)],
     step: 24 * 60 * 60 * 1000,

@@ -268,7 +268,7 @@ function Slider({ min, max, changeDates }) {
         <div>{formatDate(Number(dateRange[1]))}</div>
       </div>
       <Nouislider
-        range={{ min: Number(min), max: Number(max) }}
+        range={{ min: Number(min), max: Number(max + 24 * 60 * 60 * 1000) }}
         start={[Number(min), Number(max)]}
         step={24 * 60 * 60 * 1000}
         onUpdate={changeDateRange}
