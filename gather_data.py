@@ -107,19 +107,19 @@ def get_recovered_number(df, date, all="no"):
 
 def get_cases_back(postcode, days=3):
     cases_today = cases_data[postcode]['history'][make_time_string(latest)]['cases_all']
-    prev_date = latest - timedelta(days + 1)
+    prev_date = latest - timedelta(days)
     cases_prev = cases_data[postcode]['history'][make_time_string(prev_date)]['cases_all']
     return cases_today - cases_prev
 
 def get_tests_back(postcode, days):
     tests_today = cases_data[postcode]['history'][make_time_string(latest)]['tests_all']
-    prev_date = latest - timedelta(days + 1)
+    prev_date = latest - timedelta(days)
     tests_prev = cases_data[postcode]['history'][make_time_string(prev_date)]['tests_all']
     return tests_today - tests_prev
 
 def get_sources_back(postcode, days):
     sources_today = cases_data[postcode]['history'][make_time_string(latest)]['cases_sources']['total']
-    prev_date = latest - timedelta(days + 1)
+    prev_date = latest - timedelta(days)
     sources_prev = cases_data[postcode]['history'][make_time_string(prev_date)]['cases_sources']['total']
     result = {}
     for source in sources_today.keys():
@@ -137,8 +137,7 @@ def get_active_cases(postcode):
 
 # Make The big dictionary by each postcode
 for postcode in cases_data.keys():
-# for postcode in ['2000']:
-# for postcode in ['2170', '2780', '2196', '2026', '2747', 'all']:
+    print(postcode)
     if postcode == 'all':
         postcode_df_all = all_frame
         postcode_df_all_tests = tests_frame
