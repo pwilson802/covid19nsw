@@ -2,6 +2,7 @@ import "react-app-polyfill/ie11";
 import "react-app-polyfill/stable";
 import React, { useState } from "react";
 import { Pie, Line, Bar } from "react-chartjs-2";
+import Nouislider from "nouislider-react";
 
 function makeSourceData(view) {
   let overseas = postcodeData[view]["source"]["overseas"];
@@ -70,16 +71,24 @@ function SourceChart({ view }) {
   );
 }
 
-function makeCasesChartData(dataType) {
+function makeCasesChartData(dataType, dates) {
+  console.log("dates", dates);
+  console.log(dates.start);
+  let firstDate = new Date(Number(dates.start));
+  let lastDate = new Date(Number(dates.end));
+  console.log("firstDate", firstDate);
+  console.log("lastDate", lastDate);
   let data = [];
   Object.keys(postcodeData["history"]).forEach((item) => {
     let [year, month, day] = item.split("-");
     month = month - 1;
     let caseDate = new Date(year, month, day);
-    data.push({
-      t: caseDate,
-      y: postcodeData["history"][item][dataType],
-    });
+    if (caseDate > firstDate && caseDate < lastDate) {
+      data.push({
+        t: caseDate,
+        y: postcodeData["history"][item][dataType],
+      });
+    }
   });
   data.sort((a, b) => a.t - b.t);
   return {
@@ -94,8 +103,8 @@ function makeCasesChartData(dataType) {
   };
 }
 
-function CasesLineChart() {
-  const data = makeCasesChartData("cases_all");
+function CasesLineChart({ dates }) {
+  const data = makeCasesChartData("cases_all", dates);
   return (
     <div>
       <Line
@@ -118,8 +127,8 @@ function CasesLineChart() {
   );
 }
 
-function CasesBarChart() {
-  const data = makeCasesChartData("cases_new");
+function CasesBarChart({ dates }) {
+  const data = makeCasesChartData("cases_new", dates);
   data["datasets"][0]["label"] = "Cases";
   return (
     <div>
@@ -143,8 +152,8 @@ function CasesBarChart() {
   );
 }
 
-function TestsBarChart() {
-  const data = makeCasesChartData("tests_new");
+function TestsBarChart({ dates }) {
+  const data = makeCasesChartData("tests_new", dates);
   data["datasets"][0]["label"] = "Tests Completed";
   return (
     <div>
@@ -220,26 +229,78 @@ function ChartButtons({ buttonState, onAction }) {
   );
 }
 
-function CasesChart({ chartType }) {
+function CasesChart({ chartType, dates }) {
+  console.log("dates in CasesChart", dates);
   if (chartType == "cases_line") {
-    return <CasesLineChart />;
+    return <CasesLineChart dates={dates} />;
   } else if (chartType == "cases_bar") {
-    return <CasesBarChart />;
+    return <CasesBarChart dates={dates} />;
   } else if (chartType == "tests_bar") {
-    return <TestsBarChart />;
+    return <TestsBarChart dates={dates} />;
   }
 }
 
+function getInitialDates() {
+  let allDates = Object.keys(postcodeData["history"]).map((item) => {
+    let [year, month, day] = item.split("-");
+    month = month - 1;
+    return new Date(year, month, day);
+  });
+  allDates.sort((a, b) => a - b);
+  return {
+    firstDate: allDates[0].getTime(),
+    lastDate: allDates[allDates.length - 1].getTime(),
+  };
+}
+
+function Slider({ min, max, changeDates }) {
+  const [dateRange, setDateRange] = useState([Number(min), Number(max)]);
+  const changeDateRange = (value, index) => {
+    console.log("changing the date");
+    const newValue = value.map((item) => Number(item));
+    setDateRange(newValue);
+    changeDates(value);
+  };
+  return (
+    <div className="range-slider">
+      <div className="range-slider-dates">
+        <div>{formatDate(Number(dateRange[0]))}</div>
+        <div>{formatDate(Number(dateRange[1]))}</div>
+      </div>
+      <Nouislider
+        range={{ min: Number(min), max: Number(max) }}
+        start={[Number(min), Number(max)]}
+        step={24 * 60 * 60 * 1000}
+        onUpdate={changeDateRange}
+        connect
+      />
+    </div>
+  );
+}
+
 function Charts() {
+  const { firstDate, lastDate } = getInitialDates();
   const [chart, setChart] = useState({
     type: "cases_line",
     buttonsActive: ChartActiveButton("cases_line"),
+  });
+  const [chartDate, setChartDate] = useState({
+    start: firstDate,
+    end: lastDate,
   });
   const changeChart = (chartType) => {
     const newChartType = chartType;
     const newButtons = ChartActiveButton(chartType);
     setChart({ type: newChartType, buttonsActive: newButtons });
   };
+  const changeChartDates = (newDates) => {
+    const newValue = {
+      start: newDates[0],
+      end: newDates[1],
+    };
+    setChartDate(newValue);
+  };
+  console.log("chartDate", chartDate);
   return (
     <div className="mt-3 container">
       <div className="row justify-content-center">
@@ -249,10 +310,69 @@ function Charts() {
             buttonState={chart.buttonsActive}
           />
 
-          <CasesChart chartType={chart.type} />
+          <CasesChart chartType={chart.type} dates={chartDate} />
+          <Slider
+            min={firstDate}
+            max={lastDate}
+            changeDates={changeChartDates}
+          />
         </div>
       </div>
     </div>
+  );
+}
+
+var weekdays = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
+var months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+// Append a suffix to dates.
+// Example: 23 => 23rd, 1 => 1st.
+function nth(d) {
+  if (d > 3 && d < 21) return "th";
+  switch (d % 10) {
+    case 1:
+      return "st";
+    case 2:
+      return "nd";
+    case 3:
+      return "rd";
+    default:
+      return "th";
+  }
+}
+
+// Create a string representation of the date.
+function formatDate(dateNum) {
+  let date = new Date(dateNum);
+  return (
+    date.getDate() +
+    nth(date.getDate()) +
+    " " +
+    months[date.getMonth()] +
+    " " +
+    date.getFullYear()
   );
 }
 
