@@ -20,6 +20,7 @@ csv_file = "https://data.nsw.gov.au/data/dataset/97ea2424-abaf-4f3e-a9f2-b5c883f
 covid_frame = pd.read_csv(csv_file)
 
 # Find if the count has changed if it has not don't load the new data
+print('starting check of file count')
 new_count = len(covid_frame.index)
 with open(count_file) as c:
     previous_count = int(c.readlines()[0])
@@ -34,4 +35,5 @@ else:
 
 logging.warning(f"count update from {previous_count} to {new_count}")
 logging.warning(f"Last update: {make_current_time_string()}")
+print('file updated starting reload')
 subprocess.call(['/home/scripts/covid19reload.sh'])
