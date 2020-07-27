@@ -78,7 +78,7 @@ def index():
         try:
             days_set = request.args["days"]
         except:
-            days_set = "all"
+            days_set = "active"
         return render_template(
             "index.html",
             all_data=high_level_data,

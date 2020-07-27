@@ -725,7 +725,7 @@ function PageHeading() {
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "container"
   }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "row"
+    className: "row justify-content-center"
   }, /*#__PURE__*/_react.default.createElement(PostCodeHeading, null), /*#__PURE__*/_react.default.createElement(SuburbsHeading, null)));
 }
 

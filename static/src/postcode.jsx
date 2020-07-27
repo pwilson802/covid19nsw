@@ -31,7 +31,7 @@ function SuburbsHeading() {
 function PageHeading() {
   return (
     <div className="container">
-      <div className="row">
+      <div className="row justify-content-center">
         <PostCodeHeading />
         <SuburbsHeading />
       </div>
