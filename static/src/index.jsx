@@ -39,7 +39,8 @@ function PageLayout() {
     daysSet = daysMap[view];
   };
   let rowData = getViewData(state.dayView, allData);
-  let caseCount = countCases(rowData);
+  // let caseCount = countCases(rowData);
+  let caseCount = allData["all"][state.dayView];
   return (
     <div>
       <PageButtons buttonState={state.buttonsActive} onAction={setView} />

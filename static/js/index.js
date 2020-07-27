@@ -465,8 +465,9 @@ function PageLayout() {
     daysSet = daysMap[view];
   };
 
-  var rowData = (0, _Rows.getViewData)(state.dayView, allData);
-  var caseCount = countCases(rowData);
+  var rowData = (0, _Rows.getViewData)(state.dayView, allData); // let caseCount = countCases(rowData);
+
+  var caseCount = allData["all"][state.dayView];
   return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_Buttons.PageButtons, {
     buttonState: state.buttonsActive,
     onAction: setView
