@@ -73,6 +73,7 @@ def index():
             all_data=high_level_data,
             days_set=days,
             validation_set=all_postcode_suburb_list,
+            last_update=last_update
         )
     else:
         try:
@@ -84,6 +85,7 @@ def index():
             all_data=high_level_data,
             days_set=days_set,
             validation_set=all_postcode_suburb_list,
+            last_update=last_update
         )
 
 
@@ -118,7 +120,8 @@ def postcode():
                     all_options=all_options,
                     validation_set=all_postcode_suburb_list,
                     view_mode="map",
-                    days_set=days_set
+                    days_set=days_set,
+                    last_update=last_update
                 )
             else:
                 return render_template(
@@ -127,7 +130,8 @@ def postcode():
                     other_options=other_options,
                     all_options=all_options,
                     validation_set=all_postcode_suburb_list,
-                    days_set=days_set
+                    days_set=days_set,
+                    last_update=last_update
                 )
         # Need to find if the search is not a post code so we can convert it
         if not postcode.startswith("2"):
@@ -162,7 +166,7 @@ def postcode():
                 remove_bootstrap3(temp_map_name)
                 just_the_file = os.path.split(temp_map_name)[-1]
                 map_template = f"temp_maps/{just_the_file}"
-                return render_template('map_direct.html', days_set="seven", view_mode="map", temp_map_name=map_template, temp_map = 'true')
+                return render_template('map_direct.html', days_set="seven", view_mode="map", temp_map_name=map_template, temp_map = 'true', last_update=last_update)
         elif days == "fourteen":
             if source == 'maps':
                 temp_map_name = random_map_name()
@@ -171,7 +175,7 @@ def postcode():
                 remove_bootstrap3(temp_map_name)
                 just_the_file = os.path.split(temp_map_name)[-1]
                 map_template = f"temp_maps/{just_the_file}"
-                return render_template('map_direct.html', days_set="fourteen", view_mode="map", temp_map_name=map_template, temp_map = 'true')
+                return render_template('map_direct.html', days_set="fourteen", view_mode="map", temp_map_name=map_template, temp_map = 'true', last_update=last_update)
         elif days == "all":
             if source == 'maps':
                 temp_map_name = random_map_name()
@@ -180,7 +184,7 @@ def postcode():
                 remove_bootstrap3(temp_map_name)
                 just_the_file = os.path.split(temp_map_name)[-1]
                 map_template = f"temp_maps/{just_the_file}"
-                return render_template('map_direct.html', days_set="all", view_mode="map", temp_map_name=map_template, temp_map='true')
+                return render_template('map_direct.html', days_set="all", view_mode="map", temp_map_name=map_template, temp_map='true', last_update=last_update)
         else:
             temp_map_name = random_map_name()
             map_data = all_map('active_cases', postcode_zoom=postcode,zoom=13)
@@ -188,7 +192,7 @@ def postcode():
             remove_bootstrap3(temp_map_name)
             just_the_file = os.path.split(temp_map_name)[-1]
             map_template = f"temp_maps/{just_the_file}"
-            return render_template('map_direct.html', days_set="active", view_mode="map", temp_map_name=map_template, temp_map='true')         
+            return render_template('map_direct.html', days_set="active", view_mode="map", temp_map_name=map_template, temp_map='true', last_update=last_update)         
     else:
         print(request.args["location"])
         postcode = request.args["location"]
@@ -232,10 +236,10 @@ def map():
             days_set = input_data["days"]
         except:
             days_set = "all"
-        return render_template('map_direct.html', days_set=days_set, view_mode="map",temp_map='false', validation_set=all_postcode_suburb_list)
+        return render_template('map_direct.html', days_set=days_set, view_mode="map",temp_map='false', validation_set=all_postcode_suburb_list, last_update=last_update)
     else:
         days_set = request.args["days"] or "all"
-        return render_template('map_direct.html', days_set=days_set, view_mode="map",temp_map='false', validation_set=all_postcode_suburb_list)
+        return render_template('map_direct.html', days_set=days_set, view_mode="map",temp_map='false', validation_set=all_postcode_suburb_list, last_update=last_update)
 
 
 

@@ -148,7 +148,7 @@ for postcode in cases_data.keys():
         postcode_df_all_tests = tests_frame[tests_frame["postcode"] == float(postcode)]
         postcode_df_all_recovered = cases_frame[cases_frame["POA_NAME16"] == postcode]
     if update == True:
-        date = latest - timedelta(3)
+        date = latest - timedelta(5)
     else:
         date = oldest
     recovered = get_recovered_number(postcode_df_all_recovered, oldest_recovered)
