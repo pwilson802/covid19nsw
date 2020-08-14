@@ -141,3 +141,4 @@ app.ini
 static/node_modules/
 static/package-lock.json
 app.ini
+*app.ini*
