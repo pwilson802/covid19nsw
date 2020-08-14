@@ -16,7 +16,6 @@ suburb_to_postcode_file = os.path.join(data_folder, "suburb_to_postcode.json")
 all_postcode_suburb_file = os.path.join(data_folder, "all_postcode_suburb.json")
 last_update_file = os.path.join(data_folder, "last_update_time")
 case_count_file = os.path.join(data_folder, "case_count.json")
-map_data_file = os.path.join(data_folder, "map_data.json")
 
 # New Import file
 main_cases_file = os.path.join(data_folder, 'cases_file_latest.json')

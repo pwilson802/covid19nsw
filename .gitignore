@@ -132,8 +132,12 @@ dmypy.json
 # Maop template files
 templates/temp_maps/*
 templates/maps/*
+templates/maps/
+templates/maps
+app.ini
 
 .vscode/
 .prettierrc
 static/node_modules/
 static/package-lock.json
+app.ini
