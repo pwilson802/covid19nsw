@@ -14,7 +14,8 @@ data_folder = os.environ.get("COVID_DATA")
 main_cases_file = os.path.join(data_folder, 'cases_file_latest.json')
 
 # csv_cases contains all data except recoverd cases
-csv_cases = "https://data.nsw.gov.au/data/dataset/97ea2424-abaf-4f3e-a9f2-b5c883f42b6a/resource/2776dbb8-f807-4fb2-b1ed-184a6fc2c8aa/download/covid-19-cases-by-notification-date-location-and-likely-source-of-infection.csv"
+#csv_cases = "https://data.nsw.gov.au/data/dataset/97ea2424-abaf-4f3e-a9f2-b5c883f42b6a/resource/2776dbb8-f807-4fb2-b1ed-184a6fc2c8aa/download/covid-19-cases-by-notification-date-location-and-likely-source-of-infection.csv"
+csv_cases = "https://data.nsw.gov.au/data/dataset/97ea2424-abaf-4f3e-a9f2-b5c883f42b6a/resource/2776dbb8-f807-4fb2-b1ed-184a6fc2c8aa/download/confirmed_cases_table4_location_likely_source.csv"
 # csv_test contains all test data
 csv_tests = "https://data.nsw.gov.au/data/dataset/60616720-3c60-4c52-b499-751f31e3b132/resource/945c6204-272a-4cad-8e33-dde791f5059a/download/covid-19-tests-by-date-and-postcode-local-health-district-and-local-government-area.csv"
 # json_cases contains just cases numbers for the last month with recovered cases
@@ -60,7 +61,7 @@ else:
             cases_data[postcode]['postcode'] = postcode
             cases_data[postcode]['history'] = {}
     # Add an all entry to cases_data to be used for All NSW cases
-    cases_data['all'] = {'postcode': 'all'}
+    cases_data['all'] = {'postcode': 'all', 'history': {}}
 
 latest = all_frame['notification_date'].iloc[-1]
 oldest = all_frame['notification_date'].iloc[0]
