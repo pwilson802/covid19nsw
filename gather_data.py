@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import os
 import json
 import csv
@@ -440,5 +439,3 @@ with open(main_cases_file, "w") as json_file:
 high_level_data_file = os.path.join(data_folder, 'high_level_data.json')
 with open(high_level_data_file, "w") as json_file:
     json.dump(high_level_data, json_file)
-    
->>>>>>> f5c75893d4e031780862ccc1f420b0b5e743b6e1
