@@ -313,8 +313,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 function makeSourceData(view) {
   var overseas = postcodeData[view]["source"]["overseas"];
   var interstate = postcodeData[view]["source"]["interstate"];
-  var locally_known = postcodeData[view]["source"]["locallyacquiredcontactofaconfirmedcaseandorinaknowncluster"];
-  var locally_unknown = postcodeData[view]["source"]["locallyacquiredsourcenotidentified"];
+  var locally_known = postcodeData[view]["source"]["locallyacquiredlinkedtoknowncaseorcluster"];
+  var locally_unknown = postcodeData[view]["source"]["locallyacquirednolinkstoknowncaseorcluster"];
   var under_investigation = postcodeData[view]["cases"] - (overseas + interstate + locally_known + locally_unknown);
   return {
     labels: ["Overseas", "Interstate", "Locally (Known Source)", "Locally (Unknown Source)", "Under Investigation"],
