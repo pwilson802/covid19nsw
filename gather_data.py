@@ -83,8 +83,8 @@ def get_case_number(df, date, all="no"):
 def get_sources(df, date):
     # Gets the sources for a date
     result = {'new': {}, 'total': {}}
-    sources = ['Overseas', 'Locally acquired - source not identified',
-       'Locally acquired - contact of a confirmed case and/or in a known cluster',
+    sources = ['Overseas', 'Locally acquired - no links to known case or cluster',
+       'Locally acquired - linked to known case or cluster',
        'Interstate', 'Under Investigation']
     for source in sources:
         sources_df = df[df['likely_source_of_infection'] == source]
