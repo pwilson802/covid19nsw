@@ -58,8 +58,8 @@
 
 </nav>
 <body>
-    <p class="disclaimer">The data on this site is gathered from <a href="https://data.nsw.gov.au/nsw-covid-19-data" target="_blank">NSW Data</a>. This is displayed for interest purposes only and should not replace current health advice. The numbers displayed are confirmed cases only and may not reflect the current infection rate in your area.</p> 
-    <p class="disclaimer_line2">The last update was at {{last_update}}</p>
+    <p class="disclaimer_line2">Last Update: {{last_update}}</p>
+    <p class="disclaimer">The data on this site is gathered from <a href="https://data.nsw.gov.au/nsw-covid-19-data" target="_blank">NSW Data</a>. It is not associated with NSW Health. This is displayed for interest purposes only and should not replace current health advice. The numbers displayed are confirmed cases only and may not reflect the current infection rate in your area.</p> 
     {% block content %}{% endblock %}
   <script>
     var daysSet = {{ days_set|tojson }}
