@@ -60,6 +60,25 @@
   border: 1px solid #dfe1ea;
   background-color: rgba(246, 153, 95, 0.25);
 }
+.reallyhot-entry {
+  border: 1px solid #dfe1ea;
+  background-color: rgba(246, 153, 95, 0.25);
+}
+
+/* .hot-entry {
+  border: 1px solid #dfe1ea;
+  background-color: rgba(150, 0, 235, 0.2);
+} */
+
+/* .reallyhot-entry {
+  border: 1px solid #dfe1ea;
+  background-color: rgba(232, 112, 12, 0.25);
+} */
+
+.extrahot-entry {
+  border: 1px solid #dfe1ea;
+  background-color: rgba(209, 0, 10, 0.25);
+}
 
 .postcode_error {
   font-family: "Poppins", sans-serif;

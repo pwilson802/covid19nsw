@@ -36,7 +36,14 @@ function TableHeading({ showRank = true }) {
 }
 
 function RowEntry({ rank, postcode, suburbs, cases, recent, showRank = true }) {
-  let rowClass = recent > 0 ? "row hot-entry" : "row rank-entry";
+  let rowClass =
+    recent > 75
+      ? "row extrahot-entry"
+      : recent > 30
+      ? "row reallyhot-entry"
+      : recent > 0
+      ? "row hot-entry"
+      : "row rank-entry";
   return (
     <div className={rowClass}>
       {showRank ? (

@@ -244,6 +244,7 @@ function getInitialDates() {
   allDates.sort((a, b) => a - b);
   return {
     firstDate: allDates[0].getTime(),
+    // fistDate: allDates[allDates.length - 14].getTime(),
     lastDate: allDates[allDates.length - 1].getTime(),
   };
 }

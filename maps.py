@@ -31,17 +31,17 @@ def all_map(data, postcode_zoom='2016', high_level_data = high_level_data, zoom=
     sydney = high_level_data[postcode_zoom]['map_location']
     cases_map = folium.Map(sydney, zoom_start=zoom)
     if data == "all_days":
-        large, big, medium = 100, 40, 20
-        multiply = 14
+        large, big, medium = 225, 125, 50
+        multiply = 5
     if data == "fourteen_days":
-        large, big, medium = 20, 10, 5
-        multiply = 28
+        large, big, medium = 225, 125, 50
+        multiply = 5
     if data == "active_cases":
-        large, big, medium = 20, 10, 5
-        multiply = 28
+        large, big, medium = 225, 125, 50
+        multiply = 5
     if data == "seven_days":
-        large, big, medium = 10, 3, 2
-        multiply = 56
+        large, big, medium = 225, 125, 50
+        multiply = 5
     for l in high_level_data.keys():
         if l == 'all':
             continue
@@ -59,10 +59,10 @@ def all_map(data, postcode_zoom='2016', high_level_data = high_level_data, zoom=
             outer_color = 'darkgreen'
             iner_color = 'green'
         circle_size = cases * multiply
-        if circle_size > 1000:
-            circle_size = 1000
-        if 0 < circle_size < 200:
-            circle_size = 200
+        if circle_size > 1800:
+            circle_size = 1800
+        if 0 < circle_size < 160:
+            circle_size = 160
         folium.Circle(
                 location= high_level_data[l]['map_location'],
                 popup= folium.Popup(popup_html.replace('POSTCODE', str(l)).replace('NUM_CASES', str(cases)), min_width=140, max_width=140),
