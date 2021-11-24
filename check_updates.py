@@ -5,7 +5,16 @@ import sys
 from datetime_string import make_current_time_string
 import subprocess
 import logging
+import time
 data_folder = os.environ.get("COVID_DATA")
+lock_file = os.path.join(data_folder, "check_update.lck")
+if os.path.isfile(lock_file):
+    # The script is still running
+    sys.exit()
+
+with open(lock_file, 'w') as f:
+    f.write('file is locked')
+
 logging.basicConfig(filename='/var/log/covid_update', 
                     filemode='a',
                     format='%(asctime)s - %(message)s', 
@@ -26,6 +35,7 @@ with open(count_file) as c:
     previous_count = int(c.readlines()[0])
 
 if new_count == previous_count:
+    os.remove(lock_file)
     sys.exit()
 else:
     with open(count_file, 'w') as c:
@@ -35,5 +45,23 @@ else:
 
 logging.warning(f"count update from {previous_count} to {new_count}")
 logging.warning(f"Last update: {make_current_time_string()}")
-print('file updated starting reload')
-subprocess.call(['/home/scripts/covid19reload.sh'])
+# print('file updated starting reload')
+# subprocess.call(['/home/scripts/covid19reload.sh'])
+
+def cases_count():
+    main_cases_file = os.path.join(data_folder, 'cases_file_latest.json')
+    with open(main_cases_file) as f:
+        cases_data = json.loads(f.read())
+    return cases_data['all']['all_days']['cases']
+
+loop = True
+while loop:
+    logging.warning("Starting the loop to call the reload script")
+    subprocess.call(['/home/scripts/covid19reload.sh'])
+    current_count = cases_count()
+    time.sleep(60)
+    if current_count == new_count:
+        logging.warning("The local data was succesfully updated")
+        loop = False
+
+os.remove(lock_file)
