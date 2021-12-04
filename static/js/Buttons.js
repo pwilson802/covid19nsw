@@ -62,15 +62,15 @@ function PageButtons(_ref2) {
     onAction: onAction,
     view: "all_days"
   }), /*#__PURE__*/_react.default.createElement(SwitchButton, {
-    buttonActive: buttonState.fourteen,
-    text: "14 Days",
-    onAction: onAction,
-    view: "fourteen_days"
-  }), /*#__PURE__*/_react.default.createElement(SwitchButton, {
     text: "7 Days",
     buttonActive: buttonState.seven,
     onAction: onAction,
     view: "seven_days"
+  }), /*#__PURE__*/_react.default.createElement(SwitchButton, {
+    buttonActive: buttonState.one,
+    text: "1 Day",
+    onAction: onAction,
+    view: "one_day"
   }), activeOn ? activeButton : "");
 }
 
@@ -79,7 +79,7 @@ function activeButton(button) {
     active: false,
     all: false,
     seven: false,
-    fourteen: false
+    one: false
   };
   result[button] = true;
   return result;

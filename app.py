@@ -29,11 +29,11 @@ cases_data['all']['suburbs'] = "none"
 
 def get_high_level(cases):
     result = {x: {'active_cases': cases[x]['cases_active'],
-                       'recovered_cases': cases[x]['cases_recovered'],
                        'map_location': cases[x]['map_location'],
                        'all_days': cases[x]['all_days']['cases'],
                        'seven_days': cases[x]['seven_days']['cases'],
                        'fourteen_days': cases[x]['fourteen_days']['cases'],
+                       'one_day': cases[x]['one_day']['cases'],
                        'suburbs': cases[x]['suburbs'],
                        'cases_recent': cases[x]['cases_recent'],
                        } for x in cases}
@@ -157,6 +157,15 @@ def postcode():
                 postcode_data=cases_data[postcode]
             )
         print(days_set)
+        if days == "one":
+            if source == 'maps':
+                temp_map_name = random_map_name()
+                map_data = all_map('one_day', postcode_zoom=postcode,zoom=13)
+                map_data.save(temp_map_name)
+                remove_bootstrap3(temp_map_name)
+                just_the_file = os.path.split(temp_map_name)[-1]
+                map_template = f"temp_maps/{just_the_file}"
+                return render_template('map_direct.html', days_set="one", view_mode="map", temp_map_name=map_template, temp_map = 'true', last_update=last_update)
         if days == "seven":
             if source == 'maps':
                 temp_map_name = random_map_name()

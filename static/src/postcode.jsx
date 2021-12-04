@@ -3,7 +3,7 @@ import "react-app-polyfill/stable";
 import React, { useState } from "react";
 import { render } from "react-dom";
 import { PageButtons, AllNSWButton, activeButton } from "./Buttons";
-import { SourceChart, Charts } from "./Charts";
+import { Charts } from "./Charts";
 import { TableHeading, RowEntries, getViewData } from "./Rows";
 import { PageFooter } from "./Footer";
 
@@ -114,7 +114,7 @@ function getDayView() {
     active: "all_days",
     all: "all_days",
     seven: "seven_days",
-    fourteen: "fourteen_days",
+    fourteen: "fourteen_days"
   };
   let result = daysViewMap[daysSet];
   return result;
@@ -129,8 +129,7 @@ function PageLayout() {
     const daysMap = {
       active_cases: "active",
       all_days: "all",
-      seven_days: "seven",
-      fourteen_days: "fourteen",
+      seven_days: "seven"
     };
     const newValue = view;
     const newButtons = activeButton(daysMap[view]);
@@ -147,16 +146,16 @@ function PageLayout() {
       <PageHeading />
       <div className="container">
         <div className="row">
-          <div className="col-12 col-lg-6 my-auto">
+          {/* <div className="col-12 col-lg-6 my-auto"> */}
             <CountStatDisplay view={state.dayView} />
             <StatsExplanation />
-          </div>
-          <div className="col-12 col-lg-6 mt-2">
+          {/* </div> */}
+          {/* <div className="col-12 col-lg-6 mt-2">
             <SourceChart view={state.dayView} />
-          </div>
+          </div> */}
         </div>
       </div>
-      <Charts />
+      {/* <Charts /> */}
       <Addclosepostcode view={state.dayView} />
       <PageFooter />
     </div>

@@ -5,6 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.SourceChart = SourceChart;
 exports.Charts = Charts;
 
 require("react-app-polyfill/ie11");
@@ -35,71 +36,39 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-// function makeSourceData(view) {
-//   let overseas = postcodeData[view]["source"]["overseas"];
-//   let interstate = postcodeData[view]["source"]["interstate"];
-//   let locally_known =
-//     postcodeData[view]["source"][
-//       "locallyacquiredcontactofaconfirmedcaseandorinaknowncluster"
-//     ];
-//   let locally_unknown =
-//     postcodeData[view]["source"]["locallyacquiredsourcenotidentified"];
-//   let under_investigation =
-//     postcodeData[view]["cases"] -
-//     (overseas + interstate + locally_known + locally_unknown);
-//   return {
-//     labels: [
-//       "Overseas",
-//       "Interstate",
-//       "Locally (Known Source)",
-//       "Locally (Unknown Source)",
-//       "Under Investigation",
-//     ],
-//     datasets: [
-//       {
-//         data: [
-//           overseas,
-//           interstate,
-//           locally_known,
-//           locally_unknown,
-//           under_investigation,
-//         ],
-//         backgroundColor: [
-//           "#EB9D50",
-//           "#167E9E",
-//           "#52A874",
-//           "#9E6021",
-//           "#50C6EB",
-//         ],
-//         hoverBackgroundColor: [
-//           "#EB9D50",
-//           "#167E9E",
-//           "#52A874",
-//           "#9E6021",
-//           "#50C6EB",
-//         ],
-//       },
-//     ],
-//   };
-// }
-// function SourceChart({ view }) {
-//   let chartData = makeSourceData(view);
-//   return (
-//     <div className="infection-box">
-//       <h4 className="text-center postcode infection-heading">
-//         Infection Source
-//       </h4>
-//       <Pie
-//         data={chartData}
-//         options={{
-//           tooltips: {
-//             titleFontSize: 32,
-//           },
-//         }}
-//       />
-//     </div>
-//   );
-// }
+function makeSourceData(view) {
+  var overseas = postcodeData[view]["source"]["overseas"];
+  var interstate = postcodeData[view]["source"]["interstate"];
+  var locally_known = postcodeData[view]["source"]["locallyacquiredcontactofaconfirmedcaseandorinaknowncluster"];
+  var locally_unknown = postcodeData[view]["source"]["locallyacquiredsourcenotidentified"];
+  var under_investigation = postcodeData[view]["cases"] - (overseas + interstate + locally_known + locally_unknown);
+  return {
+    labels: ["Overseas", "Interstate", "Locally (Known Source)", "Locally (Unknown Source)", "Under Investigation"],
+    datasets: [{
+      data: [overseas, interstate, locally_known, locally_unknown, under_investigation],
+      backgroundColor: ["#EB9D50", "#167E9E", "#52A874", "#9E6021", "#50C6EB"],
+      hoverBackgroundColor: ["#EB9D50", "#167E9E", "#52A874", "#9E6021", "#50C6EB"]
+    }]
+  };
+}
+
+function SourceChart(_ref) {
+  var view = _ref.view;
+  var chartData = makeSourceData(view);
+  return /*#__PURE__*/_react.default.createElement("div", {
+    className: "infection-box"
+  }, /*#__PURE__*/_react.default.createElement("h4", {
+    className: "text-center postcode infection-heading"
+  }, "Infection Source"), /*#__PURE__*/_react.default.createElement(_reactChartjs.Pie, {
+    data: chartData,
+    options: {
+      tooltips: {
+        titleFontSize: 32
+      }
+    }
+  }));
+}
+
 function makeCasesChartData(dataType, dates) {
   var firstDate = new Date(Number(dates.start));
   var lastDate = new Date(Number(dates.end));
@@ -134,13 +103,9 @@ function makeCasesChartData(dataType, dates) {
   };
 }
 
-function CasesLineChart(_ref) {
-  var dates = _ref.dates;
-  console.log('before making data');
-  console.log(dates);
+function CasesLineChart(_ref2) {
+  var dates = _ref2.dates;
   var data = makeCasesChartData("cases_all", dates);
-  console.log('after making data');
-  console.log(data);
   return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_reactChartjs.Line, {
     data: data,
     options: {
@@ -157,8 +122,8 @@ function CasesLineChart(_ref) {
   }));
 }
 
-function CasesBarChart(_ref2) {
-  var dates = _ref2.dates;
+function CasesBarChart(_ref3) {
+  var dates = _ref3.dates;
   var data = makeCasesChartData("cases_new", dates);
   data["datasets"][0]["label"] = "Cases";
   return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_reactChartjs.Bar, {
@@ -177,8 +142,8 @@ function CasesBarChart(_ref2) {
   }));
 }
 
-function TestsBarChart(_ref3) {
-  var dates = _ref3.dates;
+function TestsBarChart(_ref4) {
+  var dates = _ref4.dates;
   var data = makeCasesChartData("tests_new", dates);
   data["datasets"][0]["label"] = "Tests Completed";
   return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_reactChartjs.Bar, {
@@ -208,11 +173,11 @@ function ChartActiveButton(button) {
   return result;
 }
 
-function ChartButton(_ref4) {
-  var onAction = _ref4.onAction,
-      text = _ref4.text,
-      chartType = _ref4.chartType,
-      buttonActive = _ref4.buttonActive;
+function ChartButton(_ref5) {
+  var onAction = _ref5.onAction,
+      text = _ref5.text,
+      chartType = _ref5.chartType,
+      buttonActive = _ref5.buttonActive;
   var activeClass = buttonActive ? "chart-active-button" : "";
   return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("button", {
     className: "charts-button btn my-2 my-sm-0 ".concat(activeClass),
@@ -222,9 +187,9 @@ function ChartButton(_ref4) {
   }, text));
 }
 
-function ChartButtons(_ref5) {
-  var buttonState = _ref5.buttonState,
-      onAction = _ref5.onAction;
+function ChartButtons(_ref6) {
+  var buttonState = _ref6.buttonState,
+      onAction = _ref6.onAction;
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "container"
   }, /*#__PURE__*/_react.default.createElement("div", {
@@ -247,9 +212,9 @@ function ChartButtons(_ref5) {
   })));
 }
 
-function CasesChart(_ref6) {
-  var chartType = _ref6.chartType,
-      dates = _ref6.dates;
+function CasesChart(_ref7) {
+  var chartType = _ref7.chartType,
+      dates = _ref7.dates;
 
   if (chartType == "cases_line") {
     return /*#__PURE__*/_react.default.createElement(CasesLineChart, {
@@ -287,10 +252,10 @@ function getInitialDates() {
   };
 }
 
-function Slider(_ref7) {
-  var min = _ref7.min,
-      max = _ref7.max,
-      changeDates = _ref7.changeDates;
+function Slider(_ref8) {
+  var min = _ref8.min,
+      max = _ref8.max,
+      changeDates = _ref8.changeDates;
 
   var _useState = (0, _react.useState)([Number(min), Number(max)]),
       _useState2 = _slicedToArray(_useState, 2),
@@ -359,8 +324,6 @@ function Charts() {
     setChartDate(newValue);
   };
 
-  console.log("adding in some logging");
-  console.log(postcodeData);
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "mt-3 container"
   }, /*#__PURE__*/_react.default.createElement("div", {

@@ -4,72 +4,72 @@ import React, { useState } from "react";
 import { Pie, Line, Bar } from "react-chartjs-2";
 import Nouislider from "nouislider-react";
 
-// function makeSourceData(view) {
-//   let overseas = postcodeData[view]["source"]["overseas"];
-//   let interstate = postcodeData[view]["source"]["interstate"];
-//   let locally_known =
-//     postcodeData[view]["source"][
-//       "locallyacquiredcontactofaconfirmedcaseandorinaknowncluster"
-//     ];
-//   let locally_unknown =
-//     postcodeData[view]["source"]["locallyacquiredsourcenotidentified"];
-//   let under_investigation =
-//     postcodeData[view]["cases"] -
-//     (overseas + interstate + locally_known + locally_unknown);
-//   return {
-//     labels: [
-//       "Overseas",
-//       "Interstate",
-//       "Locally (Known Source)",
-//       "Locally (Unknown Source)",
-//       "Under Investigation",
-//     ],
-//     datasets: [
-//       {
-//         data: [
-//           overseas,
-//           interstate,
-//           locally_known,
-//           locally_unknown,
-//           under_investigation,
-//         ],
-//         backgroundColor: [
-//           "#EB9D50",
-//           "#167E9E",
-//           "#52A874",
-//           "#9E6021",
-//           "#50C6EB",
-//         ],
-//         hoverBackgroundColor: [
-//           "#EB9D50",
-//           "#167E9E",
-//           "#52A874",
-//           "#9E6021",
-//           "#50C6EB",
-//         ],
-//       },
-//     ],
-//   };
-// }
+function makeSourceData(view) {
+  let overseas = postcodeData[view]["source"]["overseas"];
+  let interstate = postcodeData[view]["source"]["interstate"];
+  let locally_known =
+    postcodeData[view]["source"][
+      "locallyacquiredcontactofaconfirmedcaseandorinaknowncluster"
+    ];
+  let locally_unknown =
+    postcodeData[view]["source"]["locallyacquiredsourcenotidentified"];
+  let under_investigation =
+    postcodeData[view]["cases"] -
+    (overseas + interstate + locally_known + locally_unknown);
+  return {
+    labels: [
+      "Overseas",
+      "Interstate",
+      "Locally (Known Source)",
+      "Locally (Unknown Source)",
+      "Under Investigation",
+    ],
+    datasets: [
+      {
+        data: [
+          overseas,
+          interstate,
+          locally_known,
+          locally_unknown,
+          under_investigation,
+        ],
+        backgroundColor: [
+          "#EB9D50",
+          "#167E9E",
+          "#52A874",
+          "#9E6021",
+          "#50C6EB",
+        ],
+        hoverBackgroundColor: [
+          "#EB9D50",
+          "#167E9E",
+          "#52A874",
+          "#9E6021",
+          "#50C6EB",
+        ],
+      },
+    ],
+  };
+}
 
-// function SourceChart({ view }) {
-//   let chartData = makeSourceData(view);
-//   return (
-//     <div className="infection-box">
-//       <h4 className="text-center postcode infection-heading">
-//         Infection Source
-//       </h4>
-//       <Pie
-//         data={chartData}
-//         options={{
-//           tooltips: {
-//             titleFontSize: 32,
-//           },
-//         }}
-//       />
-//     </div>
-//   );
-// }
+function SourceChart({ view }) {
+  let chartData = makeSourceData(view);
+  return (
+    <div className="infection-box">
+      <h4 className="text-center postcode infection-heading">
+        Infection Source
+      </h4>
+      <Pie
+        data={chartData}
+        options={{
+          tooltips: {
+            titleFontSize: 32,
+          },
+        }}
+      />
+    </div>
+  );
+}
 
 function makeCasesChartData(dataType, dates) {
   let firstDate = new Date(Number(dates.start));
@@ -100,11 +100,7 @@ function makeCasesChartData(dataType, dates) {
 }
 
 function CasesLineChart({ dates }) {
-  console.log('before making data')
-  console.log(dates)
   const data = makeCasesChartData("cases_all", dates);
-  console.log('after making data')
-  console.log(data)
   return (
     <div>
       <Line
@@ -299,8 +295,6 @@ function Charts() {
     };
     setChartDate(newValue);
   };
-  console.log("adding in some logging")
-  console.log(postcodeData)
   return (
     <div className="mt-3 container">
       <div className="row justify-content-center">
@@ -376,4 +370,4 @@ function formatDate(dateNum) {
   );
 }
 
-export { Charts };
+export { SourceChart, Charts };

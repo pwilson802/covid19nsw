@@ -67,7 +67,7 @@ function RowEntry(_ref2) {
       recent = _ref2.recent,
       _ref2$showRank = _ref2.showRank,
       showRank = _ref2$showRank === void 0 ? true : _ref2$showRank;
-  var rowClass = recent > 0 ? "row hot-entry" : "row rank-entry";
+  var rowClass = recent > 75 ? "row extrahot-entry" : recent > 30 ? "row reallyhot-entry" : recent > 0 ? "row hot-entry" : "row rank-entry";
   return /*#__PURE__*/_react.default.createElement("div", {
     className: rowClass
   }, showRank ? /*#__PURE__*/_react.default.createElement("div", {

@@ -42,6 +42,9 @@ def all_map(data, postcode_zoom='2016', high_level_data = high_level_data, zoom=
     if data == "seven_days":
         large, big, medium = 225, 125, 50
         multiply = 5
+    if data == "one_day":
+        large, big, medium = 225, 125, 50
+        multiply = 5
     for l in high_level_data.keys():
         if l == 'all':
             continue

@@ -18,6 +18,7 @@ map_all_file = os.path.join(maps_folder, "map_all.html")
 map_fourteen_file = os.path.join(maps_folder, "map_fourteen.html")
 map_seven_file = os.path.join(maps_folder, "map_seven.html")
 map_active_file = os.path.join(maps_folder, "map_active.html")
+map_one_file = os.path.join(maps_folder, "map_one.html")
 
 popup_html = """
     <h1 class="postcode">POSTCODE</h1>
@@ -35,12 +36,14 @@ all_day_map = all_map('all_days')
 fourteen_day_map = all_map('fourteen_days')
 seven_day_map = all_map('seven_days')
 active_day_map = all_map('active_cases')
+one_day_map = all_map('one_day')
 
 
 all_day_map.save(map_all_file)
 fourteen_day_map.save(map_fourteen_file)
 seven_day_map.save(map_seven_file)
 active_day_map.save(map_active_file)
+one_day_map.save(map_one_file)
 
-for file in [map_all_file, map_fourteen_file, map_seven_file, map_active_file]:
+for file in [map_all_file, map_fourteen_file, map_seven_file, map_active_file, map_one_file]:
     remove_bootstrap3(file)

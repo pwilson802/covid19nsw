@@ -42,16 +42,16 @@ function PageButtons({ buttonState, onAction, activeOn = true }) {
         view="all_days"
       />
       <SwitchButton
-        buttonActive={buttonState.fourteen}
-        text="14 Days"
-        onAction={onAction}
-        view="fourteen_days"
-      />
-      <SwitchButton
         text="7 Days"
         buttonActive={buttonState.seven}
         onAction={onAction}
         view="seven_days"
+      />
+      <SwitchButton
+        buttonActive={buttonState.one}
+        text="1 Day"
+        onAction={onAction}
+        view="one_day"
       />
       {activeOn ? activeButton : ""}
     </div>
@@ -63,7 +63,7 @@ function activeButton(button) {
     active: false,
     all: false,
     seven: false,
-    fourteen: false,
+    one: false,
   };
   result[button] = true;
   return result;

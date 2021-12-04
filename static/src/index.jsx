@@ -32,6 +32,7 @@ function PageLayout() {
       all_days: "all",
       seven_days: "seven",
       fourteen_days: "fourteen",
+      one_day: "one",
     };
     const newValue = view;
     const newButtons = activeButton(daysMap[view]);
